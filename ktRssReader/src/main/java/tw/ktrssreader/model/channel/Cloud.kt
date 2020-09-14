@@ -5,5 +5,5 @@ data class Cloud(
     val port: Int?,
     val path: String?,
     val registerProcedure: String?,
-    val protocol: String,
+    val protocol: String?,
 )
