@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 
-class OkHttpRequest(
+internal class OkHttpRequest(
     private val okHttpClient: OkHttpClient = OkHttpClient(),
     private val requestBuilder: Request.Builder = Request.Builder()
 ) {
