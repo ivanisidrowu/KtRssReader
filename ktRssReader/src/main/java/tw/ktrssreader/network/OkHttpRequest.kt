@@ -15,7 +15,8 @@ class OkHttpRequest(
         return flow {
             val request = requestBuilder.url(url).build()
             val response = okHttpClient.newCall(request).execute()
-            val body = response.body?.string() ?: throw IOException()
+            val body =
+                response.body?.string() ?: throw IOException("Failed to get the response body!")
             emit(body)
         }
     }
