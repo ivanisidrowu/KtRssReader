@@ -6,7 +6,7 @@ import tw.ktrssreader.model.item.ITunesItem
 import tw.ktrssreader.model.item.RssStandardItem
 import java.util.*
 
-sealed class RssStandardChannel(
+open class RssStandardChannel(
     open val title: String?,
     open val description: String?,
     open val image: Image?,

@@ -2,7 +2,7 @@ package tw.ktrssreader.model.item
 
 import java.util.*
 
-sealed class RssStandardItem(
+open class RssStandardItem(
     open val title: String?,
     open val enclosure: Enclosure?,
     open val guid: String?,
