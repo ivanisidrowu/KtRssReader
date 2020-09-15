@@ -14,7 +14,7 @@ typealias Config = KtRssReaderConfig.() -> Unit
 
 @Throws(Exception::class)
 inline fun <reified T : RssStandardChannel> reader(url: String, config: Config = {}): T {
-    check(isMainThread()) { "Should not be called on main thread." }
+    check(!isMainThread()) { "Should not be called on main thread." }
 
     val ktRssReaderConfig = KtRssReaderConfig().apply(config)
     if (ktRssReaderConfig.useCache) {
