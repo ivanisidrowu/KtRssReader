@@ -3,7 +3,7 @@ package tw.ktrssreader.parser
 import kotlinx.coroutines.flow.Flow
 import tw.ktrssreader.model.channel.RssStandardChannel
 
-internal class StandardParser : ParserBase<RssStandardChannel>() {
+class RssStandardParser : ParserBase<RssStandardChannel>() {
     override suspend fun parseSuspend(xml: String): RssStandardChannel {
         TODO("Not yet implemented")
     }
