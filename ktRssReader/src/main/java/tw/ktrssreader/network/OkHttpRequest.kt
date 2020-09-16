@@ -10,10 +10,15 @@ class OkHttpRequest(
     private val requestBuilder: Request.Builder = Request.Builder()
 ) {
 
-    fun get(url: String, charset: Charset): String {
+    fun get(url: String, charset: Charset?): String {
         val request = requestBuilder.url(url).build()
         val response = okHttpClient.newCall(request).execute()
-        return response.body?.source()?.readString(charset)
-            ?: throw IOException("Failed to get the response body!")
+        val body = response.body
+        val responseString = if (charset == null) {
+            body?.string()
+        } else {
+            body?.source()?.use { it.readString(charset) }
+        }
+        return responseString ?: throw IOException("Failed to get the response body!")
     }
 }

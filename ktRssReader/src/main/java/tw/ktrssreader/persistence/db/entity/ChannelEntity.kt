@@ -5,9 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "channel_table")
 class ChannelEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val type: Int,
+    @PrimaryKey
+    val url: String,
     val channel: ByteArray,
     val time: Long
 )

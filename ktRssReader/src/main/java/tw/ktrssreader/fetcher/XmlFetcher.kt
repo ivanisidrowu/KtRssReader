@@ -5,7 +5,7 @@ import java.nio.charset.Charset
 
 class XmlFetcher(private val okHttpRequest: OkHttpRequest = OkHttpRequest()) : Fetcher {
 
-    override fun fetch(url: String, charset: Charset): String {
+    override fun fetch(url: String, charset: Charset?): String {
         return okHttpRequest.get(url = url, charset = charset)
     }
 }

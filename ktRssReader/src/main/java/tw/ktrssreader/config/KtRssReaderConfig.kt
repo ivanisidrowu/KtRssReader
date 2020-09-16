@@ -5,7 +5,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.days
 
 class KtRssReaderConfig {
-    var charset: Charset = Charsets.UTF_8
+    var charset: Charset? = null
 
     var useRemote: Boolean = false
 
