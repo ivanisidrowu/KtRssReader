@@ -1,4 +1,4 @@
-package tw.ktrssreader.parser
+package tw.ktrssreader.constant
 
 object ParserConst {
     const val CHANNEL = "channel"
