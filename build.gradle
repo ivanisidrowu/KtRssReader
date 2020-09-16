@@ -5,6 +5,9 @@ buildscript {
             'kotlinxCoroutinesCore'   : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9',
             'kotlinxCoroutinesAndroid': 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9',
             'okHttp'                  : 'com.squareup.okhttp3:okhttp:4.9.0',
+            'roomRuntime'             : 'androidx.room:room-runtime:2.2.5',
+            'roomKtx'                 : 'androidx.room:room-ktx:2.2.5',
+            'roomCompiler'            : 'androidx.room:room-compiler:2.2.5',
     ]
 
     ext.kotlin_version = "1.4.0"

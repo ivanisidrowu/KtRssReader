@@ -1,5 +1,7 @@
 package tw.ktrssreader.model.item
 
+import java.io.Serializable
+
 open class RssStandardItem(
     open val title: String?,
     open val enclosure: Enclosure?,
@@ -11,7 +13,7 @@ open class RssStandardItem(
     open val categories: List<Category>,
     open val comments: String?,
     open val source: String?,
-)
+) : Serializable
 
 data class ITunesItem(
     override val title: String?,
@@ -42,7 +44,7 @@ data class ITunesItem(
     categories = categories,
     comments = comments,
     source = source,
-)
+), Serializable
 
 data class GoogleItem(
     override val title: String?,
@@ -68,7 +70,7 @@ data class GoogleItem(
     categories = categories,
     comments = comments,
     source = source,
-)
+), Serializable
 
 data class AutoMixItem(
     override val title: String?,
@@ -99,4 +101,4 @@ data class AutoMixItem(
     categories = categories,
     comments = comments,
     source = source,
-)
+), Serializable

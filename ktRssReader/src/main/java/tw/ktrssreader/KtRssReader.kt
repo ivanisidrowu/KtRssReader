@@ -13,17 +13,20 @@ import kotlin.jvm.Throws
 typealias Config = KtRssReaderConfig.() -> Unit
 
 @Throws(Exception::class)
-inline fun <reified T : RssStandardChannel> reader(url: String, config: Config = {}): T {
+inline fun <reified T : RssStandardChannel> reader(
+    url: String,
+    config: Config = {}
+): T {
     check(!isMainThread()) { "Should not be called on main thread." }
 
     val ktRssReaderConfig = KtRssReaderConfig().apply(config)
-    if (ktRssReaderConfig.useCache) {
-        TODO("Not yet implemented")
-    } else {
+    if (ktRssReaderConfig.useRemote) {
         val fetcher = KtRssProvider.provideXmlFetcher()
-        val xml = fetcher.fetch(url)
+        val xml = fetcher.fetch(url = url, charset = ktRssReaderConfig.charset)
         val parser = KtRssProvider.provideParser<T>()
         return parser.parse(xml)
+    } else {
+        TODO("Not yet implemented")
     }
 }
 
@@ -31,7 +34,7 @@ inline fun <reified T : RssStandardChannel> reader(url: String, config: Config =
 suspend inline fun <reified T : RssStandardChannel> readerSuspend(
     url: String,
     crossinline config: Config = {}
-) = suspendCoroutine<T> { it.resume(reader(url = url, config = config)) }
+): T = suspendCoroutine { it.resume(reader(url = url, config = config)) }
 
 inline fun <reified T : RssStandardChannel> readerFlow(
     url: String,
