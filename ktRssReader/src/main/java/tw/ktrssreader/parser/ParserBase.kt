@@ -69,11 +69,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     protected fun getXmlParser(xml: String): XmlPullParser {
-        // TODO: temp test
-        val stream = javaClass.getResourceAsStream("/test_data.xml")!!
-        val content = stream.bufferedReader().use { it.readText() }
-
-        ByteArrayInputStream(content.toByteArray()).use { inputStream ->
+        ByteArrayInputStream(xml.toByteArray()).use { inputStream ->
             return Xml.newPullParser().apply {
                 setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
                 setInput(inputStream, null)
