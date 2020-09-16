@@ -13,6 +13,7 @@ import tw.ktrssreader.model.item.Enclosure
 import tw.ktrssreader.model.item.RssStandardItem
 import tw.ktrssreader.constant.ParserConst.AUTHOR
 import tw.ktrssreader.constant.ParserConst.CATEGORY
+import tw.ktrssreader.constant.ParserConst.CHANNEL
 import tw.ktrssreader.constant.ParserConst.CLOUD
 import tw.ktrssreader.constant.ParserConst.COMMENTS
 import tw.ktrssreader.constant.ParserConst.COPYRIGHT
@@ -173,7 +174,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
                 else -> skip()
             }
         }
-
+        require(XmlPullParser.END_TAG, null, CHANNEL)
         return RssStandardChannel(
             title = title,
             description = description,
