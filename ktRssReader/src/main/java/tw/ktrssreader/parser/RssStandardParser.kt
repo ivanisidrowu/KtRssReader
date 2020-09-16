@@ -1,18 +1,19 @@
 package tw.ktrssreader.parser
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import org.xmlpull.v1.XmlPullParserException
 import tw.ktrssreader.model.channel.RssStandardChannel
 
 class RssStandardParser : ParserBase<RssStandardChannel>() {
-    override suspend fun parseSuspend(xml: String): RssStandardChannel {
-        TODO("Not yet implemented")
+    @Throws(XmlPullParserException::class)
+    override fun parse(xml: String): RssStandardChannel {
+        return parseStandardChannel(xml)
     }
 
-    override fun parse(xml: String): RssStandardChannel {
-        TODO("Not yet implemented")
-    }
+    override suspend fun parseSuspend(xml: String) = parse(xml)
 
     override fun parseFlow(xml: String): Flow<RssStandardChannel> {
-        TODO("Not yet implemented")
+        return flow { emit(parse(xml)) }
     }
 }
