@@ -1,12 +1,10 @@
 package tw.ktrssreader.model.item
 
-import java.util.*
-
 open class RssStandardItem(
     open val title: String?,
     open val enclosure: Enclosure?,
     open val guid: String?,
-    open val pubDate: Date?,
+    open val pubDate: String?,
     open val description: String?,
     open val link: String?,
     open val author: String?,
@@ -19,7 +17,7 @@ data class ITunesItem(
     override val title: String?,
     override val enclosure: Enclosure?,
     override val guid: String?,
-    override val pubDate: Date?,
+    override val pubDate: String?,
     override val description: String?,
     override val link: String?,
     override val author: String?,
@@ -50,7 +48,7 @@ data class GoogleItem(
     override val title: String?,
     override val enclosure: Enclosure?,
     override val guid: String?,
-    override val pubDate: Date?,
+    override val pubDate: String?,
     override val description: String?,
     override val link: String?,
     override val author: String?,
@@ -76,7 +74,7 @@ data class AutoMixItem(
     override val title: String?,
     override val enclosure: Enclosure?,
     override val guid: String?,
-    override val pubDate: Date?,
+    override val pubDate: String?,
     override val description: String?,
     override val link: String?,
     override val author: String?,
