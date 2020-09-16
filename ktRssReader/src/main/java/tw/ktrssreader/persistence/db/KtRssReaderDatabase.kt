@@ -15,18 +15,18 @@ abstract class KtRssReaderDatabase : RoomDatabase() {
         private const val DB_NAME = "ktrssreader.db"
 
         @Volatile
-        private var INSTANCE: KtRssReaderDatabase? = null
+        private var instance: KtRssReaderDatabase? = null
 
         fun getInstance(applicationContext: Context): KtRssReaderDatabase {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Room.databaseBuilder(
+            return instance ?: synchronized(this) {
+                instance ?: Room.databaseBuilder(
                     applicationContext,
                     KtRssReaderDatabase::class.java,
                     DB_NAME
                 )
                     .addMigrations(*DatabaseMigration().getMigrations())
                     .build()
-                    .apply { INSTANCE = this }
+                    .apply { instance = this }
             }
         }
     }
