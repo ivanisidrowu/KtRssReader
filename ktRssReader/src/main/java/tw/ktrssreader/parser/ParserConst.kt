@@ -29,4 +29,11 @@ object ParserConst {
     const val REGISTER_PROCEDURE = "registerProcedure"
     const val PROTOCOL = "protocol"
     const val NAME = "name"
+    const val ENCLOSURE = "enclosure"
+    const val GUID = "guid"
+    const val AUTHOR = "author"
+    const val COMMENTS = "comments"
+    const val SOURCE = "source"
+    const val LENGTH = "length"
+    const val TYPE = "type"
 }

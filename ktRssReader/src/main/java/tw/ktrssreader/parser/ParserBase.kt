@@ -1,27 +1,31 @@
 package tw.ktrssreader.parser
 
-import android.nfc.tech.NfcA
 import android.util.Xml
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import tw.ktrssreader.model.channel.Cloud
 import tw.ktrssreader.model.channel.Image
 import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.model.channel.TextInput
+import tw.ktrssreader.model.item.Category
+import tw.ktrssreader.model.item.Enclosure
 import tw.ktrssreader.model.item.RssStandardItem
+import tw.ktrssreader.parser.ParserConst.AUTHOR
 import tw.ktrssreader.parser.ParserConst.CATEGORY
 import tw.ktrssreader.parser.ParserConst.CLOUD
+import tw.ktrssreader.parser.ParserConst.COMMENTS
 import tw.ktrssreader.parser.ParserConst.COPYRIGHT
 import tw.ktrssreader.parser.ParserConst.DESCRIPTION
 import tw.ktrssreader.parser.ParserConst.DOCS
 import tw.ktrssreader.parser.ParserConst.DOMAIN
+import tw.ktrssreader.parser.ParserConst.ENCLOSURE
 import tw.ktrssreader.parser.ParserConst.GENERATOR
+import tw.ktrssreader.parser.ParserConst.GUID
 import tw.ktrssreader.parser.ParserConst.IMAGE
 import tw.ktrssreader.parser.ParserConst.ITEM
 import tw.ktrssreader.parser.ParserConst.LANGUAGE
 import tw.ktrssreader.parser.ParserConst.LAST_BUILD_DATE
+import tw.ktrssreader.parser.ParserConst.LENGTH
 import tw.ktrssreader.parser.ParserConst.LINK
 import tw.ktrssreader.parser.ParserConst.MANAGING_EDITOR
 import tw.ktrssreader.parser.ParserConst.NAME
@@ -33,18 +37,19 @@ import tw.ktrssreader.parser.ParserConst.RATING
 import tw.ktrssreader.parser.ParserConst.REGISTER_PROCEDURE
 import tw.ktrssreader.parser.ParserConst.SKIP_DAYS
 import tw.ktrssreader.parser.ParserConst.SKIP_HOURS
+import tw.ktrssreader.parser.ParserConst.SOURCE
 import tw.ktrssreader.parser.ParserConst.TEXT_INPUT
 import tw.ktrssreader.parser.ParserConst.TITLE
 import tw.ktrssreader.parser.ParserConst.TTL
+import tw.ktrssreader.parser.ParserConst.TYPE
 import tw.ktrssreader.parser.ParserConst.URL
 import tw.ktrssreader.parser.ParserConst.WEB_MASTER
 import java.io.ByteArrayInputStream
 import java.io.IOException
 
-open class ParserBase : Parser<RssStandardChannel> {
+abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 
-    @Throws(XmlPullParserException::class)
-    override fun parse(xml: String): RssStandardChannel {
+    protected fun parseStandardChannel(xml: String): RssStandardChannel {
         val parser = getXmlParser(xml)
 
         var result: RssStandardChannel? = null
@@ -52,19 +57,13 @@ open class ParserBase : Parser<RssStandardChannel> {
             if (parser.eventType != XmlPullParser.START_TAG) continue
 
             if (parser.name == ParserConst.CHANNEL) {
-                result = readChannel(parser)
+                result = parser.readRssStandardChannel()
                 break
             } else {
                 parser.skip()
             }
         }
         return result ?: throw XmlPullParserException("No valid channel tag in the RSS feed.")
-    }
-
-    override suspend fun parseSuspend(xml: String) = parse(xml)
-
-    override fun parseFlow(xml: String): Flow<RssStandardChannel> {
-        return flow { emit(parse(xml)) }
     }
 
     protected fun getXmlParser(xml: String): XmlPullParser {
@@ -81,13 +80,55 @@ open class ParserBase : Parser<RssStandardChannel> {
         }
     }
 
-    open fun readChannel(parser: XmlPullParser): RssStandardChannel {
-        parser.require(XmlPullParser.START_TAG, null, ParserConst.CHANNEL)
+    @Throws(IOException::class, XmlPullParserException::class)
+    protected fun XmlPullParser.readString(tagName: String): String? {
+        require(XmlPullParser.START_TAG, null, tagName)
+        var content: String? = null
+        if (next() == XmlPullParser.TEXT) {
+            content = text
+            nextTag()
+        }
+        require(XmlPullParser.END_TAG, null, tagName)
+        return content
+    }
+
+    @Throws(IOException::class, XmlPullParserException::class)
+    protected fun XmlPullParser.readAttributes(
+        tagName: String,
+        attributes: List<String>,
+        action: (String, String?) -> Unit
+    ) {
+        require(XmlPullParser.START_TAG, null, tagName)
+        attributes.forEach { attr ->
+            action(attr, getAttributeValue(null, attr))
+        }
+        nextTag()
+        require(XmlPullParser.END_TAG, null, tagName)
+    }
+
+    @Throws(XmlPullParserException::class, IOException::class)
+    protected fun XmlPullParser.skip() {
+        if (eventType != XmlPullParser.START_TAG) {
+            throw IllegalStateException()
+        }
+        var depth = 1
+        while (depth != 0) {
+            when (next()) {
+                XmlPullParser.END_TAG -> depth--
+                XmlPullParser.START_TAG -> depth++
+            }
+        }
+    }
+
+    @Throws(IOException::class, XmlPullParserException::class)
+    private fun XmlPullParser.readRssStandardChannel(): RssStandardChannel {
+        require(XmlPullParser.START_TAG, null, ParserConst.CHANNEL)
+
         var title: String? = null
         var description: String? = null
         var image: Image? = null
         var language: String? = null
-        val categories = arrayListOf<String>()
+        val categories = mutableListOf<String>()
         var link: String? = null
         var copyright: String? = null
         var managingEditor: String? = null
@@ -102,33 +143,33 @@ open class ParserBase : Parser<RssStandardChannel> {
         var textInput: TextInput? = null
         var skipHours: Int? = null
         var skipDays: String? = null
-        var items: List<RssStandardItem> = listOf()
+        val items = mutableListOf<RssStandardItem>()
 
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-            when (parser.name) {
-                TITLE -> title = parser.readString(TITLE)
-                DESCRIPTION -> description = parser.readString(DESCRIPTION)
-                LINK -> link = parser.readString(LINK)
-                IMAGE -> image = readImage(parser)
-                LANGUAGE -> language = parser.readString(IMAGE)
-                CATEGORY -> parser.readString(CATEGORY)?.let { categories.add(it) }
-                COPYRIGHT -> copyright = parser.readString(COPYRIGHT)
-                MANAGING_EDITOR -> managingEditor = parser.readString(MANAGING_EDITOR)
-                WEB_MASTER -> webMaster = parser.readString(WEB_MASTER)
-                PUB_DATE -> pubDate = parser.readString(PUB_DATE)
-                LAST_BUILD_DATE -> lastBuildDate = parser.readString(LAST_BUILD_DATE)
-                GENERATOR -> generator = parser.readString(GENERATOR)
-                DOCS -> docs = parser.readString(DOCS)
-                CLOUD -> cloud = parser.readCloud()
-                TTL -> ttl = parser.readString(TTL)?.toIntOrNull()
-                RATING -> rating = parser.readString(RATING)?.toFloatOrNull()
-                TEXT_INPUT -> textInput = parser.readTextInput()
-                SKIP_HOURS -> skipHours = parser.readString(SKIP_HOURS)?.toIntOrNull()
-                SKIP_DAYS -> skipDays = parser.readString(SKIP_DAYS)
-                ITEM -> items = readItems()
-                else -> parser.skip()
+            when (this.name) {
+                TITLE -> title = readString(TITLE)
+                DESCRIPTION -> description = readString(DESCRIPTION)
+                LINK -> link = readString(LINK)
+                IMAGE -> image = readImage()
+                LANGUAGE -> language = readString(LANGUAGE)
+                CATEGORY -> readString(CATEGORY)?.let { categories.add(it) }
+                COPYRIGHT -> copyright = readString(COPYRIGHT)
+                MANAGING_EDITOR -> managingEditor = readString(MANAGING_EDITOR)
+                WEB_MASTER -> webMaster = readString(WEB_MASTER)
+                PUB_DATE -> pubDate = readString(PUB_DATE)
+                LAST_BUILD_DATE -> lastBuildDate = readString(LAST_BUILD_DATE)
+                GENERATOR -> generator = readString(GENERATOR)
+                DOCS -> docs = readString(DOCS)
+                CLOUD -> cloud = readCloud()
+                TTL -> ttl = readString(TTL)?.toIntOrNull()
+                RATING -> rating = readString(RATING)?.toFloatOrNull()
+                TEXT_INPUT -> textInput = readTextInput()
+                SKIP_HOURS -> skipHours = readString(SKIP_HOURS)?.toIntOrNull()
+                SKIP_DAYS -> skipDays = readString(SKIP_DAYS)
+                ITEM -> items.add(readRssStandardItem())
+                else -> skip()
             }
         }
 
@@ -137,7 +178,7 @@ open class ParserBase : Parser<RssStandardChannel> {
             description = description,
             image = image,
             language = language,
-            categories = listOf(),
+            categories = categories,
             link = link,
             copyright = copyright,
             managingEditor = managingEditor,
@@ -156,50 +197,111 @@ open class ParserBase : Parser<RssStandardChannel> {
         )
     }
 
-    open fun readItems(): List<RssStandardItem> {
-        return listOf()
+    @Throws(IOException::class, XmlPullParserException::class)
+    private fun XmlPullParser.readRssStandardItem(): RssStandardItem {
+        require(XmlPullParser.START_TAG, null, ITEM)
+        var title: String? = null
+        var enclosure: Enclosure? = null
+        var guid: String? = null
+        var pubDate: String? = null
+        var description: String? = null
+        var link: String? = null
+        var author: String? = null
+        val categories: MutableList<Category> = mutableListOf()
+        var comments: String? = null
+        var source: String? = null
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
+
+            when (this.name) {
+                TITLE -> title = readString(TITLE)
+                ENCLOSURE -> enclosure = readEnclosure()
+                GUID -> guid = readString(GUID)
+                PUB_DATE -> pubDate = readString(PUB_DATE)
+                DESCRIPTION -> description = readString(DESCRIPTION)
+                LINK -> link = readString(LINK)
+                AUTHOR -> author = readString(AUTHOR)
+                CATEGORY -> readItemCategory().let { categories.add(it) }
+                COMMENTS -> comments = readString(COMMENTS)
+                SOURCE -> source = readString(SOURCE)
+                else -> skip()
+            }
+        }
+        require(XmlPullParser.END_TAG, null, ITEM)
+        return RssStandardItem(
+            title = title,
+            enclosure = enclosure,
+            guid = guid,
+            pubDate = pubDate,
+            description = description,
+            link = link,
+            author = author,
+            categories = categories,
+            comments = comments,
+            source = source
+        )
     }
 
-    open fun readImage(parser: XmlPullParser): Image? {
-        parser.require(XmlPullParser.START_TAG, null, IMAGE)
+    @Throws(IOException::class, XmlPullParserException::class)
+    private fun XmlPullParser.readImage(): Image? {
+        require(XmlPullParser.START_TAG, null, IMAGE)
         var link: String? = null
         var title: String? = null
         var url: String? = null
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-            when (parser.name) {
-                LINK -> link = parser.readString(LINK)
-                TITLE -> title = parser.readString(TITLE)
-                URL -> url = parser.readString(URL)
-                else -> parser.skip()
+            when (this.name) {
+                LINK -> link = readString(LINK)
+                TITLE -> title = readString(TITLE)
+                URL -> url = readString(URL)
+                else -> skip()
             }
         }
-        parser.nextTag()
-        parser.require(XmlPullParser.END_TAG, null, IMAGE)
+        require(XmlPullParser.END_TAG, null, IMAGE)
         return Image(link = link, title = title, url = url)
     }
 
-abstract class ParserBase<out T : RssStandardChannel> : Parser<T>
-    protected fun XmlPullParser.readCloud(): Cloud {
-        require(XmlPullParser.START_TAG, null, CLOUD)
+    @Throws(IOException::class, XmlPullParserException::class)
+    private fun XmlPullParser.readEnclosure(): Enclosure {
+        var url: String? = null
+        var length: Long? = null
+        var type: String? = null
+        readAttributes(ENCLOSURE, listOf(URL, LENGTH, TYPE)) { attr, value ->
+            when (attr) {
+                URL -> url = value
+                LENGTH -> length = value?.toLongOrNull()
+                TYPE -> type = value
+            }
+        }
+        return Enclosure(url = url, length = length, type = type)
+    }
+
+    @Throws(IOException::class, XmlPullParserException::class)
+    private fun XmlPullParser.readItemCategory(): Category {
+        require(XmlPullParser.START_TAG, null, CATEGORY)
+        val domain: String? = getAttributeValue(null, DOMAIN)
+        val name: String? = readString(tagName = CATEGORY)
+        require(XmlPullParser.END_TAG, null, CATEGORY)
+        return Category(name = name, domain = domain)
+    }
+
+    @Throws(IOException::class, XmlPullParserException::class)
+    private fun XmlPullParser.readCloud(): Cloud {
         var domain: String? = null
         var port: Int? = null
         var path: String? = null
         var registerProcedure: String? = null
         var protocol: String? = null
-        val map = readAttributes(CLOUD, DOMAIN, PORT, PATH, REGISTER_PROCEDURE, PROTOCOL)
-        map.forEach { entry ->
-            when (entry.key) {
-                DOMAIN -> domain = entry.value
-                PORT -> port = entry.value.toIntOrNull()
-                PATH -> path = entry.value
-                REGISTER_PROCEDURE -> registerProcedure = entry.value
-                PROTOCOL -> protocol = entry.value
+        readAttributes(CLOUD, listOf(DOMAIN, PORT, PATH, REGISTER_PROCEDURE, PROTOCOL)) { attr, value ->
+            when (attr) {
+                DOMAIN -> domain = value
+                PORT -> port = value?.toIntOrNull()
+                PATH -> path = value
+                REGISTER_PROCEDURE -> registerProcedure = value
+                PROTOCOL -> protocol = value
             }
         }
-        nextTag()
-        require(XmlPullParser.END_TAG, null, CLOUD)
         return Cloud(
             domain = domain,
             port = port,
@@ -209,7 +311,8 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T>
         )
     }
 
-    protected fun XmlPullParser.readTextInput(): TextInput {
+    @Throws(IOException::class, XmlPullParserException::class)
+    private fun XmlPullParser.readTextInput(): TextInput {
         require(XmlPullParser.START_TAG, null, TEXT_INPUT)
         var title: String? = null
         var description: String? = null
@@ -218,57 +321,15 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T>
         while (next() != XmlPullParser.END_TAG) {
             if (eventType != XmlPullParser.START_TAG) continue
 
-            when (name) {
+            when (this.name) {
                 TITLE -> title = readString(TITLE)
                 DESCRIPTION -> description = readString(DESCRIPTION)
                 NAME -> name = readString(NAME)
                 LINK -> link = readString(LINK)
+                else -> skip()
             }
         }
-        nextTag()
         require(XmlPullParser.END_TAG, null, TEXT_INPUT)
         return TextInput(title = title, description = description, name = name, link = link)
-    }
-
-    @Throws(IOException::class, XmlPullParserException::class)
-    protected fun XmlPullParser.readString(tagName: String): String? {
-        require(XmlPullParser.START_TAG, null, tagName)
-        var content: String? = null
-        if (next() == XmlPullParser.TEXT) {
-            content = text
-            nextTag()
-        }
-        require(XmlPullParser.END_TAG, null, tagName)
-        return content
-    }
-
-    @Throws(IOException::class, XmlPullParserException::class)
-    protected fun XmlPullParser.readAttributes(
-        tagName: String,
-        vararg attrs: String
-    ): Map<String, String> {
-        require(XmlPullParser.START_TAG, null, tagName)
-
-        val map = mutableMapOf<String, String>()
-        attrs.forEach { attr ->
-            map[attr] = getAttributeValue(null, attr)
-        }
-
-        require(XmlPullParser.END_TAG, null, tagName)
-        return map
-    }
-
-    @Throws(XmlPullParserException::class, IOException::class)
-    protected fun XmlPullParser.skip() {
-        if (eventType != XmlPullParser.START_TAG) {
-            throw IllegalStateException()
-        }
-        var depth = 1
-        while (depth != 0) {
-            when (next()) {
-                XmlPullParser.END_TAG -> depth--
-                XmlPullParser.START_TAG -> depth++
-            }
-        }
     }
 }
