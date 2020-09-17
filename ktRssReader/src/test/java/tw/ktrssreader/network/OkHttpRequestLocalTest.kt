@@ -45,12 +45,12 @@ class OkHttpRequestLocalTest {
         every { mockOkHttpClient.newCall(mockRequest).execute() } returns mockResponse
         val mockBody = mockkRelaxed<ResponseBody>()
         every { mockResponse.body } returns mockBody
-        val expect = "fakeResponseString"
-        every { mockBody.string() } returns expect
+        val expected = "fakeResponseString"
+        every { mockBody.string() } returns expected
 
         val actual = subject.get(url = fakeUrl, charset = null)
 
-        actual shouldBe expect
+        actual shouldBe expected
     }
 
     @Test
@@ -63,12 +63,12 @@ class OkHttpRequestLocalTest {
         every { mockOkHttpClient.newCall(mockRequest).execute() } returns mockResponse
         val mockBody = mockkRelaxed<ResponseBody>()
         every { mockResponse.body } returns mockBody
-        val expect = "fakeResponseString"
-        every { mockBody.source().readString(any()) } returns expect
+        val expected = "fakeResponseString"
+        every { mockBody.source().readString(any()) } returns expected
 
         val actual = subject.get(url = fakeUrl, charset = fakeCharset)
 
-        actual shouldBe expect
+        actual shouldBe expected
     }
 
     @Test(expected = IOException::class)

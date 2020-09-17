@@ -5,6 +5,6 @@ import org.junit.Assert
 
 inline fun <reified T : Any> mockkRelaxed() = mockk<T>(relaxed = true)
 
-infix fun Any?.shouldBe(expect: Any?) = Assert.assertEquals(expect, this)
+infix fun Any?.shouldBe(expected: Any?) = Assert.assertEquals(expected, this)
 
-infix fun Any?.shouldNotBe(expect: Any?) = Assert.assertNotEquals(expect, this)
+infix fun Any?.shouldNotBe(expected: Any?) = Assert.assertNotEquals(expected, this)

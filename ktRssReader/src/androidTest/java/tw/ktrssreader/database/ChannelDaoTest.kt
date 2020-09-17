@@ -11,12 +11,12 @@ class ChannelDaoTest : DaoTestBase() {
     fun testGetChannelByUrlSuccessfully() {
         val subject = database.channelDao()
         val fakeUrl = "fakeUrl"
-        val expect = ChannelEntity(fakeUrl, byteArrayOf(), System.currentTimeMillis())
-        subject.insert(expect)
+        val expected = ChannelEntity(fakeUrl, byteArrayOf(), System.currentTimeMillis())
+        subject.insert(expected)
 
         val actual = subject.getChannelByUrl(fakeUrl)
 
-        actual shouldBe expect
+        actual shouldBe expected
     }
 
     @Test

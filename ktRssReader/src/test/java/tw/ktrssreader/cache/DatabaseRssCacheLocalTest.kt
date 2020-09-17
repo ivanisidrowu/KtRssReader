@@ -45,14 +45,14 @@ class DatabaseRssCacheLocalTest {
 
     @Test
     fun `Read cache`() {
-        val expect = mockkRelaxed<RssStandardChannel>()
+        val expected = mockkRelaxed<RssStandardChannel>()
         every {
             mockDao.getChannelByUrl(any())?.channel?.convertToObject<RssStandardChannel>()
-        } returns expect
+        } returns expected
 
         val actual = subject.readCache("fakeUrl")
 
-        actual shouldBe expect
+        actual shouldBe expected
     }
 
     @Test
