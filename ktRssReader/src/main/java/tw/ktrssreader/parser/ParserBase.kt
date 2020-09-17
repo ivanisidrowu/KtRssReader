@@ -3,11 +3,6 @@ package tw.ktrssreader.parser
 import android.util.Xml
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
-import tw.ktrssreader.constant.ParserConst
-import tw.ktrssreader.model.channel.Cloud
-import tw.ktrssreader.model.channel.Image
-import tw.ktrssreader.model.channel.RssStandardChannel
-import tw.ktrssreader.model.channel.TextInput
 import tw.ktrssreader.constant.ParserConst.AUTHOR
 import tw.ktrssreader.constant.ParserConst.CATEGORY
 import tw.ktrssreader.constant.ParserConst.CHANNEL
@@ -48,28 +43,37 @@ import tw.ktrssreader.constant.ParserConst.TYPE
 import tw.ktrssreader.constant.ParserConst.URL
 import tw.ktrssreader.constant.ParserConst.WEB_MASTER
 import tw.ktrssreader.constant.ParserConst.WIDTH
+import tw.ktrssreader.model.channel.Cloud
+import tw.ktrssreader.model.channel.Image
+import tw.ktrssreader.model.channel.RssStandardChannel
+import tw.ktrssreader.model.channel.TextInput
 import tw.ktrssreader.model.item.*
 import java.io.ByteArrayInputStream
 import java.io.IOException
-import kotlin.jvm.Throws
 
 abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 
-    protected fun parseStandardChannel(xml: String): RssStandardChannel {
+    protected val noValidChannelTag = "No valid channel tag in the RSS feed."
+
+    protected fun <T> parseChannel(xml: String, action: XmlPullParser.() -> T): T {
         val parser = getXmlParser(xml)
 
-        var result: RssStandardChannel? = null
+        var result: T? = null
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) continue
 
-            if (parser.name == ParserConst.CHANNEL) {
-                result = parser.readRssStandardChannel()
+            if (parser.name == CHANNEL) {
+                result = action(parser)
                 break
             } else {
                 parser.skip()
             }
         }
         return result ?: throw XmlPullParserException("No valid channel tag in the RSS feed.")
+    }
+
+    protected fun parseStandardChannel(xml: String): RssStandardChannel {
+        return parseChannel(xml) { readRssStandardChannel() }
     }
 
     protected fun getXmlParser(xml: String): XmlPullParser {
@@ -122,9 +126,17 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         }
     }
 
+    protected fun String.convertYesNo(): Boolean? {
+        return when (toLowerCase()) {
+            "yes" -> true
+            "no" -> false
+            else -> null
+        }
+    }
+
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readRssStandardChannel(): RssStandardChannel {
-        require(XmlPullParser.START_TAG, null, ParserConst.CHANNEL)
+        require(XmlPullParser.START_TAG, null, CHANNEL)
 
         var title: String? = null
         var description: String? = null
@@ -180,7 +192,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             description = description,
             image = image,
             language = language,
-            categories = categories,
+            categories = if (categories.isEmpty()) null else categories,
             link = link,
             copyright = copyright,
             managingEditor = managingEditor,
@@ -195,7 +207,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             textInput = textInput,
             skipHours = skipHours,
             skipDays = skipDays,
-            items = items
+            items = if (items.isEmpty()) null else items
         )
     }
 
@@ -238,7 +250,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             description = description,
             link = link,
             author = author,
-            categories = categories,
+            categories = if (categories.isEmpty()) null else categories,
             comments = comments,
             source = source
         )

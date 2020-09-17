@@ -47,12 +47,15 @@ object ParserConst {
     const val DAY = "day"
     const val HEIGHT = "height"
     const val WIDTH = "width"
+    const val HREF = "href"
+    const val TEXT = "text"
 
     const val ITUNES_IMAGE = "$ITUNES:$IMAGE"
     const val ITUNES_EXPLICIT = "$ITUNES:$EXPLICIT"
     const val ITUNES_CATEGORY = "$ITUNES:$CATEGORY"
     const val ITUNES_AUTHOR = "$ITUNES:$AUTHOR"
     const val ITUNES_OWNER = "$ITUNES:$OWNER"
+    const val ITUNES_NAME = "$ITUNES:$NAME"
     const val ITUNES_EMAIL = "$ITUNES:email"
     const val ITUNES_TITLE = "$ITUNES:$TITLE"
     const val ITUNES_TYPE = "$ITUNES:$TYPE"
@@ -63,4 +66,12 @@ object ParserConst {
     const val ITUNES_EPISODE = "$ITUNES:episode"
     const val ITUNES_SEASON = "$ITUNES:season"
     const val ITUNES_EPISODE_TYPE = "$ITUNES:episodeType"
+
+    const val GOOGLE_DESCRIPTION = "$GOOGLE_PLAY:$DESCRIPTION"
+    const val GOOGLE_IMAGE = "$GOOGLE_PLAY:$IMAGE"
+    const val GOOGLE_EXPLICIT = "$GOOGLE_PLAY:$EXPLICIT"
+    const val GOOGLE_CATEGORY = "$GOOGLE_PLAY:$CATEGORY"
+    const val GOOGLE_AUTHOR = "$GOOGLE_PLAY:$AUTHOR"
+    const val GOOGLE_OWNER = "$GOOGLE_PLAY:$OWNER"
+    const val GOOGLE_BLOCK = "$GOOGLE_PLAY:$BLOCK"
 }
