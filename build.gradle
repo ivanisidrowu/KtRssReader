@@ -9,6 +9,9 @@ buildscript {
             'roomKtx'                 : 'androidx.room:room-ktx:2.2.5',
             'roomCompiler'            : 'androidx.room:room-compiler:2.2.5',
     ]
+    ext.testDeps = [
+            'mockk': 'io.mockk:mockk:1.10.0'
+    ]
 
     ext.kotlin_version = "1.4.0"
     repositories {

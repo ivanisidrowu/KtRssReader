@@ -10,6 +10,7 @@ import tw.ktrssreader.utils.logD
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.jvm.Throws
 
 typealias Config = KtRssReaderConfig.() -> Unit
 
