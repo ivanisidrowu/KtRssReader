@@ -2,7 +2,7 @@ package tw.ktrssreader.constant
 
 object ParserConst {
     const val ITUNES = "itunes"
-    const val GOOGLEPLAY = "googleplay"
+    const val GOOGLE_PLAY = "googleplay"
 
     const val CHANNEL = "channel"
     const val TITLE = "title"
