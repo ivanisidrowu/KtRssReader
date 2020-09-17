@@ -4,6 +4,7 @@ import tw.ktrssreader.model.item.AutoMixItem
 import tw.ktrssreader.model.item.GoogleItem
 import tw.ktrssreader.model.item.ITunesItem
 import tw.ktrssreader.model.item.RssStandardItem
+import java.io.Serializable
 import java.util.*
 
 open class RssStandardChannel(
@@ -27,7 +28,7 @@ open class RssStandardChannel(
     open val skipHours: Int?,
     open val skipDays: String?,
     open val items: List<RssStandardItem>,
-)
+) : Serializable
 
 data class ITunesChannel(
     override val title: String?,
@@ -78,7 +79,7 @@ data class ITunesChannel(
     skipHours = skipHours,
     skipDays = skipDays,
     items = items
-)
+), Serializable
 
 data class GoogleChannel(
     override val title: String?,
@@ -126,7 +127,7 @@ data class GoogleChannel(
     skipHours = skipHours,
     skipDays = skipDays,
     items = items
-)
+), Serializable
 
 data class AutoMixChannel(
     override val title: String?,
@@ -177,4 +178,4 @@ data class AutoMixChannel(
     skipHours = skipHours,
     skipDays = skipDays,
     items = items
-)
+), Serializable

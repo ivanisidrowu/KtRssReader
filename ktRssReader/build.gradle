@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
@@ -35,5 +36,10 @@ dependencies {
 
     implementation deps.kotlinxCoroutinesCore
     implementation deps.kotlinxCoroutinesAndroid
+
     implementation deps.okHttp
+
+    implementation deps.roomRuntime
+    implementation deps.roomKtx
+    kapt deps.roomCompiler
 }
