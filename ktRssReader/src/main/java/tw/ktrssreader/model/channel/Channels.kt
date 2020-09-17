@@ -1,18 +1,14 @@
 package tw.ktrssreader.model.channel
 
-import tw.ktrssreader.model.item.AutoMixItem
-import tw.ktrssreader.model.item.GoogleItem
-import tw.ktrssreader.model.item.ITunesItem
-import tw.ktrssreader.model.item.RssStandardItem
 import java.io.Serializable
-import java.util.*
+import tw.ktrssreader.model.item.*
 
 open class RssStandardChannel(
     open val title: String?,
     open val description: String?,
     open val image: Image?,
     open val language: String?,
-    open val categories: List<String>?,
+    open val categories: List<Category>?,
     open val link: String?,
     open val copyright: String?,
     open val managingEditor: String?,
@@ -23,10 +19,10 @@ open class RssStandardChannel(
     open val docs: String?,
     open val cloud: Cloud?,
     open val ttl: Int?,
-    open val rating: Float?,
+    open val rating: String?,
     open val textInput: TextInput?,
-    open val skipHours: Int?,
-    open val skipDays: String?,
+    open val skipHours: List<Int>?,
+    open val skipDays: List<String>?,
     open val items: List<RssStandardItem>,
 ) : Serializable
 
@@ -35,7 +31,7 @@ data class ITunesChannel(
     override val description: String?,
     override val image: Image?,
     override val language: String?,
-    override val categories: List<String>?,
+    override val categories: List<Category>?,
     override val link: String?,
     override val copyright: String?,
     override val managingEditor: String?,
@@ -46,10 +42,10 @@ data class ITunesChannel(
     override val docs: String?,
     override val cloud: Cloud?,
     override val ttl: Int?,
-    override val rating: Float?,
+    override val rating: String?,
     override val textInput: TextInput?,
-    override val skipHours: Int?,
-    override val skipDays: String?,
+    override val skipHours: List<Int>?,
+    override val skipDays: List<String>?,
     override val items: List<ITunesItem>,
     val explicit: Boolean?,
     val author: String?,
@@ -86,7 +82,7 @@ data class GoogleChannel(
     override val description: String?,
     override val image: Image?,
     override val language: String?,
-    override val categories: List<String>?,
+    override val categories: List<Category>?,
     override val link: String?,
     override val copyright: String?,
     override val managingEditor: String?,
@@ -97,10 +93,10 @@ data class GoogleChannel(
     override val docs: String?,
     override val cloud: Cloud?,
     override val ttl: Int?,
-    override val rating: Float?,
+    override val rating: String?,
     override val textInput: TextInput?,
-    override val skipHours: Int?,
-    override val skipDays: String?,
+    override val skipHours: List<Int>?,
+    override val skipDays: List<String>?,
     override val items: List<GoogleItem>,
     val explicit: Boolean?,
     val author: String?,
@@ -134,7 +130,7 @@ data class AutoMixChannel(
     override val description: String?,
     override val image: Image?,
     override val language: String?,
-    override val categories: List<String>?,
+    override val categories: List<Category>?,
     override val link: String?,
     override val copyright: String?,
     override val managingEditor: String?,
@@ -145,10 +141,10 @@ data class AutoMixChannel(
     override val docs: String?,
     override val cloud: Cloud?,
     override val ttl: Int?,
-    override val rating: Float?,
+    override val rating: String?,
     override val textInput: TextInput?,
-    override val skipHours: Int?,
-    override val skipDays: String?,
+    override val skipHours: List<Int>?,
+    override val skipDays: List<String>?,
     override val items: List<AutoMixItem>,
     val explicit: Boolean?,
     val author: String?,

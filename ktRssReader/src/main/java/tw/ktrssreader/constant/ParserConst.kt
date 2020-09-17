@@ -1,6 +1,9 @@
 package tw.ktrssreader.constant
 
 object ParserConst {
+    const val ITUNES = "itunes"
+    const val GOOGLE_PLAY = "googleplay"
+
     const val CHANNEL = "channel"
     const val TITLE = "title"
     const val DESCRIPTION = "description"
@@ -36,4 +39,28 @@ object ParserConst {
     const val SOURCE = "source"
     const val LENGTH = "length"
     const val TYPE = "type"
+    const val EXPLICIT = "explicit"
+    const val OWNER = "owner"
+    const val BLOCK = "block"
+    const val PERMALINK = "isPermaLink"
+    const val HOUR = "hour"
+    const val DAY = "day"
+    const val HEIGHT = "height"
+    const val WIDTH = "width"
+
+    const val ITUNES_IMAGE = "$ITUNES:$IMAGE"
+    const val ITUNES_EXPLICIT = "$ITUNES:$EXPLICIT"
+    const val ITUNES_CATEGORY = "$ITUNES:$CATEGORY"
+    const val ITUNES_AUTHOR = "$ITUNES:$AUTHOR"
+    const val ITUNES_OWNER = "$ITUNES:$OWNER"
+    const val ITUNES_EMAIL = "$ITUNES:email"
+    const val ITUNES_TITLE = "$ITUNES:$TITLE"
+    const val ITUNES_TYPE = "$ITUNES:$TYPE"
+    const val ITUNES_NEW_FEED_URL = "$ITUNES:new-feed-url"
+    const val ITUNES_BLOCK = "$ITUNES:$BLOCK"
+    const val ITUNES_COMPLETE = "$ITUNES:complete"
+    const val ITUNES_DURATION = "$ITUNES:duration"
+    const val ITUNES_EPISODE = "$ITUNES:episode"
+    const val ITUNES_SEASON = "$ITUNES:season"
+    const val ITUNES_EPISODE_TYPE = "$ITUNES:episodeType"
 }
