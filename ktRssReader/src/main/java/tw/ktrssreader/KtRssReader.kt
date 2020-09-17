@@ -29,7 +29,7 @@ inline fun <reified T : RssStandardChannel> reader(
         val xml = fetcher.fetch(url = url, charset = ktRssReaderConfig.charset)
         val parser = KtRssProvider.provideParser<T>()
         val channel = parser.parse(xml)
-        thread { rssCache.saveCache(url = url, channel = channel) }
+        thread(name = "[reader cache]") { rssCache.saveCache(url = url, channel = channel) }
         channel
     } else {
         logD("[reader] use local cache")
