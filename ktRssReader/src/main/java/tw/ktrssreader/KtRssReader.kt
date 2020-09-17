@@ -6,9 +6,10 @@ import tw.ktrssreader.config.KtRssReaderConfig
 import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.isMainThread
+import tw.ktrssreader.utils.logD
+import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.jvm.Throws
 
 typealias Config = KtRssReaderConfig.() -> Unit
 
@@ -20,13 +21,19 @@ inline fun <reified T : RssStandardChannel> reader(
     check(!isMainThread()) { "Should not be called on main thread." }
 
     val ktRssReaderConfig = KtRssReaderConfig().apply(config)
-    if (ktRssReaderConfig.useRemote) {
+    val rssCache = KtRssProvider.provideRssCache<T>()
+    val cacheChannel = if (ktRssReaderConfig.useRemote) null else rssCache.readCache(url)
+    return if (cacheChannel == null) {
+        logD("[reader] fetch remote data")
         val fetcher = KtRssProvider.provideXmlFetcher()
         val xml = fetcher.fetch(url = url, charset = ktRssReaderConfig.charset)
         val parser = KtRssProvider.provideParser<T>()
-        return parser.parse(xml)
+        val channel = parser.parse(xml)
+        thread(name = "[reader cache]") { rssCache.saveCache(url = url, channel = channel) }
+        channel
     } else {
-        TODO("Not yet implemented")
+        logD("[reader] use local cache")
+        cacheChannel
     }
 }
 
