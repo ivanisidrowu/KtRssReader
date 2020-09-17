@@ -7,9 +7,9 @@ import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.isMainThread
 import tw.ktrssreader.utils.logD
+import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.jvm.Throws
 
 typealias Config = KtRssReaderConfig.() -> Unit
 
@@ -22,14 +22,14 @@ inline fun <reified T : RssStandardChannel> reader(
 
     val ktRssReaderConfig = KtRssReaderConfig().apply(config)
     val rssCache = KtRssProvider.provideRssCache<T>()
-    val cacheChannel = rssCache.readCache(url)
-    return if (ktRssReaderConfig.useRemote || cacheChannel == null) {
+    val cacheChannel = if (ktRssReaderConfig.useRemote) null else rssCache.readCache(url)
+    return if (cacheChannel == null) {
         logD("[reader] fetch remote data")
         val fetcher = KtRssProvider.provideXmlFetcher()
         val xml = fetcher.fetch(url = url, charset = ktRssReaderConfig.charset)
         val parser = KtRssProvider.provideParser<T>()
         val channel = parser.parse(xml)
-        rssCache.saveCache(url = url, channel = channel)
+        thread { rssCache.saveCache(url = url, channel = channel) }
         channel
     } else {
         logD("[reader] use local cache")
