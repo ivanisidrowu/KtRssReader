@@ -46,7 +46,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
 
             when (name) {
                 GOOGLE_DESCRIPTION -> description = readString(GOOGLE_DESCRIPTION)
-                GOOGLE_IMAGE -> image = readImage(standardChannel.image)
+                GOOGLE_IMAGE -> image = readImage()
                 GOOGLE_EXPLICIT -> explicit = readString(GOOGLE_EXPLICIT)?.convertYesNo()
                 GOOGLE_CATEGORY -> categories = readCategory()
                 GOOGLE_AUTHOR -> author = readString(GOOGLE_AUTHOR)
@@ -64,10 +64,10 @@ class GoogleParser : ParserBase<GoogleChannel>() {
         require(XmlPullParser.END_TAG, null, CHANNEL)
         return GoogleChannel(
             title = standardChannel.title,
-            description = description ?: standardChannel.description,
+            description = description,
             image = image,
             language = standardChannel.language,
-            categories = categories ?: standardChannel.categories,
+            categories = categories,
             link = standardChannel.link,
             copyright = standardChannel.copyright,
             managingEditor = standardChannel.managingEditor,
@@ -112,7 +112,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
             enclosure = standardItem.enclosure,
             guid = standardItem.guid,
             pubDate = standardItem.pubDate,
-            description = description ?: standardItem.description,
+            description = description,
             link = standardItem.link,
             author = standardItem.author,
             categories = standardItem.categories,
@@ -124,18 +124,18 @@ class GoogleParser : ParserBase<GoogleChannel>() {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readImage(standardImage: Image?): Image {
+    private fun XmlPullParser.readImage(): Image {
         require(XmlPullParser.START_TAG, null, ParserConst.GOOGLE_IMAGE)
-        val href: String? = getAttributeValue(null, ParserConst.HREF) ?: standardImage?.link
+        val href: String? = getAttributeValue(null, ParserConst.HREF)
         nextTag()
         require(XmlPullParser.END_TAG, null, ParserConst.GOOGLE_IMAGE)
         return Image(
-            link = standardImage?.link,
-            title = standardImage?.title,
+            link = null,
+            title = null,
             url = href,
-            description = standardImage?.description,
-            height = standardImage?.height,
-            width = standardImage?.width
+            description = null,
+            height = null,
+            width = null
         )
     }
 

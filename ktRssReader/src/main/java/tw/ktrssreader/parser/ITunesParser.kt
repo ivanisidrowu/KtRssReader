@@ -59,7 +59,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
             if (eventType != XmlPullParser.START_TAG) continue
 
             when (name) {
-                ITUNES_IMAGE -> image = readImage(standardChannel.image)
+                ITUNES_IMAGE -> image = readImage()
                 ITUNES_EXPLICIT -> explicit = readString(ITUNES_EXPLICIT)?.toBoolean()
                 ITUNES_CATEGORY -> categories = readCategory()
                 ITUNES_AUTHOR -> author = readString(ITUNES_AUTHOR)
@@ -85,7 +85,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
             description = standardChannel.description,
             image = image,
             language = standardChannel.language,
-            categories = categories ?: standardChannel.categories,
+            categories = categories,
             link = standardChannel.link,
             copyright = standardChannel.copyright,
             managingEditor = standardChannel.managingEditor,
@@ -113,23 +113,23 @@ class ITunesParser : ParserBase<ITunesChannel>() {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readImage(standardImage: Image?): Image {
+    private fun XmlPullParser.readImage(): Image {
         require(XmlPullParser.START_TAG, null, ITUNES_IMAGE)
-        val href: String? = getAttributeValue(null, HREF) ?: standardImage?.link
+        val href: String? = getAttributeValue(null, HREF)
         nextTag()
         require(XmlPullParser.END_TAG, null, ITUNES_IMAGE)
         return Image(
-            link = standardImage?.link,
-            title = standardImage?.title,
+            link = null,
+            title = null,
             url = href,
-            description = standardImage?.description,
-            height = standardImage?.height,
-            width = standardImage?.width
+            description = null,
+            height = null,
+            width = null
         )
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readCategory(): List<Category> {
+    private fun XmlPullParser.readCategory(): List<Category>? {
         require(XmlPullParser.START_TAG, null, ITUNES_CATEGORY)
         val categories = mutableListOf<Category>()
         getAttributeValue(null, TEXT)?.let { categories.add(Category(name = it, null)) }
@@ -184,7 +184,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
 
             when (name) {
                 ITUNES_DURATION -> duration = readString(ITUNES_DURATION)
-                ITUNES_IMAGE -> image = readImage(null).url
+                ITUNES_IMAGE -> image = readImage().url
                 ITUNES_EXPLICIT -> explicit = readString(ITUNES_EXPLICIT)?.toBoolean()
                 ITUNES_TITLE -> simpleTitle = readString(ITUNES_TITLE)
                 ITUNES_EPISODE -> episode = readString(ITUNES_EPISODE)?.toIntOrNull()
@@ -204,7 +204,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
             pubDate = standardItem.pubDate,
             description = standardItem.description,
             link = standardItem.link,
-            author = author ?: standardItem.author,
+            author = author,
             categories = standardItem.categories,
             comments = standardItem.comments,
             source = standardItem.source,

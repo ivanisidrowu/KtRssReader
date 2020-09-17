@@ -55,7 +55,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 
     protected val noValidChannelTag = "No valid channel tag in the RSS feed."
 
-    protected fun <T> parseChannel(xml: String, action: XmlPullParser.() -> T): T {
+    protected inline fun <T> parseChannel(xml: String, action: XmlPullParser.() -> T): T {
         val parser = getXmlParser(xml)
 
         var result: T? = null
