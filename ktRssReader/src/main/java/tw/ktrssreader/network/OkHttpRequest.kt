@@ -6,8 +6,8 @@ import java.io.IOException
 import java.nio.charset.Charset
 
 class OkHttpRequest(
-    private val okHttpClient: OkHttpClient = OkHttpClient(),
-    private val requestBuilder: Request.Builder = Request.Builder()
+    private val okHttpClient: OkHttpClient,
+    private val requestBuilder: Request.Builder
 ) {
 
     fun get(url: String, charset: Charset?): String {
