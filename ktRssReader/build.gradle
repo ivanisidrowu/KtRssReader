@@ -23,6 +23,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        def sharedTestDir = 'src/sharedTest/java'
+        test {
+            java.srcDir sharedTestDir
+        }
+        androidTest {
+            java.srcDir sharedTestDir
+        }
+    }
 }
 
 dependencies {
@@ -42,4 +52,7 @@ dependencies {
     implementation deps.roomRuntime
     implementation deps.roomKtx
     kapt deps.roomCompiler
+
+    testImplementation testDeps.mockk
+    androidTestImplementation testDeps.mockk
 }
