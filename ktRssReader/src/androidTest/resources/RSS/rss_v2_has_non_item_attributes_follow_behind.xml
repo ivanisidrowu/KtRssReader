@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+   <channel>
+      <title>channel title</title>
+      <link>http://channel.link</link>
+      <description>Channel description</description>
+      <videoData>video unknown attribute</videoData>
+      <language>en-us</language>
+      <pubDate>Tue, 10 Jun 2003 04:00:00 GMT</pubDate>
+      <lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
+      <docs>http://channel.docs</docs>
+      <generator>channel generator</generator>
+      <videoData>video unknown attribute</videoData>
+      <managingEditor>managingEditor@example.com</managingEditor>
+      <webMaster>webmaster@example.com</webMaster>
+      <category>channel category 1</category>
+      <category>channel category 2</category>
+      <cloud domain="liftoff.msfc.nasa.gov" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify" protocol="xml-rpc" />
+      <ttl>60</ttl>
+      <rating>(PICS-1.1 "http://channel.rating" l by "webmaster@example.com" on "2007.01.29T10:09-0800" r (n 0 s 0 v 0 l 0))</rating>
+      <image>
+         <link>http://channel.image.link</link>
+         <title>channel image title</title>
+         <url>http://channel.image.url</url>
+         <description>channel image description</description>
+         <height>32</height>
+         <width>96</width>
+      </image>
+      <videoData>video unknown attribute</videoData>
+      <skipDays>
+         <day>Saturday</day>
+         <day>Sunday</day>
+      </skipDays>
+      <skipHours>
+         <hour>0</hour>
+         <hour>1</hour>
+         <hour>2</hour>
+         <hour>22</hour>
+         <hour>23</hour>
+      </skipHours>
+      <textInput>
+         <description>channel textInput description</description>
+         <link>http://channel.textInput.link</link>
+         <name>channel textInput name</name>
+         <title>channel textInput title</title>
+      </textInput>
+      <item>
+         <title>item title - Full</title>
+         <link>http://item.link</link>
+         <author>item.author@example.com</author>
+         <category>item category 1</category>
+         <category>item category 2</category>
+         <comments>http://item.comment</comments>
+         <enclosure length="24986239" type="audio/mpeg" url="http://item.enclosure.url/item.mp3" />
+         <description>item description How do Americans get ready to work with Russians aboard the International Space Station? They take a crash course in culture, language and protocol at Russia's &lt;a href="http://howe.iki.rssi.ru/GCTC/gctc_e.htm"&gt;Star City&lt;/a&gt;.</description>
+         <pubDate>Tue, 03 Jun 2003 09:39:21 GMT</pubDate>
+         <guid>http://item.guid</guid>
+         <source url="item.source.url">item source</source>
+      </item>
+      <item>
+         <title>item title - Partial</title>
+         <description>item description Sky watchers in Europe, Asia, and parts of Alaska and Canada will experience a &lt;a href="http://science.nasa.gov/headlines/y2003/30may_solareclipse.htm"&gt;partial eclipse of the Sun&lt;/a&gt; on Saturday, May 31st.</description>
+         <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
+         <guid isPermaLink="true">http://item.guid</guid>
+      </item>
+      <nonItem>
+         <title>unknown attribute</title>
+      </nonItem>
+   </channel>
+</rss>

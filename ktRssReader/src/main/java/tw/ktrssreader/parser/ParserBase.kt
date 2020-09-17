@@ -180,7 +180,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             description = description,
             image = image,
             language = language,
-            categories = categories,
+            categories = categories.takeIf { it.isNotEmpty() },
             link = link,
             copyright = copyright,
             managingEditor = managingEditor,
@@ -238,7 +238,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             description = description,
             link = link,
             author = author,
-            categories = categories,
+            categories = categories.takeIf { it.isNotEmpty() },
             comments = comments,
             source = source
         )
