@@ -103,6 +103,7 @@ data class GoogleChannel(
     val author: String?,
     val owner: String?,
     val block: Boolean?,
+    val email: String?,
 ) : RssStandardChannel(
     title = title,
     description = description,

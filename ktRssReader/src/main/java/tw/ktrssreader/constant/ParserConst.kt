@@ -49,6 +49,7 @@ object ParserConst {
     const val WIDTH = "width"
     const val HREF = "href"
     const val TEXT = "text"
+    const val EMAIL = "email"
 
     const val ITUNES_IMAGE = "$ITUNES:$IMAGE"
     const val ITUNES_EXPLICIT = "$ITUNES:$EXPLICIT"
@@ -56,7 +57,7 @@ object ParserConst {
     const val ITUNES_AUTHOR = "$ITUNES:$AUTHOR"
     const val ITUNES_OWNER = "$ITUNES:$OWNER"
     const val ITUNES_NAME = "$ITUNES:$NAME"
-    const val ITUNES_EMAIL = "$ITUNES:email"
+    const val ITUNES_EMAIL = "$ITUNES:$EMAIL"
     const val ITUNES_TITLE = "$ITUNES:$TITLE"
     const val ITUNES_TYPE = "$ITUNES:$TYPE"
     const val ITUNES_NEW_FEED_URL = "$ITUNES:new-feed-url"
@@ -74,4 +75,5 @@ object ParserConst {
     const val GOOGLE_AUTHOR = "$GOOGLE_PLAY:$AUTHOR"
     const val GOOGLE_OWNER = "$GOOGLE_PLAY:$OWNER"
     const val GOOGLE_BLOCK = "$GOOGLE_PLAY:$BLOCK"
+    const val GOOGLE_EMAIL = "$GOOGLE_PLAY:$EMAIL"
 }

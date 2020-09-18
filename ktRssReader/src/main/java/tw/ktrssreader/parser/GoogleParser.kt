@@ -8,6 +8,7 @@ import tw.ktrssreader.constant.ParserConst.GOOGLE_AUTHOR
 import tw.ktrssreader.constant.ParserConst.GOOGLE_BLOCK
 import tw.ktrssreader.constant.ParserConst.GOOGLE_CATEGORY
 import tw.ktrssreader.constant.ParserConst.GOOGLE_DESCRIPTION
+import tw.ktrssreader.constant.ParserConst.GOOGLE_EMAIL
 import tw.ktrssreader.constant.ParserConst.GOOGLE_EXPLICIT
 import tw.ktrssreader.constant.ParserConst.GOOGLE_IMAGE
 import tw.ktrssreader.constant.ParserConst.GOOGLE_OWNER
@@ -39,6 +40,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
         var author: String? = null
         var owner: String? = null
         var block: Boolean? = null
+        var email: String? = null
         val items: MutableList<GoogleItem> = mutableListOf()
         var itemIndex = 0
         while (next() != XmlPullParser.END_TAG) {
@@ -52,6 +54,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
                 GOOGLE_AUTHOR -> author = readString(GOOGLE_AUTHOR)
                 GOOGLE_OWNER -> owner = readString(GOOGLE_OWNER)
                 GOOGLE_BLOCK -> block = readString(GOOGLE_BLOCK)?.convertYesNo()
+                GOOGLE_EMAIL -> email = readString(GOOGLE_EMAIL)
                 ITEM -> {
                     standardChannel.items?.get(itemIndex)?.let {
                         items.add(readItem(it))
@@ -86,7 +89,8 @@ class GoogleParser : ParserBase<GoogleChannel>() {
             explicit = explicit,
             author = author,
             owner = owner,
-            block = block
+            block = block,
+            email = email
         )
     }
 
