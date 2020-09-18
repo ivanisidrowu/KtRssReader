@@ -67,7 +67,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
             description = description,
             image = image,
             language = standardChannel.language,
-            categories = categories,
+            categories = categories?.takeIf { it.isNotEmpty() },
             link = standardChannel.link,
             copyright = standardChannel.copyright,
             managingEditor = standardChannel.managingEditor,
