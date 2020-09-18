@@ -1,6 +1,6 @@
 package tw.ktrssreader.parser
 
-import junit.framework.Assert
+import extensions.shouldBe
 import org.junit.Test
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
@@ -44,13 +44,9 @@ class RssStandardParserTest {
         @Test
         fun parse() {
             val xml = XmlFileReader.readFile(rssFilePath)
-            val channel = rssStandardParser.parse(xml)
+            val actualChannel = rssStandardParser.parse(xml)
 
-            Assert.assertEquals(
-                "channel value should be the expected value",
-                expectedChannel,
-                channel
-            )
+            actualChannel shouldBe expectedChannel
         }
     }
 
