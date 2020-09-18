@@ -82,7 +82,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
             textInput = standardChannel.textInput,
             skipHours = standardChannel.skipHours,
             skipDays = standardChannel.skipDays,
-            items = items,
+            items = items.takeIf { it.isNotEmpty() },
             explicit = explicit,
             author = author,
             owner = owner,
