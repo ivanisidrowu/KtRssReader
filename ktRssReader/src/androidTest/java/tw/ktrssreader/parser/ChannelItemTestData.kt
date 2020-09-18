@@ -12,7 +12,7 @@ object ChannelItemTestData {
     private const val ITEM_TITLE_ATTR_PARTIAL = "item title - Partial"
     private val ITEM_GUID_ATTR_WITH_IS_PERMA_LINK = Guid(value = "http://item.guid", isPermaLink = true)
     private val ITEM_GUID_ATTR = Guid(value = "http://item.guid", isPermaLink = null)
-    private const val ITEM_DESCRIPTION_ATTR = "item description How do Americans get ready to work with Russians aboard the International Space Station? They take a crash course in culture, language and protocol at Russia's <a href=\"http://howe.iki.rssi.ru/GCTC/gctc_e.htm\">Star City</a>."
+    private const val ITEM_DESCRIPTION_ATTR = "item description <a href=\"http://item.description\">item description</a>."
     private const val ITEM_DESCRIPTION_ATTR_2 = "item description 2"
     private const val ITEM_PUB_DATE_ATTR = "Fri, 30 May 2003 11:06:42 GMT"
     private const val ITEM_LINK_ATTR = "http://item.link"
@@ -64,7 +64,7 @@ object ChannelItemTestData {
     private const val CHANNEL_GENERATOR_ATTR = "channel generator"
     private const val CHANNEL_DOCS_ATTR = "http://channel.docs"
     private val CHANNEL_CLOULD_ATTR = Cloud(
-        domain = "liftoff.msfc.nasa.gov",
+        domain = "channel.cloud.domain",
         port = 80,
         path = "/RPC2",
         registerProcedure = "myCloud.rssPleaseNotify",

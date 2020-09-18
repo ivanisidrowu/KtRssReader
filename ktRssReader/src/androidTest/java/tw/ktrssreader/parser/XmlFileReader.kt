@@ -7,17 +7,17 @@ import java.nio.charset.Charset
 
 object XmlFileReader {
     fun readFile(filename: String): String {
-        val inputStream: InputStream = this::class.java.classLoader.getResourceAsStream(filename)
-        val streamBuilder = StringBuilder()
+        val stringBuilder = StringBuilder()
+        this::class.java.classLoader.getResourceAsStream(filename).use { inputStream ->
+            var availableCount = inputStream.available()
+            while (availableCount > 0) {
+                val string = inputStream.readByteString(availableCount).string(Charsets.UTF_8)
+                stringBuilder.append(string)
 
-        var availableCount = inputStream.available()
-        while (availableCount > 0) {
-            val string = inputStream.readByteString(availableCount).string(Charset.forName("UTF-8"))
-            streamBuilder.append(string)
-
-            availableCount = inputStream.available()
+                availableCount = inputStream.available()
+            }
         }
 
-        return streamBuilder.toString()
+        return stringBuilder.toString()
     }
 }

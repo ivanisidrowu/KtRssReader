@@ -20,7 +20,7 @@
       <webMaster>webmaster@example.com</webMaster>
       <category>channel category 1</category>
       <category domain="http://channel.category.domain">channel category 2</category>
-      <cloud domain="liftoff.msfc.nasa.gov" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify" protocol="xml-rpc" />
+      <cloud domain="channel.cloud.domain" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify" protocol="xml-rpc" />
       <ttl>60</ttl>
       <rating>(PICS-1.1 "http://channel.rating" l by "webmaster@example.com" on "2007.01.29T10:09-0800" r (n 0 s 0 v 0 l 0))</rating>
       <image>
@@ -57,7 +57,7 @@
          <category>item category 2</category>
          <comments>http://item.comment</comments>
          <enclosure length="24986239" type="audio/mpeg" url="http://item.enclosure.url/item.mp3" />
-         <description>item description How do Americans get ready to work with Russians aboard the International Space Station? They take a crash course in culture, language and protocol at Russia's &lt;a href="http://howe.iki.rssi.ru/GCTC/gctc_e.htm"&gt;Star City&lt;/a&gt;.</description>
+         <description>item description &lt;a href="http://item.description"&gt;item description&lt;/a&gt;.</description>
          <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
          <guid>http://item.guid</guid>
          <source url="item.source.url">item source</source>

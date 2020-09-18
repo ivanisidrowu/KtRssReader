@@ -1,7 +1,6 @@
 package tw.ktrssreader.parser
 
 import junit.framework.Assert
-import org.junit.Before
 import org.junit.Test
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
@@ -18,7 +17,7 @@ import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_TEXT_IMAGE
 class RssStandardParserTest {
 
     @RunWith(Parameterized::class)
-    class RssStandardParserTest(
+    class RssStandardParserParseFunctionTest(
         private val rssFilePath: String,
         private val expectedChannel: RssStandardChannel?
     ) {
@@ -40,12 +39,7 @@ class RssStandardParserTest {
             )
         }
 
-        private lateinit var rssStandardParser: RssStandardParser
-
-        @Before
-        fun setUp() {
-            rssStandardParser = RssStandardParser()
-        }
+        private val rssStandardParser: RssStandardParser = RssStandardParser()
 
         @Test
         fun parse() {
