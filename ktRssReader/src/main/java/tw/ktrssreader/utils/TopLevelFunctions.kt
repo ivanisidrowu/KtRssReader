@@ -14,8 +14,6 @@ fun logD(message: String) {
     if (KtRssReaderGlobalConfig.enableLog) Log.d(TAG, message)
 }
 
-fun isMainThread(): Boolean = Looper.myLooper() == Looper.getMainLooper()
-
 fun <T> T.convertToByteArray(): ByteArray {
     return ByteArrayOutputStream().use { bos ->
         val oos = ObjectOutputStream(bos)

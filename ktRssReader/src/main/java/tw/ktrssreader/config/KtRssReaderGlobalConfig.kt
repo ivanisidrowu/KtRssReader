@@ -3,10 +3,19 @@ package tw.ktrssreader.config
 import android.content.Context
 
 object KtRssReaderGlobalConfig {
-    lateinit var applicationContext: Context
+    private var applicationContext: Context? = null
     var enableLog: Boolean = false
+
+    fun setApplicationContext(applicationContext: Context) {
+        this.applicationContext = applicationContext
+    }
+
+    fun getApplicationContext(): Context {
+        return applicationContext
+            ?: error("No Application Context configured. Please use readerGlobalConfig() DSL.")
+    }
 }
 
 fun readerGlobalConfig(builder: KtRssReaderGlobalConfig.() -> Unit) {
-    KtRssReaderGlobalConfig.apply(builder)
+    return KtRssReaderGlobalConfig.run(builder)
 }

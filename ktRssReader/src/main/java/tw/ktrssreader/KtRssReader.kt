@@ -5,9 +5,8 @@ import kotlinx.coroutines.flow.flow
 import tw.ktrssreader.config.KtRssReaderConfig
 import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.provider.KtRssProvider
-import tw.ktrssreader.utils.isMainThread
+import tw.ktrssreader.utils.ThreadUtils
 import tw.ktrssreader.utils.logD
-import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.jvm.Throws
@@ -19,7 +18,7 @@ inline fun <reified T : RssStandardChannel> reader(
     url: String,
     config: Config = {}
 ): T {
-    check(!isMainThread()) { "Should not be called on main thread." }
+    check(!ThreadUtils.isMainThread()) { "Should not be called on main thread." }
 
     val ktRssReaderConfig = KtRssReaderConfig().apply(config)
     val rssCache = KtRssProvider.provideRssCache<T>()
@@ -30,7 +29,9 @@ inline fun <reified T : RssStandardChannel> reader(
         val xml = fetcher.fetch(url = url, charset = ktRssReaderConfig.charset)
         val parser = KtRssProvider.provideParser<T>()
         val channel = parser.parse(xml)
-        thread(name = "[reader cache]") { rssCache.saveCache(url = url, channel = channel) }
+        ThreadUtils.runOnNewThread(treadName = "[reader cache]") {
+            rssCache.saveCache(url = url, channel = channel)
+        }
         channel
     } else {
         logD("[reader] use local cache")

@@ -26,7 +26,7 @@ class DatabaseRssCacheLocalTest {
     fun setup() {
         MockKAnnotations.init(this)
         mockkObject(KtRssReaderGlobalConfig)
-        every { KtRssReaderGlobalConfig.applicationContext } returns mockkRelaxed()
+        every { KtRssReaderGlobalConfig.getApplicationContext() } returns mockkRelaxed()
 
         val mockDatabase = mockkRelaxed<KtRssReaderDatabase>()
         mockkObject(KtRssProvider)
