@@ -11,6 +11,4 @@ infix fun Any?.shouldBe(expected: Any?) = Assert.assertEquals(expected, this)
 
 infix fun Any?.shouldNotBe(expected: Any?) = Assert.assertNotEquals(expected, this)
 
-inline fun never(noinline verifyBlock: MockKVerificationScope.() -> Unit) {
-    verify(exactly = 0, verifyBlock = verifyBlock)
-}
+fun never(block: MockKVerificationScope.() -> Unit) = verify(exactly = 0, verifyBlock = block)

@@ -33,6 +33,19 @@ android {
             java.srcDir sharedTestDir
         }
     }
+
+    def javaVersion = JavaVersion.VERSION_1_8
+    compileOptions {
+        targetCompatibility = javaVersion
+        sourceCompatibility = javaVersion
+    }
+    kotlinOptions {
+        jvmTarget = javaVersion
+        freeCompilerArgs += [
+                '-Xopt-in=kotlin.time.ExperimentalTime',
+                '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi',
+        ]
+    }
 }
 
 dependencies {
@@ -54,5 +67,7 @@ dependencies {
     kapt deps.roomCompiler
 
     testImplementation testDeps.mockk
+    testImplementation testDeps.turbine
+
     androidTestImplementation testDeps.mockk
 }
