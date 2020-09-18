@@ -2,6 +2,7 @@ package tw.ktrssreader.model.channel
 
 import java.io.Serializable
 import tw.ktrssreader.model.item.*
+import java.lang.StringBuilder
 
 open class RssStandardChannel(
     open val title: String?,
@@ -24,7 +25,86 @@ open class RssStandardChannel(
     open val skipHours: List<Int>?,
     open val skipDays: List<String>?,
     open val items: List<RssStandardItem>?,
-) : Serializable
+) : Serializable {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is RssStandardChannel) return false
+
+        if (title != other.title) return false
+        if (description != other.description) return false
+        if (image != other.image) return false
+        if (language != other.language) return false
+        if (categories != other.categories) return false
+        if (link != other.link) return false
+        if (copyright != other.copyright) return false
+        if (managingEditor != other.managingEditor) return false
+        if (webMaster != other.webMaster) return false
+        if (pubDate != other.pubDate) return false
+        if (lastBuildDate != other.lastBuildDate) return false
+        if (generator != other.generator) return false
+        if (docs != other.docs) return false
+        if (cloud != other.cloud) return false
+        if (ttl != other.ttl) return false
+        if (rating != other.rating) return false
+        if (textInput != other.textInput) return false
+        if (skipHours != other.skipHours) return false
+        if (skipDays != other.skipDays) return false
+        if (items != other.items) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title?.hashCode() ?: 0
+        result = 31 * result + (description?.hashCode() ?: 0)
+        result = 31 * result + (image?.hashCode() ?: 0)
+        result = 31 * result + (language?.hashCode() ?: 0)
+        result = 31 * result + (categories?.hashCode() ?: 0)
+        result = 31 * result + (link?.hashCode() ?: 0)
+        result = 31 * result + (copyright?.hashCode() ?: 0)
+        result = 31 * result + (managingEditor?.hashCode() ?: 0)
+        result = 31 * result + (webMaster?.hashCode() ?: 0)
+        result = 31 * result + (pubDate?.hashCode() ?: 0)
+        result = 31 * result + (lastBuildDate?.hashCode() ?: 0)
+        result = 31 * result + (generator?.hashCode() ?: 0)
+        result = 31 * result + (docs?.hashCode() ?: 0)
+        result = 31 * result + (cloud?.hashCode() ?: 0)
+        result = 31 * result + (ttl ?: 0)
+        result = 31 * result + (rating?.hashCode() ?: 0)
+        result = 31 * result + (textInput?.hashCode() ?: 0)
+        result = 31 * result + (skipHours?.hashCode() ?: 0)
+        result = 31 * result + (skipDays?.hashCode() ?: 0)
+        result = 31 * result + items.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        val stringBuilder = StringBuilder().apply {
+            appendLine("title:$title")
+            appendLine("description:$description")
+            appendLine("image:$image")
+            appendLine("language:$language")
+            appendLine("categories:$categories")
+            appendLine("link:$link")
+            appendLine("copyright:$copyright")
+            appendLine("managingEditor:$managingEditor")
+            appendLine("webMaster:$webMaster")
+            appendLine("pubDate:$pubDate")
+            appendLine("lastBuildDate:$lastBuildDate")
+            appendLine("generator:$generator")
+            appendLine("docs:$docs")
+            appendLine("cloud:$cloud")
+            appendLine("ttl:$ttl")
+            appendLine("rating:$rating")
+            appendLine("textInput:$textInput")
+            appendLine("skipHours:$skipHours")
+            appendLine("skipDays:$skipDays")
+            appendLine("items:$items")
+        }
+
+        return stringBuilder.toString()
+    }
+}
 
 data class ITunesChannel(
     override val title: String?,

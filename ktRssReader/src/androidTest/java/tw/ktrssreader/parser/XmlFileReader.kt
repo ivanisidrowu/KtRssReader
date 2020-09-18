@@ -1,0 +1,23 @@
+package tw.ktrssreader.parser
+
+import okio.ByteString.Companion.readByteString
+import java.io.InputStream
+import java.lang.StringBuilder
+import java.nio.charset.Charset
+
+object XmlFileReader {
+    fun readFile(filename: String): String {
+        val stringBuilder = StringBuilder()
+        this::class.java.classLoader.getResourceAsStream(filename).use { inputStream ->
+            var availableCount = inputStream.available()
+            while (availableCount > 0) {
+                val string = inputStream.readByteString(availableCount).string(Charsets.UTF_8)
+                stringBuilder.append(string)
+
+                availableCount = inputStream.available()
+            }
+        }
+
+        return stringBuilder.toString()
+    }
+}
