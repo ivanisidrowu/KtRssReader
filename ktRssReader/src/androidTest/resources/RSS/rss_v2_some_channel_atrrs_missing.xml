@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+   <channel>
+      <title>channel title</title>
+      <link>http://channel.link</link>
+      <videoData>video unknown attribute</videoData>
+      <language>en-us</language>
+      <pubDate>Tue, 10 Jun 2003 04:00:00 GMT</pubDate>
+      <lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
+      <docs>http://channel.docs</docs>
+      <generator>channel generator</generator>
+      <videoData>video unknown attribute</videoData>
+      <managingEditor>managingEditor@example.com</managingEditor>
+      <webMaster>webmaster@example.com</webMaster>
+      <ttl>60</ttl>
+      <rating>(PICS-1.1 "http://channel.rating" l by "webmaster@example.com" on "2007.01.29T10:09-0800" r (n 0 s 0 v 0 l 0))</rating>
+      <image>
+         <link>http://channel.image.link</link>
+         <title>channel image title</title>
+         <url>http://channel.image.url</url>
+         <description>channel image description</description>
+         <height>32</height>
+         <width>96</width>
+      </image>
+      <textInput>
+         <description>channel textInput description</description>
+         <link>http://channel.textInput.link</link>
+         <name>channel textInput name</name>
+         <title>channel textInput title</title>
+      </textInput>
+      <item>
+         <title>item title - Full</title>
+         <link>http://item.link</link>
+         <author>item.author@example.com</author>
+         <category>item category 1</category>
+         <category>item category 2</category>
+         <comments>http://item.comment</comments>
+         <enclosure length="24986239" type="audio/mpeg" url="http://item.enclosure.url/item.mp3" />
+         <description>item description &lt;a href="http://item.description"&gt;item description&lt;/a&gt;.</description>
+         <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
+         <guid>http://item.guid</guid>
+         <source url="item.source.url">item source</source>
+      </item>
+   </channel>
+</rss>
