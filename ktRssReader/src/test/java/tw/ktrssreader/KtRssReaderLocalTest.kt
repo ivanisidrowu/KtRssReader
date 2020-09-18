@@ -45,7 +45,7 @@ class KtRssReaderLocalTest {
             clearAllMocks()
         }
 
-        protected fun mockGetRemoteChannelSuccessfully(block: (expect: RssStandardChannel) -> Unit) {
+        protected fun mockGetRemoteChannelSuccessfully(block: (RssStandardChannel) -> Unit) {
             val expected = mockkRelaxed<RssStandardChannel>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
@@ -70,7 +70,7 @@ class KtRssReaderLocalTest {
             block()
         }
 
-        protected fun mockGetCacheChannelSuccessfully(block: (expect: RssStandardChannel) -> Unit, ) {
+        protected fun mockGetCacheChannelSuccessfully(block: (RssStandardChannel) -> Unit, ) {
             val expected = mockkRelaxed<RssStandardChannel>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
@@ -83,7 +83,7 @@ class KtRssReaderLocalTest {
             block(expected)
         }
 
-        protected fun mockGetCacheChannelFailed(block: (expect: RssStandardChannel) -> Unit) {
+        protected fun mockGetCacheChannelFailed(block: (RssStandardChannel) -> Unit) {
             val expected = mockkRelaxed<RssStandardChannel>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
@@ -109,14 +109,14 @@ class KtRssReaderLocalTest {
         }
 
         @Test
-        fun `Get remote channel successfully`() = mockGetRemoteChannelSuccessfully { expected ->
+        fun `Get remote channel successfully`() = mockGetRemoteChannelSuccessfully { mockItem ->
             val actual = reader<RssStandardChannel>(fakeUrl) {
                 useRemote = true
             }
 
             never { mockRssCache.readCache(fakeUrl) }
-            verify { mockRssCache.saveCache(fakeUrl, expected) }
-            actual shouldBe expected
+            verify { mockRssCache.saveCache(fakeUrl, mockItem) }
+            actual shouldBe mockItem
         }
 
         @Test(expected = Exception::class)
@@ -127,18 +127,18 @@ class KtRssReaderLocalTest {
         }
 
         @Test
-        fun `Get cache channel successfully`() = mockGetCacheChannelSuccessfully { expected ->
+        fun `Get cache channel successfully`() = mockGetCacheChannelSuccessfully { mockItem ->
             val actual = reader<RssStandardChannel>(fakeUrl)
 
-            actual shouldBe expected
+            actual shouldBe mockItem
         }
 
         @Test
-        fun `Get cache channel failed`() = mockGetCacheChannelFailed { expected ->
+        fun `Get cache channel failed`() = mockGetCacheChannelFailed { mockItem ->
             val actual = reader<RssStandardChannel>(fakeUrl)
 
-            verify { mockRssCache.saveCache(fakeUrl, expected) }
-            actual shouldBe expected
+            verify { mockRssCache.saveCache(fakeUrl, mockItem) }
+            actual shouldBe mockItem
         }
     }
 
@@ -155,12 +155,12 @@ class KtRssReaderLocalTest {
         }
 
         @Test
-        fun `Get remote channel successfully`() = mockGetRemoteChannelSuccessfully { expected ->
+        fun `Get remote channel successfully`() = mockGetRemoteChannelSuccessfully { mockItem ->
             runBlocking {
                 readerFlow<RssStandardChannel>(fakeUrl) {
                     useRemote = true
                 }.test {
-                    expectItem() shouldBe expected
+                    mockItem shouldBe expectItem()
                     expectComplete()
                 }
             }
@@ -178,23 +178,23 @@ class KtRssReaderLocalTest {
         }
 
         @Test
-        fun `Get cache channel successfully`() = mockGetCacheChannelSuccessfully { expected ->
+        fun `Get cache channel successfully`() = mockGetCacheChannelSuccessfully { mockItem ->
             runBlocking {
                 readerFlow<RssStandardChannel>(fakeUrl)
                     .test {
-                        expectItem() shouldBe expected
+                        mockItem shouldBe expectItem()
                         expectComplete()
                     }
             }
         }
 
         @Test
-        fun `Get cache channel failed`() = mockGetCacheChannelFailed { expected ->
+        fun `Get cache channel failed`() = mockGetCacheChannelFailed { mockItem ->
             runBlocking {
                 readerFlow<RssStandardChannel>(fakeUrl)
                     .test {
-                        verify { mockRssCache.saveCache(fakeUrl, expected) }
-                        expectItem() shouldBe expected
+                        verify { mockRssCache.saveCache(fakeUrl, mockItem) }
+                        mockItem shouldBe expectItem()
                         expectComplete()
                     }
             }
@@ -211,12 +211,12 @@ class KtRssReaderLocalTest {
         }
 
         @Test
-        fun `Get remote channel successfully`() = mockGetRemoteChannelSuccessfully { expected ->
+        fun `Get remote channel successfully`() = mockGetRemoteChannelSuccessfully { mockItem ->
             runBlocking {
                 val actual = readerSuspend<RssStandardChannel>(fakeUrl) {
                     useRemote = true
                 }
-                actual shouldBe expected
+                actual shouldBe mockItem
             }
         }
 
@@ -230,21 +230,21 @@ class KtRssReaderLocalTest {
         }
 
         @Test
-        fun `Get cache channel successfully`() = mockGetCacheChannelSuccessfully { expected ->
+        fun `Get cache channel successfully`() = mockGetCacheChannelSuccessfully { mockItem ->
             runBlocking {
                 val actual = readerSuspend<RssStandardChannel>(fakeUrl)
 
-                actual shouldBe expected
+                actual shouldBe mockItem
             }
         }
 
         @Test
-        fun `Get cache channel failed`() = mockGetCacheChannelFailed { expected ->
+        fun `Get cache channel failed`() = mockGetCacheChannelFailed { mockItem ->
             runBlocking {
                 val actual = readerSuspend<RssStandardChannel>(fakeUrl)
 
-                verify { mockRssCache.saveCache(fakeUrl, expected) }
-                actual shouldBe expected
+                verify { mockRssCache.saveCache(fakeUrl, mockItem) }
+                actual shouldBe mockItem
             }
         }
     }
