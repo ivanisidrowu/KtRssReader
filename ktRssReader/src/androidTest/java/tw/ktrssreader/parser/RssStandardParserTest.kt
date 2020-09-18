@@ -6,12 +6,12 @@ import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.xmlpull.v1.XmlPullParserException
-import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.parser.ChannelItemTestData.FULL_RSS_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_RSS_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_CLOUD
 import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_IMAGE
 import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_TEXT_IMAGE
+import tw.ktrssreader.parser.ChannelItemTestData.toRssStandardChannel
 
 @RunWith(Enclosed::class)
 class RssStandardParserTest {
@@ -19,7 +19,7 @@ class RssStandardParserTest {
     @RunWith(Parameterized::class)
     class RssStandardParserParseFunctionTest(
         private val rssFilePath: String,
-        private val expectedChannel: RssStandardChannel?
+        private val expectedChannel: ChannelItemTestData.TestRssStandardChannel?
     ) {
         companion object {
             private const val RSS_FOLDER = "RSS"
@@ -46,7 +46,7 @@ class RssStandardParserTest {
             val xml = XmlFileReader.readFile(rssFilePath)
             val actualChannel = rssStandardParser.parse(xml)
 
-            actualChannel shouldBe expectedChannel
+            actualChannel shouldBe expectedChannel?.toRssStandardChannel()
         }
     }
 

@@ -2,6 +2,7 @@ package tw.ktrssreader.model.channel
 
 import java.io.Serializable
 import tw.ktrssreader.model.item.*
+import java.lang.StringBuilder
 
 open class RssStandardChannel(
     open val title: String?,
@@ -77,6 +78,32 @@ open class RssStandardChannel(
         return result
     }
 
+    override fun toString(): String {
+        val stringBuilder = StringBuilder().apply {
+            appendLine("title:$title")
+            appendLine("description:$description")
+            appendLine("image:$image")
+            appendLine("language:$language")
+            appendLine("categories:$categories")
+            appendLine("link:$link")
+            appendLine("copyright:$copyright")
+            appendLine("managingEditor:$managingEditor")
+            appendLine("webMaster:$webMaster")
+            appendLine("pubDate:$pubDate")
+            appendLine("lastBuildDate:$lastBuildDate")
+            appendLine("generator:$generator")
+            appendLine("docs:$docs")
+            appendLine("cloud:$cloud")
+            appendLine("ttl:$ttl")
+            appendLine("rating:$rating")
+            appendLine("textInput:$textInput")
+            appendLine("skipHours:$skipHours")
+            appendLine("skipDays:$skipDays")
+            appendLine("items:$items")
+        }
+
+        return stringBuilder.toString()
+    }
 }
 
 data class ITunesChannel(

@@ -1,6 +1,7 @@
 package tw.ktrssreader.model.item
 
 import java.io.Serializable
+import java.lang.StringBuilder
 
 open class RssStandardItem(
     open val title: String?,
@@ -44,6 +45,23 @@ open class RssStandardItem(
         result = 31 * result + (comments?.hashCode() ?: 0)
         result = 31 * result + (source?.hashCode() ?: 0)
         return result
+    }
+
+    override fun toString(): String {
+        val stringBuilder = StringBuilder().apply {
+            appendLine("title:$title")
+            appendLine("enclosure:$enclosure")
+            appendLine("guid:$guid")
+            appendLine("pubDate:$pubDate")
+            appendLine("description:$description")
+            appendLine("link:$link")
+            appendLine("author:$author")
+            appendLine("categories:$categories")
+            appendLine("comments:$comments")
+            appendLine("source:$source")
+        }
+
+        return stringBuilder.toString()
     }
 }
 
