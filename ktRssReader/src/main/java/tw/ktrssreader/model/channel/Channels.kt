@@ -23,7 +23,7 @@ open class RssStandardChannel(
     open val textInput: TextInput?,
     open val skipHours: List<Int>?,
     open val skipDays: List<String>?,
-    open val items: List<RssStandardItem>,
+    open val items: List<RssStandardItem>?,
 ) : Serializable
 
 data class ITunesChannel(
@@ -46,7 +46,8 @@ data class ITunesChannel(
     override val textInput: TextInput?,
     override val skipHours: List<Int>?,
     override val skipDays: List<String>?,
-    override val items: List<ITunesItem>,
+    override val items: List<ITunesItem>?,
+    val simpleTitle: String?,
     val explicit: Boolean?,
     val author: String?,
     val owner: Owner?,
@@ -97,11 +98,12 @@ data class GoogleChannel(
     override val textInput: TextInput?,
     override val skipHours: List<Int>?,
     override val skipDays: List<String>?,
-    override val items: List<GoogleItem>,
+    override val items: List<GoogleItem>?,
     val explicit: Boolean?,
     val author: String?,
     val owner: String?,
     val block: Boolean?,
+    val email: String?,
 ) : RssStandardChannel(
     title = title,
     description = description,
@@ -145,7 +147,7 @@ data class AutoMixChannel(
     override val textInput: TextInput?,
     override val skipHours: List<Int>?,
     override val skipDays: List<String>?,
-    override val items: List<AutoMixItem>,
+    override val items: List<AutoMixItem>?,
     val explicit: Boolean?,
     val author: String?,
     val owner: Owner?,
