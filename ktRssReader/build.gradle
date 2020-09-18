@@ -47,7 +47,7 @@ dependencies {
     implementation deps.kotlinxCoroutinesCore
     implementation deps.kotlinxCoroutinesAndroid
 
-    implementation deps.okHttp
+    implementation deps.okhttp
 
     implementation deps.roomRuntime
     implementation deps.roomKtx

@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.flow
 import org.xmlpull.v1.XmlPullParserException
 import tw.ktrssreader.model.channel.RssStandardChannel
 import kotlin.coroutines.suspendCoroutine
+import kotlin.jvm.Throws
 
 class RssStandardParser : ParserBase<RssStandardChannel>() {
     @Throws(XmlPullParserException::class)

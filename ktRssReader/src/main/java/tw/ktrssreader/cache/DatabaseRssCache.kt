@@ -10,7 +10,7 @@ import tw.ktrssreader.utils.logD
 
 class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
 
-    private val db = KtRssProvider.provideDatabase(KtRssReaderGlobalConfig.applicationContext)
+    private val db = KtRssProvider.provideDatabase(KtRssReaderGlobalConfig.getApplicationContext())
     private val dao = db.channelDao()
 
     override fun readCache(url: String): T? {
