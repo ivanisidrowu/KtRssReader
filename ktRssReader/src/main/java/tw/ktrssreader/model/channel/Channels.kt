@@ -1,8 +1,8 @@
 package tw.ktrssreader.model.channel
 
-import java.io.Serializable
 import tw.ktrssreader.model.item.*
 import java.lang.StringBuilder
+import java.io.Serializable
 
 open class RssStandardChannel(
     open val title: String?,
@@ -228,7 +228,9 @@ data class AutoMixChannel(
     override val skipHours: List<Int>?,
     override val skipDays: List<String>?,
     override val items: List<AutoMixItem>?,
+    val simpleTitle: String?,
     val explicit: Boolean?,
+    val email: String?,
     val author: String?,
     val owner: Owner?,
     val type: String?,

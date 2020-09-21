@@ -134,6 +134,7 @@ data class AutoMixItem(
     override val categories: List<Category>?,
     override val comments: String?,
     override val source: Source?,
+    val simpleTitle: String?,
     val duration: String?,
     val image: String?,
     val explicit: Boolean?,
