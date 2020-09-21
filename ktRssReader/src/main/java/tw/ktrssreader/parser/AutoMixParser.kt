@@ -83,7 +83,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
             when (name) {
                 ITUNES_IMAGE -> image = readImage(standardChannel.image, ITUNES_IMAGE)
                 ITUNES_EXPLICIT -> explicit = readString(ITUNES_EXPLICIT)?.toBoolean()
-                ITUNES_CATEGORY -> categories.doActionIfNull(this) { categories = readCategory(ITUNES_CATEGORY) }
+                ITUNES_CATEGORY -> categories.doActionOrSkip(this) { categories = readCategory(ITUNES_CATEGORY) }
                 ITUNES_AUTHOR -> author = readString(ITUNES_AUTHOR)
                 ITUNES_OWNER -> owner = readITunesOwner()
                 ITUNES_TITLE -> simpleTitle = readString(ITUNES_TITLE)
@@ -164,7 +164,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
             when (name) {
                 tagName -> {
                     getAttributeValue(null, ParserConst.TEXT)
-                        ?.let { categories.add(Category(name = it, null)) }
+                        ?.let { categories.add(Category(name = it, domain = null)) }
                     nextTag()
                 }
                 else -> skip()
@@ -260,14 +260,14 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
             if (eventType != XmlPullParser.START_TAG) continue
 
             when (name) {
-                GOOGLE_DESCRIPTION -> description.doActionIfNull(this) { description = readString(GOOGLE_DESCRIPTION) }
+                GOOGLE_DESCRIPTION -> description.doActionOrSkip(this) { description = readString(GOOGLE_DESCRIPTION) }
                 GOOGLE_IMAGE -> image = readImage(previousResult.image, GOOGLE_IMAGE)
-                GOOGLE_EXPLICIT -> explicit.doActionIfNull(this) { explicit = readString(GOOGLE_EXPLICIT)?.convertYesNo() }
-                GOOGLE_CATEGORY -> categories.doActionIfNull(this) { categories = readCategory(GOOGLE_CATEGORY) }
-                GOOGLE_AUTHOR -> author.doActionIfNull(this) { author = readString(GOOGLE_AUTHOR) }
-                GOOGLE_OWNER -> owner.doActionIfNull(this) { owner = readGoogleOwner(previousResult.owner) }
-                GOOGLE_BLOCK -> block.doActionIfNull(this) { block = readString(GOOGLE_BLOCK)?.convertYesNo() }
-                GOOGLE_EMAIL -> email.doActionIfNull(this) { email = readString(GOOGLE_EMAIL) }
+                GOOGLE_EXPLICIT -> explicit.doActionOrSkip(this) { explicit = readString(GOOGLE_EXPLICIT)?.convertYesNo() }
+                GOOGLE_CATEGORY -> categories.doActionOrSkip(this) { categories = readCategory(GOOGLE_CATEGORY) }
+                GOOGLE_AUTHOR -> author.doActionOrSkip(this) { author = readString(GOOGLE_AUTHOR) }
+                GOOGLE_OWNER -> owner.doActionOrSkip(this) { owner = readGoogleOwner(previousResult.owner) }
+                GOOGLE_BLOCK -> block.doActionOrSkip(this) { block = readString(GOOGLE_BLOCK)?.convertYesNo() }
+                GOOGLE_EMAIL -> email.doActionOrSkip(this) { email = readString(GOOGLE_EMAIL) }
                 ITEM -> {
                     previousResult.items?.get(itemIndex)?.let {
                         items.add(readGoogleItem(it))
@@ -313,10 +313,10 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
 
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readGoogleOwner(previousResult: Owner?): Owner? {
-        return if (previousResult == null || previousResult.name?.isEmpty() == true) {
-            Owner(name = readString(GOOGLE_OWNER), email = previousResult?.email)
-        } else {
+        return if (previousResult?.name?.isEmpty() == false) {
             previousResult
+        } else {
+            Owner(name = readString(GOOGLE_OWNER), email = previousResult?.email)
         }
     }
 
@@ -330,9 +330,9 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
             if (eventType != XmlPullParser.START_TAG) continue
 
             when (name) {
-                GOOGLE_DESCRIPTION -> description.doActionIfNull(this) { description = readString(GOOGLE_DESCRIPTION) }
-                GOOGLE_EXPLICIT -> explicit.doActionIfNull(this) { explicit = readString(GOOGLE_EXPLICIT)?.convertYesNo() }
-                GOOGLE_BLOCK -> block.doActionIfNull(this) { block = readString(GOOGLE_BLOCK)?.convertYesNo() }
+                GOOGLE_DESCRIPTION -> description.doActionOrSkip(this) { description = readString(GOOGLE_DESCRIPTION) }
+                GOOGLE_EXPLICIT -> explicit.doActionOrSkip(this) { explicit = readString(GOOGLE_EXPLICIT)?.convertYesNo() }
+                GOOGLE_BLOCK -> block.doActionOrSkip(this) { block = readString(GOOGLE_BLOCK)?.convertYesNo() }
                 else -> skip()
             }
         }
@@ -359,7 +359,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
         )
     }
 
-    private inline fun Any?.doActionIfNull(parser: XmlPullParser, action: () -> Unit) {
+    private inline fun Any?.doActionOrSkip(parser: XmlPullParser, action: () -> Unit) {
         return if (this == null) {
             action()
         } else {
