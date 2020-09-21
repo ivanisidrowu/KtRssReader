@@ -8,7 +8,7 @@
         <itunes:name>channel owner name - iTunes</itunes:name>
         <itunes:email>channel.owner.email.itunes@example.com</itunes:email>
       </itunes:owner>
-      <itunes:explicit>yes</itunes:explicit>
+      <itunes:explicit>true</itunes:explicit>
       <itunes:block>yes</itunes:block>
       <itunes:image href="https://channel.image.itunes" />
       <itunes:category text="Technology - iTunes"/>
@@ -65,7 +65,7 @@
           <itunes:author>item author - iTunes</itunes:author>
           <itunes:image href="https://item.image.itunes" />
           <itunes:duration>2:00</itunes:duration>
-          <itunes:explicit>yes</itunes:explicit>
+          <itunes:explicit>true</itunes:explicit>
           <itunes:block>yes</itunes:block>
           <itunes:episode>1</itunes:episode>
           <itunes:season>1</itunes:season>
@@ -85,7 +85,7 @@
           <unknown>unknown attribute</unknown>
       </item>
       <item>
-          <itunes:explicit>no</itunes:explicit>
+          <itunes:explicit>false</itunes:explicit>
           <itunes:block>no</itunes:block>
           <title>item title - Partial</title>
           <description>item description 2</description>

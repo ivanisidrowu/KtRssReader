@@ -8,7 +8,7 @@
           <itunes:owner>
             <itunes:email>channel.owner.email.itunes@example.com</itunes:email>
           </itunes:owner>
-          <itunes:explicit>no</itunes:explicit>
+          <itunes:explicit>false</itunes:explicit>
           <itunes:block>no</itunes:block>
           <itunes:complete>no</itunes:complete>
           <title>channel title</title>
