@@ -265,7 +265,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
                 GOOGLE_EXPLICIT -> explicit.doActionOrSkip(this) { explicit = readString(GOOGLE_EXPLICIT)?.convertYesNo() }
                 GOOGLE_CATEGORY -> categories.doActionOrSkip(this) { categories = readCategory(GOOGLE_CATEGORY) }
                 GOOGLE_AUTHOR -> author.doActionOrSkip(this) { author = readString(GOOGLE_AUTHOR) }
-                GOOGLE_OWNER -> owner.doActionOrSkip(this) { owner = readGoogleOwner(previousResult.owner) }
+                GOOGLE_OWNER -> owner = readGoogleOwner(previousResult.owner)
                 GOOGLE_BLOCK -> block.doActionOrSkip(this) { block = readString(GOOGLE_BLOCK)?.convertYesNo() }
                 GOOGLE_EMAIL -> email.doActionOrSkip(this) { email = readString(GOOGLE_EMAIL) }
                 ITEM -> {
