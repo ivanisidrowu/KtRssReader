@@ -313,7 +313,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
 
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readGoogleOwner(previousResult: Owner?): Owner? {
-        return if (previousResult?.email?.isEmpty() == false) {
+        return if (previousResult?.email?.isNotEmpty() == true) {
             previousResult
         } else {
             Owner(name = previousResult?.name, email = readString(GOOGLE_OWNER))
