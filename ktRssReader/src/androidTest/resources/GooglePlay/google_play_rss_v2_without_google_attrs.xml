@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0">
+   <nonChannel>
+      <title>unknown attribute</title>
+   </nonChannel>
+   <nonChannel tags="xvzxcv"/>
+   <channel>
+      <title>channel title</title>
+      <link>http://channel.link</link>
+      <description>channel description</description>
+      <unknown>unknown attribute</unknown>
+      <language>en</language>
+      <pubDate>Tue, 10 Jun 2003 04:00:00 GMT</pubDate>
+      <lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
+      <docs>http://channel.docs</docs>
+      <generator>channel generator</generator>
+      <videoData>video unknown attribute</videoData>
+      <copyright>channel copyright</copyright>
+      <managingEditor>managingEditor@example.com</managingEditor>
+      <webMaster>webmaster@example.com</webMaster>
+      <category>channel category 1</category>
+      <category domain="http://channel.category.domain">channel category 2</category>
+      <cloud domain="channel.cloud.domain" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify" protocol="xml-rpc" />
+      <ttl>60</ttl>
+      <rating>(PICS-1.1 "http://channel.rating" l by "webmaster@example.com" on "2007.01.29T10:09-0800" r (n 0 s 0 v 0 l 0))</rating>
+      <image>
+         <link>http://channel.image.link</link>
+         <title>channel image title</title>
+         <url>http://channel.image.url</url>
+         <description>channel image description</description>
+         <height>32</height>
+         <width>96</width>
+      </image>
+      <videoData>video unknown attribute</videoData>
+      <skipDays>
+         <day>Saturday</day>
+         <day>Sunday</day>
+      </skipDays>
+      <skipHours>
+        <hour>0</hour>
+        <hour>1</hour>
+        <hour>2</hour>
+        <hour>22</hour>
+        <hour>23</hour>
+      </skipHours>
+      <textInput>
+         <description>channel textInput description</description>
+         <link>http://channel.textInput.link</link>
+         <name>channel textInput name</name>
+         <title>channel textInput title</title>
+      </textInput>
+   </channel>
+   <nonChannel>
+      <title>unknown attribute</title>
+   </nonChannel>
+   <nonChannel tags="xvzxcv"/>
+</rss>

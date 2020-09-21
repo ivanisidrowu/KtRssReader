@@ -1,12 +1,14 @@
 package tw.ktrssreader.parser
 
-import tw.ktrssreader.model.channel.Cloud
-import tw.ktrssreader.model.channel.Image
-import tw.ktrssreader.model.channel.RssStandardChannel
-import tw.ktrssreader.model.channel.TextInput
+import tw.ktrssreader.model.channel.*
 import tw.ktrssreader.model.item.*
 
 object ChannelItemTestData {
+    const val RSS_FOLDER = "RSS"
+    const val GOOGLE_PLAY_FOLDER = "GooglePlay"
+    const val ITUNES_FOLDER = "iTunes"
+    const val MISMATCH_TAG_FOLDER = "StartOrEndTagMismatch"
+
     class TestRssStandardItem(
         override val title: String? = ITEM_TITLE_ATTR,
         override val enclosure: Enclosure? = ITEM_ENCLOSURE_ATTR,
@@ -57,7 +59,7 @@ object ChannelItemTestData {
         override val textInput: TextInput? = CHANNEL_TEXT_INPUT_ATTR,
         override val skipHours: List<Int>? = CHANNEL_SKIP_HOURS_ATTR,
         override val skipDays: List<String>? = CHANNEL_SKIP_DAYS_ATTR,
-        override val items: List<RssStandardItem> = listOf(ITEM_FULL_RSS_ATTRS, ITEM_RSS_PARTIAL_1, ITEM_RSS_PARTIAL_2),
+        override val items: List<RssStandardItem>? = listOf(ITEM_FULL_RSS_ATTRS, ITEM_RSS_PARTIAL_1, ITEM_RSS_PARTIAL_2),
     ): RssStandardChannel(
         title = title,
         description = description,
@@ -238,7 +240,7 @@ object ChannelItemTestData {
         textInput = CHANNEL_PARTIAL_TEXT_INPUT_ATTR,
         skipHours = null,
         skipDays = null,
-        items = listOf(ITEM_FULL_RSS_ATTRS)
+        items = null
     )
 
     val RSS_CHANNEL_PARTIAL_CLOUD = TestRssStandardChannel(
@@ -277,4 +279,271 @@ object ChannelItemTestData {
             items = items
         )
     }
+
+
+    // Google play test data
+    private const val GOOGLE_CHANNEL_AUTHOR_ATTR = "channel author - google play"
+    private const val GOOGLE_CHANNEL_IMAGE_ATTR = "http://channel.image.url"
+    private const val GOOGLE_CHANNEL_EMAIL_ATTR = "channel.email.googleplay@example.com"
+    private const val GOOGLE_CHANNEL_OWNER_ATTR = "channel.owner.googleplay@example.com"
+    private const val GOOGLE_CHANNEL_CATEGORY_ATTR = "Games & Hobbies"
+    private const val GOOGLE_CHANNEL_DESCRIPTION_ATTR = "channel description - google play"
+    private const val GOOGLE_CHANNEL_LANGUAGE_ATTR = "en"
+
+    private const val GOOGLE_ITEM_DESCRIPTION_ATTR = "item description - google play"
+    private val FULL_GOOGLE_ITEM = GoogleItem(
+        title = ITEM_TITLE_ATTR,
+        enclosure = ITEM_ENCLOSURE_ATTR,
+        guid = ITEM_GUID_ATTR,
+        pubDate = ITEM_PUB_DATE_ATTR,
+        description = GOOGLE_ITEM_DESCRIPTION_ATTR,
+        link = ITEM_LINK_ATTR,
+        author = ITEM_AUTHOR_ATTR,
+        categories = listOf(
+            ITEM_CATEGORY_ATTR,
+            ITEM_CATEGORY_ATTR_WITHOUT_DOMAIN
+        ),
+        comments = ITEM_COMMENTS_ATTR,
+        source = ITEM_SOURCE_ATTR,
+        explicit = true,
+        block = true
+    )
+
+    private val PARTIAL_GOOGLE_ITEM_1 = FULL_GOOGLE_ITEM.copy(
+        title = ITEM_TITLE_ATTR_PARTIAL,
+        enclosure = null,
+        guid = ITEM_GUID_ATTR_WITH_IS_PERMA_LINK,
+        pubDate = ITEM_PUB_DATE_ATTR,
+        link = null,
+        author = null,
+        categories = null,
+        comments = null,
+        source = ITEM_SOURCE_ATTR_WITHOUT_URL,
+        explicit = false,
+        block = false
+    )
+
+    private val PARTIAL_GOOGLE_ITEM_2 = FULL_GOOGLE_ITEM.copy(
+        title = null,
+        enclosure = ITEM_PARTIAL_ENCLOSURE_ATTR,
+        guid = null,
+        pubDate = null,
+        description = null,
+        link = null,
+        author = null,
+        categories = null,
+        source = null,
+        explicit = null,
+        block = null
+
+    )
+    val FULL_GOOGLE_CHANNEL = GoogleChannel(
+        title = CHANNEL_TITLE_ATTR,
+        description = GOOGLE_CHANNEL_DESCRIPTION_ATTR,
+        image = Image(
+            link = null,
+            title = null,
+            url = GOOGLE_CHANNEL_IMAGE_ATTR,
+            description = null,
+            height = null,
+            width = null
+        ),
+        language = GOOGLE_CHANNEL_LANGUAGE_ATTR,
+        categories = listOf(Category(name = GOOGLE_CHANNEL_CATEGORY_ATTR, domain = null)),
+        link = CHANNEL_LINK_ATTR,
+        copyright = CHANNEL_COPYRIGHT_ATTR,
+        managingEditor = CHANNEL_MANAGING_EDITOR_ATTR,
+        webMaster = CHANNEL_WEBMASTER_ATTR,
+        pubDate = CHANNEL_PUB_DATE_ATTR,
+        lastBuildDate = CHANNEL_LAST_BUILD_DATE_ATTR,
+        generator = CHANNEL_GENERATOR_ATTR,
+        docs = CHANNEL_DOCS_ATTR,
+        cloud = CHANNEL_CLOUD_ATTR,
+        ttl = CHANNEL_TTL_ATTR,
+        rating = CHANNEL_RATING_ATTR,
+        textInput = CHANNEL_TEXT_INPUT_ATTR,
+        skipHours = CHANNEL_SKIP_HOURS_ATTR,
+        skipDays = CHANNEL_SKIP_DAYS_ATTR,
+        items = listOf(FULL_GOOGLE_ITEM, PARTIAL_GOOGLE_ITEM_1, PARTIAL_GOOGLE_ITEM_2),
+        explicit = true,
+        author = GOOGLE_CHANNEL_AUTHOR_ATTR,
+        owner = GOOGLE_CHANNEL_OWNER_ATTR,
+        block = true,
+        email = GOOGLE_CHANNEL_EMAIL_ATTR
+    )
+
+    val PARTIAL_GOOGLE_CHANNEL = FULL_GOOGLE_CHANNEL.copy(
+        description = null,
+        image = null,
+        categories = null,
+        items = null,
+        explicit = null,
+        author = null,
+        owner = null,
+        block = null,
+        email = null
+    )
+
+    val PARTIAL_GOOGLE_CHANNEL_2 = FULL_GOOGLE_CHANNEL.copy(
+        description = null,
+        image = null,
+        categories = null,
+        items = null,
+        explicit = null,
+        author = null,
+        owner = null,
+        block = null,
+        email = null,
+        textInput = CHANNEL_PARTIAL_TEXT_INPUT_ATTR,
+        cloud = CHANNEL_PARTIAL_CLOULD_ATTR
+    )
+
+    // iTunes test data
+    private const val ITUNES_CHANNEL_TITLE_ATTR = "channel title - iTunes"
+    private const val ITUNES_CHANNEL_AUTHOR_ATTR = "channel author - iTunes"
+    private const val ITUNES_CHANNEL_IMAGE_ATTR = "https://channel.image.itunes"
+    private val ITUNES_CHANNEL_OWNER_ATTR = Owner(name = "channel owner name - iTunes", email = "channel.owner.email.itunes@example.com")
+    private const val ITUNES_CHANNEL_CATEGORY_ATTR = "Technology - iTunes"
+    private const val ITUNES_CHANNEL_LANGUAGE_ATTR = "en"
+    private const val ITUNES_CHANNEL_NEW_FEED_URL_ATTR = "https://channel.new.feed.url.itunes"
+    private const val ITUNES_CHANNEL_TYPE_ATTR = "channel episodic - iTunes"
+
+    private const val ITUNES_ITEM_AUTHOR_ATTR = "item author - iTunes"
+    private const val ITUNES_ITEM_TITLE_ATTR = "item title - iTunes"
+    private const val ITUNES_ITEM_DURATION_ATTR = "2:00"
+    private const val ITUNES_ITEM_IMAGE_ATTR = "https://item.image.itunes"
+    private const val ITUNES_ITEM_EPISODE_ATTR = "full"
+    private val FULL_ITUNES_ITEM = ITunesItem(
+        title = ITEM_TITLE_ATTR,
+        enclosure = ITEM_ENCLOSURE_ATTR,
+        guid = ITEM_GUID_ATTR,
+        pubDate = ITEM_PUB_DATE_ATTR,
+        description = ITEM_DESCRIPTION_ATTR,
+        link = ITEM_LINK_ATTR,
+        author = ITUNES_ITEM_AUTHOR_ATTR,
+        categories = listOf(
+            ITEM_CATEGORY_ATTR,
+            ITEM_CATEGORY_ATTR_WITHOUT_DOMAIN
+        ),
+        comments = ITEM_COMMENTS_ATTR,
+        source = ITEM_SOURCE_ATTR,
+        explicit = true,
+        block = true,
+        simpleTitle = ITUNES_ITEM_TITLE_ATTR,
+        duration = ITUNES_ITEM_DURATION_ATTR,
+        image = ITUNES_ITEM_IMAGE_ATTR,
+        episode = 1,
+        season = 1,
+        episodeType = ITUNES_ITEM_EPISODE_ATTR,
+    )
+
+    private val PARTIAL_ITUNES_ITEM_1 = FULL_ITUNES_ITEM.copy(
+        title = ITEM_TITLE_ATTR_PARTIAL,
+        enclosure = null,
+        guid = ITEM_GUID_ATTR_WITH_IS_PERMA_LINK,
+        description = ITEM_DESCRIPTION_ATTR_2,
+        link = null,
+        author = null,
+        categories = null,
+        comments = null,
+        source = ITEM_SOURCE_ATTR_WITHOUT_URL,
+        simpleTitle = null,
+        duration = null,
+        image = null,
+        explicit = false,
+        episode = null,
+        season = null,
+        episodeType = null,
+        block = false
+    )
+
+    private val PARTIAL_ITUNES_ITEM_2 = FULL_ITUNES_ITEM.copy(
+        title = null,
+        enclosure = ITEM_PARTIAL_ENCLOSURE_ATTR,
+        guid = null,
+        pubDate = null,
+        description = null,
+        link = null,
+        author = null,
+        categories = null,
+        source = null,
+        simpleTitle = null,
+        duration = null,
+        image = null,
+        explicit = null,
+        episode = null,
+        season = null,
+        episodeType = null,
+        block = null
+    )
+
+    val FULL_ITUNES_CHANNEL = ITunesChannel(
+        title = CHANNEL_TITLE_ATTR,
+        description = CHANNEL_DESCRIPTION_ATTR,
+        image = Image(
+            link = null,
+            title = null,
+            url = ITUNES_CHANNEL_IMAGE_ATTR,
+            description = null,
+            height = null,
+            width = null
+        ),
+        language = ITUNES_CHANNEL_LANGUAGE_ATTR,
+        categories = listOf(Category(name = ITUNES_CHANNEL_CATEGORY_ATTR, domain = null)),
+        link = CHANNEL_LINK_ATTR,
+        copyright = CHANNEL_COPYRIGHT_ATTR,
+        managingEditor = CHANNEL_MANAGING_EDITOR_ATTR,
+        webMaster = CHANNEL_WEBMASTER_ATTR,
+        pubDate = CHANNEL_PUB_DATE_ATTR,
+        lastBuildDate = CHANNEL_LAST_BUILD_DATE_ATTR,
+        generator = CHANNEL_GENERATOR_ATTR,
+        docs = CHANNEL_DOCS_ATTR,
+        cloud = CHANNEL_CLOUD_ATTR,
+        ttl = CHANNEL_TTL_ATTR,
+        rating = CHANNEL_RATING_ATTR,
+        textInput = CHANNEL_TEXT_INPUT_ATTR,
+        skipHours = CHANNEL_SKIP_HOURS_ATTR,
+        skipDays = CHANNEL_SKIP_DAYS_ATTR,
+        items = listOf(FULL_ITUNES_ITEM, PARTIAL_ITUNES_ITEM_1, PARTIAL_ITUNES_ITEM_2),
+        explicit = true,
+        author = ITUNES_CHANNEL_AUTHOR_ATTR,
+        owner = ITUNES_CHANNEL_OWNER_ATTR,
+        block = true,
+        newFeedUrl = ITUNES_CHANNEL_NEW_FEED_URL_ATTR,
+        simpleTitle = ITUNES_CHANNEL_TITLE_ATTR,
+        type = ITUNES_CHANNEL_TYPE_ATTR,
+        complete = true,
+    )
+
+    val PARTIAL_ITUNES_CHANNEL = FULL_ITUNES_CHANNEL.copy(
+        image = null,
+        categories = null,
+        items = null,
+        simpleTitle = null,
+        explicit = false,
+        author = null,
+        owner = ITUNES_CHANNEL_OWNER_ATTR.copy(name = null),
+        type = null,
+        newFeedUrl = null,
+        block = false,
+        complete = false
+    )
+
+    val PARTIAL_ITUNES_CHANNEL_2 = FULL_ITUNES_CHANNEL.copy(
+        image = null,
+        categories = null,
+        items = null,
+        simpleTitle = null,
+        explicit = null,
+        author = null,
+        owner = null,
+        type = null,
+        newFeedUrl = null,
+        block = null,
+        complete = null,
+        cloud = CHANNEL_PARTIAL_CLOULD_ATTR,
+        textInput = CHANNEL_PARTIAL_TEXT_INPUT_ATTR,
+        skipDays = null,
+        skipHours = null
+    )
 }

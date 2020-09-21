@@ -19,18 +19,5 @@
          <link>http://channel.textInput.link</link>
          <title>channel textInput title</title>
       </textInput>
-      <item>
-         <title>item title - Full</title>
-         <link>http://item.link</link>
-         <author>item.author@example.com</author>
-         <category domain="http://item.category.domain">item category 1</category>
-         <category>item category 2</category>
-         <comments>http://item.comment</comments>
-         <enclosure length="24986239" type="audio/mpeg" url="http://item.enclosure.url/item.mp3" />
-         <description>item description &lt;a href="http://item.description"&gt;item description&lt;/a&gt;.</description>
-         <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
-         <guid>http://item.guid</guid>
-         <source url="item.source.url">item source</source>
-      </item>
    </channel>
 </rss>
