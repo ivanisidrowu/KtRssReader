@@ -20,6 +20,7 @@ import tw.ktrssreader.model.item.Category
 import tw.ktrssreader.model.item.GoogleItem
 import tw.ktrssreader.model.item.RssStandardItem
 import java.io.IOException
+import kotlin.jvm.Throws
 
 class GoogleParser : ParserBase<GoogleChannel>() {
 
@@ -58,7 +59,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
                 ITEM -> {
                     standardChannel.items?.get(itemIndex)?.let {
                         items.add(readItem(it))
-                        itemIndex ++
+                        itemIndex++
                     }
                 }
                 else -> skip()
@@ -129,10 +130,10 @@ class GoogleParser : ParserBase<GoogleChannel>() {
 
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readImage(): Image {
-        require(XmlPullParser.START_TAG, null, ParserConst.GOOGLE_IMAGE)
+        require(XmlPullParser.START_TAG, null, GOOGLE_IMAGE)
         val href: String? = getAttributeValue(null, ParserConst.HREF)
         nextTag()
-        require(XmlPullParser.END_TAG, null, ParserConst.GOOGLE_IMAGE)
+        require(XmlPullParser.END_TAG, null, GOOGLE_IMAGE)
         return Image(
             link = null,
             title = null,
@@ -147,14 +148,16 @@ class GoogleParser : ParserBase<GoogleChannel>() {
     private fun XmlPullParser.readCategory(): List<Category> {
         require(XmlPullParser.START_TAG, null, GOOGLE_CATEGORY)
         val categories = mutableListOf<Category>()
-        getAttributeValue(null, ParserConst.TEXT)?.let { categories.add(Category(name = it, null)) }
+        getAttributeValue(null, ParserConst.TEXT)?.let {
+            categories.add(Category(name = it, domain = null))
+        }
         while (next() != XmlPullParser.END_TAG) {
             if (eventType != XmlPullParser.START_TAG) continue
 
             when (name) {
                 GOOGLE_CATEGORY -> {
                     getAttributeValue(null, ParserConst.TEXT)
-                        ?.let { categories.add(Category(name = it, null)) }
+                        ?.let { categories.add(Category(name = it, domain = null)) }
                     nextTag()
                 }
                 else -> skip()

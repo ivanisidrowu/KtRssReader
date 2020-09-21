@@ -1,6 +1,5 @@
 package tw.ktrssreader.utils
 
-import android.os.Looper
 import android.util.Log
 import tw.ktrssreader.config.KtRssReaderGlobalConfig
 import java.io.ByteArrayInputStream
