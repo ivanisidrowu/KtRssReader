@@ -50,6 +50,7 @@ import tw.ktrssreader.model.channel.TextInput
 import tw.ktrssreader.model.item.*
 import java.io.ByteArrayInputStream
 import java.io.IOException
+import kotlin.jvm.Throws
 
 abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 
@@ -320,7 +321,10 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         var path: String? = null
         var registerProcedure: String? = null
         var protocol: String? = null
-        readAttributes(CLOUD, listOf(DOMAIN, PORT, PATH, REGISTER_PROCEDURE, PROTOCOL)) { attr, value ->
+        readAttributes(
+            CLOUD,
+            listOf(DOMAIN, PORT, PATH, REGISTER_PROCEDURE, PROTOCOL)
+        ) { attr, value ->
             when (attr) {
                 DOMAIN -> domain = value
                 PORT -> port = value?.toIntOrNull()

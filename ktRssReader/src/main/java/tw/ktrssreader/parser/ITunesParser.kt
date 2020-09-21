@@ -30,6 +30,7 @@ import tw.ktrssreader.model.item.Category
 import tw.ktrssreader.model.item.ITunesItem
 import tw.ktrssreader.model.item.RssStandardItem
 import java.io.IOException
+import kotlin.jvm.Throws
 
 class ITunesParser : ParserBase<ITunesChannel>() {
 
@@ -132,14 +133,14 @@ class ITunesParser : ParserBase<ITunesChannel>() {
     private fun XmlPullParser.readCategory(): List<Category>? {
         require(XmlPullParser.START_TAG, null, ITUNES_CATEGORY)
         val categories = mutableListOf<Category>()
-        getAttributeValue(null, TEXT)?.let { categories.add(Category(name = it, null)) }
+        getAttributeValue(null, TEXT)?.let { categories.add(Category(name = it, domain = null)) }
         while (next() != XmlPullParser.END_TAG) {
             if (eventType != XmlPullParser.START_TAG) continue
 
             when (name) {
                 ITUNES_CATEGORY -> {
                     getAttributeValue(null, TEXT)
-                        ?.let { categories.add(Category(name = it, null)) }
+                        ?.let { categories.add(Category(name = it, domain = null)) }
                     nextTag()
                 }
                 else -> skip()
