@@ -60,7 +60,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
 
             when (name) {
                 ITUNES_IMAGE -> image = readImage()
-                ITUNES_EXPLICIT -> explicit = readString(ITUNES_EXPLICIT)?.toBoolean()
+                ITUNES_EXPLICIT -> explicit = readString(ITUNES_EXPLICIT)?.convertYesNo()
                 ITUNES_CATEGORY -> categories = readCategory()
                 ITUNES_AUTHOR -> author = readString(ITUNES_AUTHOR)
                 ITUNES_OWNER -> owner = readOwner()
@@ -185,7 +185,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
             when (name) {
                 ITUNES_DURATION -> duration = readString(ITUNES_DURATION)
                 ITUNES_IMAGE -> image = readImage().url
-                ITUNES_EXPLICIT -> explicit = readString(ITUNES_EXPLICIT)?.toBoolean()
+                ITUNES_EXPLICIT -> explicit = readString(ITUNES_EXPLICIT)?.convertYesNo()
                 ITUNES_TITLE -> simpleTitle = readString(ITUNES_TITLE)
                 ITUNES_EPISODE -> episode = readString(ITUNES_EPISODE)?.toIntOrNull()
                 ITUNES_SEASON -> season = readString(ITUNES_SEASON)?.toIntOrNull()

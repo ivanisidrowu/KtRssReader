@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+  <unknown>unknown attribute</unknown>
+  <channel>
+      <itunes:title>channel title - iTunes</itunes:title>>
+      <itunes:author>channel author - iTunes</itunes:author>
+      <itunes:owner>
+        <itunes:name>channel owner name - iTunes</itunes:name>
+        <itunes:email>channel.owner.email.itunes@example.com</itunes:email>
+      </itunes:owner>
+      <itunes:explicit>yes</itunes:explicit>
+      <itunes:block>yes</itunes:block>
+      <itunes:image href="https://channel.image.itunes" />
+      <itunes:category text="Technology - iTunes"/>
+      <itunes:complete>yes</itunes:complete>
+      <itunes:type>channel episodic - iTunes</itunes:type>
+      <itunes:new-feed-url>https://channel.new.feed.url.itunes</itunes:new-feed-url>
+      <title>channel title</title>
+      <link>http://channel.link</link>
+      <description>channel description</description>
+      <unknown>unknown attribute</unknown>
+      <language>en</language>
+      <pubDate>Tue, 10 Jun 2003 04:00:00 GMT</pubDate>
+      <lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
+      <docs>http://channel.docs</docs>
+      <generator>channel generator</generator>
+      <videoData>video unknown attribute</videoData>
+      <copyright>channel copyright</copyright>
+      <managingEditor>managingEditor@example.com</managingEditor>
+      <webMaster>webmaster@example.com</webMaster>
+      <category>channel category 1</category>
+      <category domain="http://channel.category.domain">channel category 2</category>
+      <cloud domain="channel.cloud.domain" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify" protocol="xml-rpc" />
+      <ttl>60</ttl>
+      <rating>(PICS-1.1 "http://channel.rating" l by "webmaster@example.com" on "2007.01.29T10:09-0800" r (n 0 s 0 v 0 l 0))</rating>
+      <image>
+        <link>http://channel.image.link</link>
+        <title>channel image title</title>
+        <url>http://channel.image.url</url>
+        <description>channel image description</description>
+        <height>32</height>
+        <width>96</width>
+      </image>
+      <videoData>video unknown attribute</videoData>
+      <skipDays>
+        <day>Saturday</day>
+        <day>Sunday</day>
+      </skipDays>
+      <skipHours>
+        <hour>0</hour>
+        <hour>1</hour>
+        <hour>2</hour>
+        <hour>22</hour>
+        <hour>23</hour>
+      </skipHours>
+      <textInput>
+        <description>channel textInput description</description>
+        <link>http://channel.textInput.link</link>
+        <name>channel textInput name</name>
+        <title>channel textInput title</title>
+      </textInput>
+      <item>
+          <unknown>unknown attribute</unknown>
+          <itunes:title>item title - iTunes</itunes:title>
+          <itunes:author>item author - iTunes</itunes:author>
+          <itunes:image href="https://item.image.itunes" />
+          <itunes:duration>2:00</itunes:duration>
+          <itunes:explicit>yes</itunes:explicit>
+          <itunes:block>yes</itunes:block>
+          <itunes:episode>1</itunes:episode>
+          <itunes:season>1</itunes:season>
+          <itunes:episodeType>full</itunes:episodeType>
+          <unknown>unknown attribute</unknown>
+          <title>item title - Full</title>
+          <link>http://item.link</link>
+          <author>item.author@example.com</author>
+          <category domain="http://item.category.domain">item category 1</category>
+          <category>item category 2</category>
+          <comments>http://item.comment</comments>
+          <enclosure length="24986239" type="audio/mpeg" url="http://item.enclosure.url/item.mp3" />
+          <description>item description &lt;a href="http://item.description"&gt;item description&lt;/a&gt;.</description>
+          <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
+          <guid>http://item.guid</guid>
+          <source url="item.source.url">item source</source>
+          <unknown>unknown attribute</unknown>
+      </item>
+      <item>
+          <itunes:explicit>no</itunes:explicit>
+          <itunes:block>no</itunes:block>
+          <title>item title - Partial</title>
+          <description>item description 2</description>
+          <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
+          <guid isPermaLink="true">http://item.guid</guid>
+          <source>item source</source>
+      </item>
+      <item>
+          <comments>http://item.comment</comments>
+          <enclosure type="audio/mpeg"/>
+      </item>
+    </channel>
+    <unknown>unknown attribute</unknown>
+  </rss>

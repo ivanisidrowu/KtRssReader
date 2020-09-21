@@ -11,7 +11,9 @@ import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_RSS_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_CLOUD
 import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_IMAGE
 import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_TEXT_IMAGE
+import tw.ktrssreader.parser.ChannelItemTestData.RSS_FOLDER
 import tw.ktrssreader.parser.ChannelItemTestData.toRssStandardChannel
+import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
 
 @RunWith(Enclosed::class)
 class RssStandardParserTest {
@@ -22,8 +24,6 @@ class RssStandardParserTest {
         private val expectedChannel: ChannelItemTestData.TestRssStandardChannel?
     ) {
         companion object {
-            private const val RSS_FOLDER = "RSS"
-
             @JvmStatic
             @Parameterized.Parameters
             fun getTestingData() = listOf(
@@ -52,24 +52,7 @@ class RssStandardParserTest {
 
 
     @RunWith(Parameterized::class)
-    class RssStandardParserErrorTagTest(private val rssFilePath: String) {
-        companion object {
-            private const val RSS_FOLDER = "RSS"
-            private const val MISMATCH_TAG_FOLDER = "StartOrEndTagMismatch"
-
-            @JvmStatic
-            @Parameterized.Parameters
-            fun getTestingData() = listOf(
-                arrayOf("$RSS_FOLDER/$MISMATCH_TAG_FOLDER/rss_v2_channel_end_tag_missing.xml"),
-                arrayOf("$RSS_FOLDER/$MISMATCH_TAG_FOLDER/rss_v2_channel_start_tag_missing.xml"),
-                arrayOf("$RSS_FOLDER/$MISMATCH_TAG_FOLDER/rss_v2_channel_sub_attr_end_tag_missing.xml"),
-                arrayOf("$RSS_FOLDER/$MISMATCH_TAG_FOLDER/rss_v2_channel_sub_attr_start_tag_missing.xml"),
-                arrayOf("$RSS_FOLDER/$MISMATCH_TAG_FOLDER/rss_v2_item_start_tag_missing.xml"),
-                arrayOf("$RSS_FOLDER/$MISMATCH_TAG_FOLDER/rss_v2_item_sub_attr_end_tag_missing.xml"),
-                arrayOf("$RSS_FOLDER/$MISMATCH_TAG_FOLDER/rss_v2_item_sub_attr_start_tag_missing.xml"),
-                arrayOf("$RSS_FOLDER/$MISMATCH_TAG_FOLDER/rss_v2_items_end_tag_missing.xml"),
-            )
-        }
+    class RssStandardErrorTagParserErrorTagTest(private val rssFilePath: String): ErrorTagParserBaseTest() {
 
         @Test(expected = XmlPullParserException::class)
         fun parse() {
