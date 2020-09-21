@@ -7,6 +7,7 @@ buildscript {
         def room_version = '2.2.5'
 
         def mockk_version = '1.10.0'
+        def turbine_version = '0.2.1'
 
         deps = [
                 'kotlinxCoroutinesCore'   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
@@ -17,7 +18,8 @@ buildscript {
                 'roomCompiler'            : "androidx.room:room-compiler:$room_version",
         ]
         testDeps = [
-                'mockk': "io.mockk:mockk:$mockk_version"
+                'mockk'  : "io.mockk:mockk:$mockk_version",
+                'turbine': "app.cash.turbine:turbine:$turbine_version"
         ]
 
         kotlin_version = "1.4.0"
