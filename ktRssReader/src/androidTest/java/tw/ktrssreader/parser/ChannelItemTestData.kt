@@ -146,7 +146,7 @@ object ChannelItemTestData {
         source = null,
     )
 
-    private val testRssStandardChannel = RssStandardChannelData(
+    private val TEST_RSS_STANDARD_CHANNEL = RssStandardChannelData(
         title = CHANNEL_TITLE_ATTR,
         description = CHANNEL_DESCRIPTION_ATTR,
         image = CHANNEL_IMAGE_ATTR,
@@ -172,9 +172,9 @@ object ChannelItemTestData {
         items = listOf(ITEM_FULL_RSS_ATTRS, ITEM_RSS_PARTIAL_1, ITEM_RSS_PARTIAL_2),
     )
 
-    val FULL_RSS_CHANNEL = testRssStandardChannel
+    val FULL_RSS_CHANNEL = TEST_RSS_STANDARD_CHANNEL
 
-    val PARTIAL_RSS_CHANNEL = testRssStandardChannel.copy(
+    val PARTIAL_RSS_CHANNEL = TEST_RSS_STANDARD_CHANNEL.copy(
         description = null,
         image = null,
         categories = null,
@@ -186,7 +186,7 @@ object ChannelItemTestData {
         items = listOf(ITEM_FULL_RSS_ATTRS)
     )
 
-    val RSS_CHANNEL_PARTIAL_IMAGE = testRssStandardChannel.copy(
+    val RSS_CHANNEL_PARTIAL_IMAGE = TEST_RSS_STANDARD_CHANNEL.copy(
         description = null,
         image = CHANNEL_PARTIAL_IMAGE_ATTR,
         categories = null,
@@ -198,7 +198,7 @@ object ChannelItemTestData {
         items = listOf(ITEM_FULL_RSS_ATTRS)
     )
 
-    val RSS_CHANNEL_PARTIAL_TEXT_IMAGE = testRssStandardChannel.copy(
+    val RSS_CHANNEL_PARTIAL_TEXT_IMAGE = TEST_RSS_STANDARD_CHANNEL.copy(
         description = null,
         image = null,
         categories = null,
@@ -210,7 +210,7 @@ object ChannelItemTestData {
         items = null
     )
 
-    val RSS_CHANNEL_PARTIAL_CLOUD = testRssStandardChannel.copy(
+    val RSS_CHANNEL_PARTIAL_CLOUD = TEST_RSS_STANDARD_CHANNEL.copy(
         description = null,
         image = null,
         categories = null,
