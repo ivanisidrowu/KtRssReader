@@ -22,26 +22,25 @@ import tw.ktrssreader.constant.ParserConst.ITUNES_SEASON
 import tw.ktrssreader.constant.ParserConst.ITUNES_TITLE
 import tw.ktrssreader.constant.ParserConst.ITUNES_TYPE
 import tw.ktrssreader.constant.ParserConst.TEXT
-import tw.ktrssreader.model.channel.ITunesChannel
+import tw.ktrssreader.model.channel.ITunesChannelData
 import tw.ktrssreader.model.channel.Image
 import tw.ktrssreader.model.channel.Owner
-import tw.ktrssreader.model.channel.RssStandardChannel
+import tw.ktrssreader.model.channel.RssStandardChannelData
 import tw.ktrssreader.model.item.Category
-import tw.ktrssreader.model.item.ITunesItem
+import tw.ktrssreader.model.item.ITunesItemData
 import tw.ktrssreader.model.item.RssStandardItem
 import java.io.IOException
-import kotlin.jvm.Throws
 
-class ITunesParser : ParserBase<ITunesChannel>() {
+class ITunesParser : ParserBase<ITunesChannelData>() {
 
     override fun parse(xml: String) = parseITunesChannel(xml)
 
-    private fun parseITunesChannel(xml: String): ITunesChannel {
+    private fun parseITunesChannel(xml: String): ITunesChannelData {
         val standardChannel = parseStandardChannel(xml)
         return parseChannel(xml) { readITunesChannel(standardChannel) }
     }
 
-    private fun XmlPullParser.readITunesChannel(standardChannel: RssStandardChannel): ITunesChannel {
+    private fun XmlPullParser.readITunesChannel(standardChannel: RssStandardChannelData): ITunesChannelData {
         require(XmlPullParser.START_TAG, null, CHANNEL)
         var image: Image? = null
         var explicit: Boolean? = null
@@ -53,7 +52,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
         var newFeedUrl: String? = null
         var block: Boolean? = null
         var complete: Boolean? = null
-        val items: MutableList<ITunesItem> = mutableListOf()
+        val items: MutableList<ITunesItemData> = mutableListOf()
         var itemIndex = 0
 
         while (next() != XmlPullParser.END_TAG) {
@@ -81,7 +80,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
         }
 
         require(XmlPullParser.END_TAG, null, CHANNEL)
-        return ITunesChannel(
+        return ITunesChannelData(
             title = standardChannel.title,
             description = standardChannel.description,
             image = image,
@@ -169,7 +168,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readItem(standardItem: RssStandardItem): ITunesItem {
+    private fun XmlPullParser.readItem(standardItem: RssStandardItem): ITunesItemData {
         require(XmlPullParser.START_TAG, null, ITEM)
         var simpleTitle: String? = null
         var duration: String? = null
@@ -198,7 +197,7 @@ class ITunesParser : ParserBase<ITunesChannel>() {
         }
 
         require(XmlPullParser.END_TAG, null, ITEM)
-        return ITunesItem(
+        return ITunesItemData(
             title = standardItem.title,
             enclosure = standardItem.enclosure,
             guid = standardItem.guid,

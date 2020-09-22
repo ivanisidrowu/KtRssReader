@@ -3,11 +3,10 @@ package tw.ktrssreader.parser
 import extensions.shouldBe
 import org.junit.Test
 import org.junit.experimental.runners.Enclosed
-
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.xmlpull.v1.XmlPullParserException
-import tw.ktrssreader.model.channel.GoogleChannel
+import tw.ktrssreader.model.channel.GoogleChannelData
 import tw.ktrssreader.parser.ChannelItemTestData.FULL_GOOGLE_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.GOOGLE_PLAY_FOLDER
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_GOOGLE_CHANNEL
@@ -20,7 +19,7 @@ class GoogleParserTest {
     @RunWith(Parameterized::class)
     class GoogleParserParseFunctionTest(
         private val rssFilePath: String,
-        private val expectedChannel: GoogleChannel
+        private val expectedChannel: GoogleChannelData
     ) {
         companion object {
             @JvmStatic

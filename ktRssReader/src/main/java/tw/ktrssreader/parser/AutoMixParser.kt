@@ -29,17 +29,18 @@ import tw.ktrssreader.constant.ParserConst.ITUNES_OWNER
 import tw.ktrssreader.constant.ParserConst.ITUNES_SEASON
 import tw.ktrssreader.constant.ParserConst.ITUNES_TITLE
 import tw.ktrssreader.constant.ParserConst.ITUNES_TYPE
-import tw.ktrssreader.model.channel.AutoMixChannel
+import tw.ktrssreader.model.channel.AutoMixChannelData
 import tw.ktrssreader.model.channel.Image
 import tw.ktrssreader.model.channel.Owner
-import tw.ktrssreader.model.channel.RssStandardChannel
+import tw.ktrssreader.model.channel.RssStandardChannelData
 import tw.ktrssreader.model.item.AutoMixItem
+import tw.ktrssreader.model.item.AutoMixItemData
 import tw.ktrssreader.model.item.Category
-import tw.ktrssreader.model.item.RssStandardItem
+import tw.ktrssreader.model.item.RssStandardItemData
 import java.io.IOException
 
 
-class AutoMixParser : ParserBase<AutoMixChannel>() {
+class AutoMixParser : ParserBase<AutoMixChannelData>() {
     override fun parse(xml: String) = parseAutoMixChannel(xml)
 
     /**
@@ -47,7 +48,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
      * RssStandard -> iTunes -> GooglePlay
      */
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun parseAutoMixChannel(xml: String): AutoMixChannel {
+    private fun parseAutoMixChannel(xml: String): AutoMixChannelData {
         val standardChannel = parseStandardChannel(xml)
         return readAutoMixChannel(xml, standardChannel)
     }
@@ -55,14 +56,14 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
     @Throws(IOException::class, XmlPullParserException::class)
     private fun readAutoMixChannel(
         xml: String,
-        standardChannel: RssStandardChannel
-    ): AutoMixChannel {
+        standardChannel: RssStandardChannelData
+    ): AutoMixChannelData {
         val fromITunes = parseChannel(xml) { readITunesTags(standardChannel) }
         return parseChannel(xml) { readGoogleTags(fromITunes) }
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readITunesTags(standardChannel: RssStandardChannel): AutoMixChannel {
+    private fun XmlPullParser.readITunesTags(standardChannel: RssStandardChannelData): AutoMixChannelData {
         require(XmlPullParser.START_TAG, null, CHANNEL)
         var image: Image? = standardChannel.image
         var explicit: Boolean? = null
@@ -74,7 +75,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
         var newFeedUrl: String? = null
         var block: Boolean? = null
         var complete: Boolean? = null
-        val items: MutableList<AutoMixItem> = mutableListOf()
+        val items: MutableList<AutoMixItemData> = mutableListOf()
         var itemIndex = 0
 
         while (next() != XmlPullParser.END_TAG) {
@@ -102,7 +103,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
         }
 
         require(XmlPullParser.END_TAG, null, CHANNEL)
-        return AutoMixChannel(
+        return AutoMixChannelData(
             title = standardChannel.title,
             description = standardChannel.description,
             image = image,
@@ -193,7 +194,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readITunesItem(standardItem: RssStandardItem): AutoMixItem {
+    private fun XmlPullParser.readITunesItem(standardItem: RssStandardItemData): AutoMixItemData {
         require(XmlPullParser.START_TAG, null, ITEM)
         var simpleTitle: String? = null
         var duration: String? = null
@@ -216,12 +217,12 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
                 ITUNES_SEASON -> season = readString(ITUNES_SEASON)?.toIntOrNull()
                 ITUNES_EPISODE_TYPE -> episodeType = readString(ITUNES_EPISODE_TYPE)
                 ITUNES_BLOCK -> block = readString(ITUNES_BLOCK)?.convertYesNo()
-                ITUNES_AUTHOR -> author = readString(ITUNES_AUTHOR)
+                ITUNES_AUTHOR -> author.doActionOrSkip(this) { author = readString(ITUNES_AUTHOR) }
                 else -> skip()
             }
         }
         require(XmlPullParser.END_TAG, null, ITEM)
-        return AutoMixItem(
+        return AutoMixItemData(
             title = standardItem.title,
             enclosure = standardItem.enclosure,
             guid = standardItem.guid,
@@ -244,7 +245,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readGoogleTags(previousResult: AutoMixChannel): AutoMixChannel {
+    private fun XmlPullParser.readGoogleTags(previousResult: AutoMixChannelData): AutoMixChannelData {
         require(XmlPullParser.START_TAG, null, CHANNEL)
         var description: String? = previousResult.description
         var image: Image? = previousResult.image
@@ -278,7 +279,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
             }
         }
         require(XmlPullParser.END_TAG, null, CHANNEL)
-        return AutoMixChannel(
+        return AutoMixChannelData(
             title = previousResult.title,
             description = description,
             image = image,
@@ -314,6 +315,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readGoogleOwner(previousResult: Owner?): Owner? {
         return if (previousResult?.email?.isNotEmpty() == true) {
+            skip()
             previousResult
         } else {
             Owner(name = previousResult?.name, email = readString(GOOGLE_OWNER))
@@ -337,7 +339,7 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
             }
         }
         require(XmlPullParser.END_TAG, null, ITEM)
-        return AutoMixItem(
+        return AutoMixItemData(
             title = previousResult.title,
             enclosure = previousResult.enclosure,
             guid = previousResult.guid,
