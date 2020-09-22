@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<rss xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+    version="2.0">
+    <channel>
+       <unknown>unknown attribute</unknown>
+       <googleplay:author>channel author - google play</googleplay:author>
+       <googleplay:image href="http://channel.image.url" />
+       <googleplay:owner>channel.owner.googleplay@example.com</googleplay:owner>
+       <googleplay:email>channel.email.googleplay@example.com</googleplay:email>
+       <googleplay:category text="Games &amp; Hobbies" />
+       <googleplay:description>channel description - google play</googleplay:description>
+       <googleplay:explicit>no</googleplay:explicit>
+       <googleplay:block>no</googleplay:block>
+       <itunes:author>channel author - iTunes</itunes:author>
+       <itunes:owner>
+          <itunes:name>channel owner name - iTunes</itunes:name>
+          <itunes:email>channel.owner.email.itunes@example.com</itunes:email>
+       </itunes:owner>
+       <itunes:explicit>true</itunes:explicit>
+       <itunes:block>yes</itunes:block>
+       <itunes:image href="https://channel.image.itunes" />
+       <itunes:category text="Technology - iTunes" />
+       <title>channel title</title>
+       <link>http://channel.link</link>
+       <unknown>unknown attribute</unknown>
+       <language>en-us</language>
+       <pubDate>Tue, 10 Jun 2003 04:00:00 GMT</pubDate>
+       <lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
+       <docs>http://channel.docs</docs>
+       <generator>channel generator</generator>
+       <videoData>video unknown attribute</videoData>
+       <copyright>channel copyright</copyright>
+       <image>
+          <link>http://channel.image.link</link>
+          <title>channel image title</title>
+          <description>channel image description</description>
+          <height>32</height>
+          <width>96</width>
+       </image>
+       <unknown>unknown attribute</unknown>
+    </channel>
+</rss>
