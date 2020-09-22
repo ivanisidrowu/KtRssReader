@@ -13,36 +13,36 @@ import tw.ktrssreader.constant.ParserConst.GOOGLE_EXPLICIT
 import tw.ktrssreader.constant.ParserConst.GOOGLE_IMAGE
 import tw.ktrssreader.constant.ParserConst.GOOGLE_OWNER
 import tw.ktrssreader.constant.ParserConst.ITEM
-import tw.ktrssreader.model.channel.GoogleChannel
+import tw.ktrssreader.model.channel.GoogleChannelData
 import tw.ktrssreader.model.channel.Image
-import tw.ktrssreader.model.channel.RssStandardChannel
+import tw.ktrssreader.model.channel.Owner
+import tw.ktrssreader.model.channel.RssStandardChannelData
 import tw.ktrssreader.model.item.Category
-import tw.ktrssreader.model.item.GoogleItem
+import tw.ktrssreader.model.item.GoogleItemData
 import tw.ktrssreader.model.item.RssStandardItem
 import java.io.IOException
-import kotlin.jvm.Throws
 
-class GoogleParser : ParserBase<GoogleChannel>() {
+class GoogleParser : ParserBase<GoogleChannelData>() {
 
     override fun parse(xml: String) = parserGoogleChannel(xml)
 
-    private fun parserGoogleChannel(xml: String): GoogleChannel {
+    private fun parserGoogleChannel(xml: String): GoogleChannelData {
         val standardChannel = parseStandardChannel(xml)
         return parseChannel(xml) { readGoogleChannel(standardChannel) }
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readGoogleChannel(standardChannel: RssStandardChannel): GoogleChannel {
+    private fun XmlPullParser.readGoogleChannel(standardChannel: RssStandardChannelData): GoogleChannelData {
         require(XmlPullParser.START_TAG, null, CHANNEL)
         var description: String? = null
         var image: Image? = null
         var explicit: Boolean? = null
         var categories: List<Category>? = null
         var author: String? = null
-        var owner: String? = null
+        var owner: Owner? = null
         var block: Boolean? = null
         var email: String? = null
-        val items: MutableList<GoogleItem> = mutableListOf()
+        val items: MutableList<GoogleItemData> = mutableListOf()
         var itemIndex = 0
         while (next() != XmlPullParser.END_TAG) {
             if (eventType != XmlPullParser.START_TAG) continue
@@ -53,7 +53,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
                 GOOGLE_EXPLICIT -> explicit = readString(GOOGLE_EXPLICIT)?.convertYesNo()
                 GOOGLE_CATEGORY -> categories = readCategory()
                 GOOGLE_AUTHOR -> author = readString(GOOGLE_AUTHOR)
-                GOOGLE_OWNER -> owner = readString(GOOGLE_OWNER)
+                GOOGLE_OWNER -> owner = Owner(name = null, email = readString(GOOGLE_OWNER))
                 GOOGLE_BLOCK -> block = readString(GOOGLE_BLOCK)?.convertYesNo()
                 GOOGLE_EMAIL -> email = readString(GOOGLE_EMAIL)
                 ITEM -> {
@@ -66,7 +66,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
             }
         }
         require(XmlPullParser.END_TAG, null, CHANNEL)
-        return GoogleChannel(
+        return GoogleChannelData(
             title = standardChannel.title,
             description = description,
             image = image,
@@ -96,7 +96,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readItem(standardItem: RssStandardItem): GoogleItem {
+    private fun XmlPullParser.readItem(standardItem: RssStandardItem): GoogleItemData {
         require(XmlPullParser.START_TAG, null, ITEM)
         var description: String? = null
         var explicit: Boolean? = null
@@ -112,7 +112,7 @@ class GoogleParser : ParserBase<GoogleChannel>() {
             }
         }
         require(XmlPullParser.END_TAG, null, ITEM)
-        return GoogleItem(
+        return GoogleItemData(
             title = standardItem.title,
             enclosure = standardItem.enclosure,
             guid = standardItem.guid,

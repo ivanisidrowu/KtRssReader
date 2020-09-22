@@ -43,14 +43,10 @@ import tw.ktrssreader.constant.ParserConst.TYPE
 import tw.ktrssreader.constant.ParserConst.URL
 import tw.ktrssreader.constant.ParserConst.WEB_MASTER
 import tw.ktrssreader.constant.ParserConst.WIDTH
-import tw.ktrssreader.model.channel.Cloud
-import tw.ktrssreader.model.channel.Image
-import tw.ktrssreader.model.channel.RssStandardChannel
-import tw.ktrssreader.model.channel.TextInput
+import tw.ktrssreader.model.channel.*
 import tw.ktrssreader.model.item.*
 import java.io.ByteArrayInputStream
 import java.io.IOException
-import kotlin.jvm.Throws
 
 abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 
@@ -73,7 +69,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         return result ?: throw XmlPullParserException("No valid channel tag in the RSS feed.")
     }
 
-    protected fun parseStandardChannel(xml: String): RssStandardChannel {
+    protected fun parseStandardChannel(xml: String): RssStandardChannelData {
         return parseChannel(xml) { readRssStandardChannel() }
     }
 
@@ -136,7 +132,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readRssStandardChannel(): RssStandardChannel {
+    private fun XmlPullParser.readRssStandardChannel(): RssStandardChannelData {
         require(XmlPullParser.START_TAG, null, CHANNEL)
 
         var title: String? = null
@@ -158,7 +154,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         var textInput: TextInput? = null
         var skipHours: List<Int>? = null
         var skipDays: List<String>? = null
-        val items = mutableListOf<RssStandardItem>()
+        val items = mutableListOf<RssStandardItemData>()
 
         while (next() != XmlPullParser.END_TAG) {
             if (eventType != XmlPullParser.START_TAG) continue
@@ -188,7 +184,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             }
         }
         require(XmlPullParser.END_TAG, null, CHANNEL)
-        return RssStandardChannel(
+        return RssStandardChannelData(
             title = title,
             description = description,
             image = image,
@@ -213,7 +209,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readRssStandardItem(): RssStandardItem {
+    private fun XmlPullParser.readRssStandardItem(): RssStandardItemData {
         require(XmlPullParser.START_TAG, null, ITEM)
         var title: String? = null
         var enclosure: Enclosure? = null
@@ -243,7 +239,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             }
         }
         require(XmlPullParser.END_TAG, null, ITEM)
-        return RssStandardItem(
+        return RssStandardItemData(
             title = title,
             enclosure = enclosure,
             guid = guid,
