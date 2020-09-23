@@ -100,7 +100,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             }
         }
         require(XmlPullParser.END_TAG, null, tagName)
-        logD("$logTag [readString] content = $content")
+        logD("$logTag [readString] tag name = $tagName, content = $content")
         return content
     }
 
