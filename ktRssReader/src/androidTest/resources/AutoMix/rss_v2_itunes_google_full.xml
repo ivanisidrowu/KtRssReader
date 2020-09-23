@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<rss xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+    version="2.0">
+   <nonChannel>
+      <title>unknown attribute</title>
+   </nonChannel>
+   <nonChannel tags="xvzxcv"/>
+    <channel>
+       <unknown>unknown attribute</unknown>
+       <googleplay:author>channel author - google play</googleplay:author>
+       <googleplay:image href="http://channel.image.url" />
+       <googleplay:owner>channel.owner.googleplay@example.com</googleplay:owner>
+       <googleplay:email>channel.email.googleplay@example.com</googleplay:email>
+       <googleplay:category text="Games &amp; Hobbies" />
+       <googleplay:description>channel description - google play</googleplay:description>
+       <googleplay:explicit>yes</googleplay:explicit>
+       <googleplay:block>yes</googleplay:block>
+       <itunes:title>channel title - iTunes</itunes:title>
+       <itunes:author>channel author - iTunes</itunes:author>
+       <itunes:owner>
+          <itunes:name>channel owner name - iTunes</itunes:name>
+          <itunes:email>channel.owner.email.itunes@example.com</itunes:email>
+       </itunes:owner>
+       <itunes>true</itunes>
+       <itunes:block>yes</itunes:block>
+       <itunes:image href="https://channel.image.itunes" />
+       <itunes:category text="Technology - iTunes" />
+       <itunes:complete>yes</itunes:complete>
+       <itunes:type>channel episodic - iTunes</itunes:type>
+       <itunes:new-feed-url>https://channel.new.feed.url.itunes</itunes:new-feed-url>
+       <title>channel title</title>
+       <link>http://channel.link</link>
+       <description>channel description</description>
+       <unknown>unknown attribute</unknown>
+       <language>en-us</language>
+       <pubDate>Tue, 10 Jun 2003 04:00:00 GMT</pubDate>
+       <lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
+       <docs>http://channel.docs</docs>
+       <generator>channel generator</generator>
+       <videoData>video unknown attribute</videoData>
+       <copyright>channel copyright</copyright>
+       <managingEditor>managingEditor@example.com</managingEditor>
+       <webMaster>webmaster@example.com</webMaster>
+       <category>channel category 1</category>
+       <category domain="http://channel.category.domain">channel category 2</category>
+       <cloud domain="channel.cloud.domain" path="/RPC2" port="80"
+           protocol="xml-rpc" registerProcedure="myCloud.rssPleaseNotify" />
+       <ttl>60</ttl>
+       <rating>(PICS-1.1 "http://channel.rating" l by "webmaster@example.com" on "2007.01.29T10:09-0800" r (n 0 s 0 v 0 l 0))</rating>
+       <image>
+          <link>http://channel.image.link</link>
+          <title>channel image title</title>
+          <url>http://channel.image.url</url>
+          <description>channel image description</description>
+          <height>32</height>
+          <width>96</width>
+       </image>
+       <videoData>video unknown attribute</videoData>
+       <skipDays>
+          <day>Saturday</day>
+          <day>Sunday</day>
+       </skipDays>
+       <skipHours>
+          <hour>0</hour>
+          <hour>1</hour>
+          <hour>2</hour>
+          <hour>22</hour>
+          <hour>23</hour>
+       </skipHours>
+       <textInput>
+          <description>channel textInput description</description>
+          <link>http://channel.textInput.link</link>
+          <name>channel textInput name</name>
+          <title>channel textInput title</title>
+       </textInput>
+       <unknown>unknown attribute</unknown>
+       <item>
+          <itunes:title>item title - iTunes</itunes:title>
+          <itunes:author>item author - iTunes</itunes:author>
+          <itunes:image href="https://item.image.itunes" />
+          <itunes:duration>2:00</itunes:duration>
+          <itunes:explicit>true</itunes:explicit>
+          <itunes:block>yes</itunes:block>
+          <itunes:episode>1</itunes:episode>
+          <itunes:season>1</itunes:season>
+          <itunes:episodeType>full</itunes:episodeType>
+          <googleplay:description>item description - google play</googleplay:description>
+          <googleplay:explicit>no</googleplay:explicit>
+          <googleplay:block>no</googleplay:block>
+          <title>item title - Full</title>
+          <link>http://item.link</link>
+          <author>item.author@example.com</author>
+          <category domain="http://item.category.domain">item category 1</category>
+          <category>item category 2</category>
+          <comments>http://item.comment</comments>
+          <enclosure length="24986239" type="audio/mpeg"
+              url="http://item.enclosure.url/item.mp3" />
+          <description>item description &lt;a href="http://item.description"&gt;item description&lt;/a&gt;.</description>
+          <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
+          <guid>http://item.guid</guid>
+          <source url="item.source.url">item source</source>
+       </item>
+       <item>
+          <itunes:title>item title - iTunes</itunes:title>
+          <itunes:author>item author - iTunes</itunes:author>
+          <itunes:image href="https://item.image.itunes" />
+          <itunes:duration>2:00</itunes:duration>
+          <itunes:episode>1</itunes:episode>
+          <itunes:season>1</itunes:season>
+          <itunes:episodeType>full</itunes:episodeType>
+          <googleplay:description>item description - google play</googleplay:description>
+          <googleplay:explicit>yes</googleplay:explicit>
+          <googleplay:block>yes</googleplay:block>
+          <title>item title - Partial</title>
+          <link>http://item.link</link>
+          <category domain="http://item.category.domain">item category 1</category>
+          <category>item category 2</category>
+          <comments>http://item.comment</comments>
+          <enclosure length="24986239" type="audio/mpeg"
+              url="http://item.enclosure.url/item.mp3" />
+          <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
+          <guid>http://item.guid</guid>
+          <source url="item.source.url">item source</source>
+       </item>
+       <item>
+          <unknown>unknown attribute</unknown>
+          <googleplay:description>item description - google play</googleplay:description>
+          <googleplay:explicit>yes</googleplay:explicit>
+          <googleplay:block>yes</googleplay:block>
+          <unknown>unknown attribute</unknown>
+          <title>item title - Partial</title>
+          <link>http://item.link</link>
+          <author>item.author@example.com</author>
+          <comments>http://item.comment</comments>
+          <enclosure length="24986239" type="audio/mpeg"
+              url="http://item.enclosure.url/item.mp3" />
+          <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
+          <guid>http://item.guid</guid>
+          <source url="item.source.url">item source</source>
+          <unknown>unknown attribute</unknown>
+       </item>
+       <unknown>unknown attribute</unknown>
+    </channel>
+   <nonChannel>
+      <title>unknown attribute</title>
+   </nonChannel>
+   <nonChannel tags="xvzxcv"/>
+</rss>

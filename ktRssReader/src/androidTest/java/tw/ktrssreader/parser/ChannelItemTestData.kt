@@ -7,6 +7,7 @@ object ChannelItemTestData {
     const val RSS_FOLDER = "RSS"
     const val GOOGLE_PLAY_FOLDER = "GooglePlay"
     const val ITUNES_FOLDER = "iTunes"
+    const val AUTOMIX_FOLDER = "AutoMix"
     const val MISMATCH_TAG_FOLDER = "StartOrEndTagMismatch"
 
     // item attributes
@@ -486,5 +487,151 @@ object ChannelItemTestData {
         textInput = CHANNEL_PARTIAL_TEXT_INPUT_ATTR,
         skipDays = null,
         skipHours = null
+    )
+
+    // AutoMix test data, Priority RSS 2.0 > iTunes > Google Play
+    private val FULL_AUTOMIX_ITEM = AutoMixItemData(
+        title = ITEM_TITLE_ATTR,
+        enclosure = ITEM_ENCLOSURE_ATTR,
+        guid = ITEM_GUID_ATTR,
+        pubDate = ITEM_PUB_DATE_ATTR,
+        description = ITEM_DESCRIPTION_ATTR,
+        link = ITEM_LINK_ATTR,
+        author = ITEM_AUTHOR_ATTR,
+        categories = listOf(
+            ITEM_CATEGORY_ATTR,
+            ITEM_CATEGORY_ATTR_WITHOUT_DOMAIN
+        ),
+        comments = ITEM_COMMENTS_ATTR,
+        source = ITEM_SOURCE_ATTR,
+        duration = ITUNES_ITEM_DURATION_ATTR,
+        image = ITUNES_ITEM_IMAGE_ATTR,
+        explicit = true,
+        episode = 1,
+        season = 1,
+        episodeType = ITUNES_ITEM_EPISODE_ATTR,
+        block = true,
+        simpleTitle = ITUNES_ITEM_TITLE_ATTR
+    )
+
+    private val PARTIAL_AUTOMIX_ITEM_1 = FULL_AUTOMIX_ITEM.copy(
+        title = ITEM_TITLE_ATTR_PARTIAL,
+        description = GOOGLE_ITEM_DESCRIPTION_ATTR,
+        author = ITUNES_ITEM_AUTHOR_ATTR,
+        categories = listOf(
+            ITEM_CATEGORY_ATTR,
+            ITEM_CATEGORY_ATTR_WITHOUT_DOMAIN
+        ),
+        duration = ITUNES_ITEM_DURATION_ATTR,
+        image = ITUNES_ITEM_IMAGE_ATTR,
+        explicit = true,
+        episode = 1,
+        season = 1,
+        episodeType = ITUNES_ITEM_EPISODE_ATTR,
+        block = true
+    )
+
+    private val PARTIAL_AUTOMIX_ITEM_2 = AutoMixItemData(
+        title = ITEM_TITLE_ATTR_PARTIAL,
+        enclosure = ITEM_ENCLOSURE_ATTR,
+        guid = ITEM_GUID_ATTR,
+        pubDate = ITEM_PUB_DATE_ATTR,
+        description = GOOGLE_ITEM_DESCRIPTION_ATTR,
+        link = ITEM_LINK_ATTR,
+        author = ITEM_AUTHOR_ATTR,
+        categories = null,
+        comments = ITEM_COMMENTS_ATTR,
+        source = ITEM_SOURCE_ATTR,
+        duration = null,
+        image = null,
+        explicit = true,
+        episode = null,
+        season = null,
+        episodeType = null,
+        block = true,
+        simpleTitle = null
+    )
+
+    val FULL_AUTOMIX_CHANNEL = AutoMixChannelData(
+        title = CHANNEL_TITLE_ATTR,
+        description = CHANNEL_DESCRIPTION_ATTR,
+        image = CHANNEL_IMAGE_ATTR,
+        language = CHANNEL_LANGUAGE_ATTR,
+        categories = listOf(
+            CHANNEL_CATEGORY_ATTR_WITHOUT_DOMAIN,
+            CHANNEL_CATEGORY_ATTR
+        ),
+        link = CHANNEL_LINK_ATTR,
+        copyright = CHANNEL_COPYRIGHT_ATTR,
+        managingEditor = CHANNEL_MANAGING_EDITOR_ATTR,
+        webMaster = CHANNEL_WEBMASTER_ATTR,
+        pubDate = CHANNEL_PUB_DATE_ATTR,
+        lastBuildDate = CHANNEL_LAST_BUILD_DATE_ATTR,
+        generator = CHANNEL_GENERATOR_ATTR,
+        docs = CHANNEL_DOCS_ATTR,
+        cloud = CHANNEL_CLOUD_ATTR,
+        ttl = CHANNEL_TTL_ATTR,
+        rating = CHANNEL_RATING_ATTR,
+        textInput = CHANNEL_TEXT_INPUT_ATTR,
+        skipHours = CHANNEL_SKIP_HOURS_ATTR,
+        skipDays = CHANNEL_SKIP_DAYS_ATTR,
+        items = listOf(FULL_AUTOMIX_ITEM, PARTIAL_AUTOMIX_ITEM_1, PARTIAL_AUTOMIX_ITEM_2),
+        explicit = true,
+        author = ITUNES_CHANNEL_AUTHOR_ATTR,
+        owner = ITUNES_CHANNEL_OWNER_ATTR,
+        type = ITUNES_CHANNEL_TYPE_ATTR,
+        newFeedUrl = ITUNES_CHANNEL_NEW_FEED_URL_ATTR,
+        block = true,
+        complete = true,
+        simpleTitle = ITUNES_CHANNEL_TITLE_ATTR,
+        email = GOOGLE_CHANNEL_EMAIL_ATTR
+    )
+
+    val PARTIAL_AUTOMIX_CHANNEL = FULL_AUTOMIX_CHANNEL.copy(
+        description = GOOGLE_CHANNEL_DESCRIPTION_ATTR,
+        image = CHANNEL_IMAGE_ATTR.copy(url = ITUNES_CHANNEL_IMAGE_ATTR),
+        categories = listOf(Category(name = ITUNES_CHANNEL_CATEGORY_ATTR, domain = null)),
+        managingEditor = null,
+        webMaster = null,
+        cloud = null,
+        ttl = null,
+        rating = null,
+        textInput = null,
+        skipHours = null,
+        skipDays = null,
+        items = null,
+        simpleTitle = null,
+        explicit = true,
+        email = GOOGLE_CHANNEL_EMAIL_ATTR,
+        author = ITUNES_CHANNEL_AUTHOR_ATTR,
+        owner = ITUNES_CHANNEL_OWNER_ATTR,
+        type = null,
+        newFeedUrl = null,
+        block = true,
+        complete = null
+    )
+
+    val PARTIAL_AUTOMIX_CHANNEL_2 = PARTIAL_AUTOMIX_CHANNEL.copy(
+        description = GOOGLE_CHANNEL_DESCRIPTION_ATTR,
+        image = CHANNEL_IMAGE_ATTR.copy(url = GOOGLE_CHANNEL_IMAGE_ATTR),
+        categories = listOf(Category(name = GOOGLE_CHANNEL_CATEGORY_ATTR, domain = null)),
+        managingEditor = null,
+        webMaster = null,
+        cloud = null,
+        ttl = null,
+        rating = null,
+        textInput = null,
+        skipHours = null,
+        skipDays = null,
+        items = null,
+        simpleTitle = null,
+        explicit = false,
+        email = GOOGLE_CHANNEL_EMAIL_ATTR,
+        author = GOOGLE_CHANNEL_AUTHOR_ATTR,
+        owner = googleChannelOwnerAttr,
+        type = null,
+        newFeedUrl = null,
+        block = false,
+        complete = null
     )
 }
