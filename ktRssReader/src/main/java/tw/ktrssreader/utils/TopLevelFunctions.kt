@@ -35,16 +35,17 @@ fun <T> ByteArray.convertToObject(): T {
 
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T : RssStandardChannel, R> convertChannelTo(
+    ifRssStandard: () -> Any,
     ifITunes: () -> Any,
     ifGoogle: () -> Any,
-    ifAutoMix: () -> Any,
-    ifRssStandard: () -> Any
+    ifAutoMix: () -> Any
 ): R {
     val clazz = T::class.java
+    // Do NOT change this order
     return when {
+        AutoMixChannel::class.java.isAssignableFrom(clazz) -> ifAutoMix()
         ITunesChannel::class.java.isAssignableFrom(clazz) -> ifITunes()
         GoogleChannel::class.java.isAssignableFrom(clazz) -> ifGoogle()
-        AutoMixChannel::class.java.isAssignableFrom(clazz) -> ifAutoMix()
         else -> ifRssStandard()
     } as R
 }

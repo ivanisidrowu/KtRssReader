@@ -31,10 +31,10 @@ object KtRssProvider {
 
     inline fun <reified T : RssStandardChannel> provideParser(): Parser<T> {
         return convertChannelTo<T, Parser<T>>(
+            ifRssStandard = { RssStandardParser() },
             ifITunes = { ITunesParser() },
             ifGoogle = { GoogleParser() },
-            ifAutoMix = { AutoMixParser() },
-            ifRssStandard = { RssStandardParser() }
+            ifAutoMix = { AutoMixParser() }
         )
     }
 }

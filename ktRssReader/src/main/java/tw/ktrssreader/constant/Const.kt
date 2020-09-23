@@ -32,10 +32,10 @@ object Const {
 
             inline fun <reified T : RssStandardChannel> convertToChannelType(): Int {
                 return convertChannelTo<T, Int>(
+                    ifRssStandard = { RSS_STANDARD },
                     ifITunes = { ITUNES },
                     ifGoogle = { GOOGLE },
-                    ifAutoMix = { AUTO_MIX },
-                    ifRssStandard = { RSS_STANDARD }
+                    ifAutoMix = { AUTO_MIX }
                 )
             }
         }
