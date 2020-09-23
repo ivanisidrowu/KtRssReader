@@ -42,9 +42,9 @@ class ChannelDaoTest : DaoTestBase() {
         val fakeUrl2 = "fakeUrl2"
         val fakeUrl3 = "fakeUrl3"
         val subject = database.channelDao()
-        val entity1 = ChannelEntity(fakeUrl1, fakeType, byteArrayOf(), fakeTime)
-        val entity2 = ChannelEntity(fakeUrl2, fakeType, byteArrayOf(), fakeTime)
-        val entity3 = ChannelEntity(fakeUrl3, fakeType, byteArrayOf(), fakeTime)
+        val entity1 = ChannelEntity(fakeUrl1, fakeType, fakeChannelByteArray, fakeTime)
+        val entity2 = ChannelEntity(fakeUrl2, fakeType, fakeChannelByteArray, fakeTime)
+        val entity3 = ChannelEntity(fakeUrl3, fakeType, fakeChannelByteArray, fakeTime)
         subject.insert(entity1)
         subject.insert(entity2)
         subject.insert(entity3)
