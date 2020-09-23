@@ -13,6 +13,10 @@ fun logD(message: String) {
     if (KtRssReaderGlobalConfig.enableLog) Log.d(TAG, message)
 }
 
+fun logW(message: String) {
+    if (KtRssReaderGlobalConfig.enableLog) Log.w(TAG, message)
+}
+
 fun <T> T.convertToByteArray(): ByteArray {
     return ByteArrayOutputStream().use { bos ->
         val oos = ObjectOutputStream(bos)
