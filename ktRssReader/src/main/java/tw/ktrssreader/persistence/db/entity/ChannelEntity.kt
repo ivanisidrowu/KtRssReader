@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class ChannelEntity(
     @PrimaryKey
     val url: String,
+    val type: Int,
     val channel: ByteArray,
     val time: Long
 ) {

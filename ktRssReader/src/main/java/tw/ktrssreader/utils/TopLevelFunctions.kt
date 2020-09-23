@@ -2,6 +2,10 @@ package tw.ktrssreader.utils
 
 import android.util.Log
 import tw.ktrssreader.config.KtRssReaderGlobalConfig
+import tw.ktrssreader.model.channel.AutoMixChannel
+import tw.ktrssreader.model.channel.GoogleChannel
+import tw.ktrssreader.model.channel.ITunesChannel
+import tw.ktrssreader.model.channel.RssStandardChannel
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -27,4 +31,20 @@ fun <T> ByteArray.convertToObject(): T {
         val ois = ObjectInputStream(bis)
         ois.readObject() as T
     }
+}
+
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T : RssStandardChannel, R> convertChannelTo(
+    ifITunes: () -> Any,
+    ifGoogle: () -> Any,
+    ifAutoMix: () -> Any,
+    ifRssStandard: () -> Any
+): R {
+    val clazz = T::class.java
+    return when {
+        ITunesChannel::class.java.isAssignableFrom(clazz) -> ifITunes()
+        GoogleChannel::class.java.isAssignableFrom(clazz) -> ifGoogle()
+        AutoMixChannel::class.java.isAssignableFrom(clazz) -> ifAutoMix()
+        else -> ifRssStandard()
+    } as R
 }
