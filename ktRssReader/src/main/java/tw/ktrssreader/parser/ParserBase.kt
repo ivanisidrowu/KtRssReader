@@ -90,6 +90,11 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         if (next() == XmlPullParser.TEXT) {
             content = text
             nextTag()
+            if (eventType != XmlPullParser.END_TAG) {
+                skip()
+                nextTag()
+                content = null
+            }
         }
         require(XmlPullParser.END_TAG, null, tagName)
         return content
