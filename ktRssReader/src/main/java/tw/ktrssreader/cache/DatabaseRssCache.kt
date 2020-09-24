@@ -19,8 +19,13 @@ class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
     override fun readCache(url: String, type: @Const.ChannelType Int, expiredTimeMillis: Long): T? {
         val entity = dao.getChannel(url, type) ?: return null
 
-        val isCacheInvalid = Calendar.getInstance().timeInMillis > (entity.time + expiredTimeMillis)
-        return if (isCacheInvalid) null else entity.channel.convertToObject() as? T
+        val isCacheValid = (entity.time + expiredTimeMillis) > Calendar.getInstance().timeInMillis
+        return if (isCacheValid) {
+            entity.channel.convertToObject() as? T
+        } else {
+            dao.delete(entity)
+            null
+        }
     }
 
     override fun saveCache(url: String, channel: RssStandardChannel) {

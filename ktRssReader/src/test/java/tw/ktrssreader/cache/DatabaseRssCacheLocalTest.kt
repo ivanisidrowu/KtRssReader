@@ -26,7 +26,7 @@ class DatabaseRssCacheLocalTest {
     private lateinit var mockDao: ChannelDao
 
     @RelaxedMockK
-    private lateinit var mockChannel: ChannelEntity
+    private lateinit var mockChannelEntity: ChannelEntity
 
     private val fakeUrl = "fakeUrl"
     private val fakeType = Const.RSS_STANDARD
@@ -41,7 +41,7 @@ class DatabaseRssCacheLocalTest {
         mockkObject(KtRssProvider)
         every { KtRssProvider.provideDatabase(any()) } returns mockDatabase
         every { mockDatabase.channelDao() } returns mockDao
-        every { mockDao.getChannel(fakeUrl, fakeType) } returns mockChannel
+        every { mockDao.getChannel(fakeUrl, fakeType) } returns mockChannelEntity
 
         mockkStatic("tw.ktrssreader.utils.TopLevelFunctionsKt")
 
@@ -58,15 +58,15 @@ class DatabaseRssCacheLocalTest {
         val mockCalendar = mockkRelaxed<Calendar>()
         mockkStatic(Calendar::class)
         every { Calendar.getInstance() } returns mockCalendar
-        every { mockCalendar.timeInMillis } returns 3
-        every { mockChannel.time } returns 1
+        every { mockCalendar.timeInMillis } returns 100
+        every { mockChannelEntity.time } returns 10
 
         val expected = mockkRelaxed<RssStandardChannel>()
         every {
-            mockDao.getChannel(any(), any())?.channel?.convertToObject<RssStandardChannel>()
+            mockChannelEntity.channel.convertToObject<RssStandardChannel>()
         } returns expected
 
-        val actual = subject.readCache(fakeUrl, fakeType, 4)
+        val actual = subject.readCache(fakeUrl, fakeType, expiredTimeMillis = 10000)
 
         actual shouldBe expected
     }
@@ -76,16 +76,17 @@ class DatabaseRssCacheLocalTest {
         val mockCalendar = mockkRelaxed<Calendar>()
         mockkStatic(Calendar::class)
         every { Calendar.getInstance() } returns mockCalendar
-        every { mockCalendar.timeInMillis } returns 3
-        every { mockChannel.time } returns 1
+        every { mockCalendar.timeInMillis } returns 10000
+        every { mockChannelEntity.time } returns 10
 
         val expected = mockkRelaxed<RssStandardChannel>()
         every {
-            mockDao.getChannel(any(), any())?.channel?.convertToObject<RssStandardChannel>()
+            mockChannelEntity.channel.convertToObject<RssStandardChannel>()
         } returns expected
 
-        val actual = subject.readCache(fakeUrl, fakeType, expiredTimeMillis = 2)
+        val actual = subject.readCache(fakeUrl, fakeType, expiredTimeMillis = 100)
 
+        verify { mockDao.delete(mockChannelEntity) }
         actual shouldBe null
     }
 
