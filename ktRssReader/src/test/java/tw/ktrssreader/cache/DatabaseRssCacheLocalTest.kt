@@ -8,6 +8,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import tw.ktrssreader.config.KtRssReaderGlobalConfig
+import tw.ktrssreader.constant.Const
 import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.persistence.db.KtRssReaderDatabase
 import tw.ktrssreader.persistence.db.dao.ChannelDao
@@ -21,6 +22,9 @@ class DatabaseRssCacheLocalTest {
 
     @RelaxedMockK
     private lateinit var mockDao: ChannelDao
+
+    private val fakeUrl = "fakeUrl"
+    private val fakeType = Const.RSS_STANDARD
 
     @Before
     fun setup() {
@@ -47,17 +51,16 @@ class DatabaseRssCacheLocalTest {
     fun `Read cache`() {
         val expected = mockkRelaxed<RssStandardChannel>()
         every {
-            mockDao.getChannelByUrl(any())?.channel?.convertToObject<RssStandardChannel>()
+            mockDao.getChannel(any(), any())?.channel?.convertToObject<RssStandardChannel>()
         } returns expected
 
-        val actual = subject.readCache("fakeUrl")
+        val actual = subject.readCache(fakeUrl, fakeType)
 
         actual shouldBe expected
     }
 
     @Test
     fun `Save cache`() {
-        val fakeUrl = "fakeUrl"
         val mockChannel = mockkRelaxed<RssStandardChannel>()
         val fakeByteArray: ByteArray = byteArrayOf()
         every { mockChannel.convertToByteArray() } returns fakeByteArray

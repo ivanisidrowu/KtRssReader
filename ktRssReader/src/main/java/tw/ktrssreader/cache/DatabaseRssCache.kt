@@ -1,6 +1,7 @@
 package tw.ktrssreader.cache
 
 import tw.ktrssreader.config.KtRssReaderGlobalConfig
+import tw.ktrssreader.constant.Const
 import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.persistence.db.entity.ChannelEntity
 import tw.ktrssreader.provider.KtRssProvider
@@ -13,8 +14,8 @@ class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
     private val db = KtRssProvider.provideDatabase(KtRssReaderGlobalConfig.getApplicationContext())
     private val dao = db.channelDao()
 
-    override fun readCache(url: String): T? {
-        return dao.getChannelByUrl(url)?.channel?.convertToObject() as? T
+    override fun readCache(url: String, type: @Const.ChannelType Int): T? {
+        return dao.getChannel(url, type)?.channel?.convertToObject() as? T
     }
 
     override fun saveCache(url: String, channel: RssStandardChannel) {
@@ -23,6 +24,7 @@ class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
         dao.insert(
             ChannelEntity(
                 url = url,
+                type = Const.ChannelType.convertChannelToType(channel),
                 channel = channel.convertToByteArray(),
                 time = System.currentTimeMillis()
             )
