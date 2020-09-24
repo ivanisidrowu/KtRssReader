@@ -90,13 +90,13 @@ class MyApplication : Application() {
 val result: ITunesChannelData = Reader.read<ITunesChannelData> {
     charset = Charsets.UTF_8,
     useRemote = true,
-    expiredTime = 600000
+    expiredTimeMillis = 600000
 }
 ```
 
 * `charset`: Specify an encoding charset, if it's not set, it will use the charset from the RSS source.
 * `useRemote`: Pull data from cache or remote server.
-* `expiredTime`: The cache expire time in milliseconds.
+* `expiredTimeMillis`: The cache expire time in milliseconds.
 
 #### With Flow
 
