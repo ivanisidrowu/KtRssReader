@@ -38,13 +38,13 @@ Before we get into the basic API usage, let talk about the data models in KtRssR
 
 [`RssStandardChannelData`](https://github.com/ivgsanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L29) / [`RssStandardChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L6): To get tags and values from [RSS 2.0 standard](https://cyber.harvard.edu/rss/rss.html).
 
-#### iTunes Format
+#### iTunes Podcast Format
 
 [`ITunesChannelData`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L64) / [`ITunesChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L52): To get [iTunes](https://help.apple.com/itc/podcasts_connect/#/itcb54353390) tags from a source.
 
-#### Google Play Format
+#### Google Play Podcast Format
 
-[`GoogleChannelData`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L104) / [`GoogleChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L52): To get [Google Play](https://sgsupport.google.com/podcast-publishers/answer/9889544?hl=en) tags.
+[`GoogleChannelData`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L104) / [`GoogleChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L52): To get [Google Play](https://support.google.com/podcast-publishers/answer/9889544?hl=en) tags.
 
 #### Auto Mix Data
 
@@ -96,7 +96,7 @@ val result: ITunesChannelData = Reader.read<ITunesChannelData> {
 
 * `charset`: Specify an encoding charset, if it's not set, it will use the charset from the RSS source.
 * `useRemote`: Pull data from cache or remote server.
-* `expiredTime`: The cache expire time
+* `expiredTime`: The cache expire time in milliseconds.
 
 #### With Flow
 
