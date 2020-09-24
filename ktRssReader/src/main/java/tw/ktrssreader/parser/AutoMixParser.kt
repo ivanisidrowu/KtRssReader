@@ -69,7 +69,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readITunesTags(standardChannel: RssStandardChannelData): AutoMixChannelData {
         require(XmlPullParser.START_TAG, null, CHANNEL)
-        logD("$logTag [readITunesTags]: Reading iTunes channel")
+        logD(logTag, "[readITunesTags]: Reading iTunes channel")
         var image: Image? = standardChannel.image
         var explicit: Boolean? = null
         var categories: List<Category>? = standardChannel.categories
@@ -149,7 +149,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
             nextTag()
         }
         require(XmlPullParser.END_TAG, null, tagName)
-        logD("$logTag [readImage]: link = ${standardImage?.link}, title = ${standardImage?.title}, url = ${standardImage?.url ?: href}, description = ${standardImage?.description}, height = ${standardImage?.height}, width = ${standardImage?.width}")
+        logD(logTag, "[readImage]: link = ${standardImage?.link}, title = ${standardImage?.title}, url = ${standardImage?.url ?: href}, description = ${standardImage?.description}, height = ${standardImage?.height}, width = ${standardImage?.width}")
         return Image(
             link = standardImage?.link,
             title = standardImage?.title,
@@ -177,7 +177,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
                 else -> skip()
             }
         }
-        logD("$logTag [readCategory]: categories = $categories")
+        logD(logTag, "[readCategory]: categories = $categories")
         require(XmlPullParser.END_TAG, null, tagName)
         return categories
     }
@@ -197,14 +197,14 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
             }
         }
         require(XmlPullParser.END_TAG, null, ITUNES_OWNER)
-        logD("$logTag [readITunesOwner]: name = $name, email = $email")
+        logD(logTag, "[readITunesOwner]: name = $name, email = $email")
         return Owner(name = name, email = email)
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readITunesItem(standardItem: RssStandardItemData): AutoMixItemData {
         require(XmlPullParser.START_TAG, null, ITEM)
-        logD("$logTag [readITunesItem]: Reading iTunes item")
+        logD(logTag, "[readITunesItem]: Reading iTunes item")
         var simpleTitle: String? = null
         var duration: String? = null
         var image: String? = null
@@ -256,7 +256,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readGoogleTags(previousResult: AutoMixChannelData): AutoMixChannelData {
         require(XmlPullParser.START_TAG, null, CHANNEL)
-        logD("$logTag [readGoogleTags] Reading Google Play channel")
+        logD(logTag, "[readGoogleTags] Reading Google Play channel")
         var description: String? = previousResult.description
         var image: Image? = previousResult.image
         var explicit: Boolean? = previousResult.explicit
@@ -330,14 +330,14 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
         } else {
             Owner(name = previousResult?.name, email = readString(GOOGLE_OWNER))
         }
-        logD("$logTag [readGoogleOwner]: $owner")
+        logD(logTag, "[readGoogleOwner]: $owner")
         return owner
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readGoogleItem(previousResult: AutoMixItem): AutoMixItem {
         require(XmlPullParser.START_TAG, null, ITEM)
-        logD("$logTag [readGoogleItem]: Reading Google Play item")
+        logD(logTag, "[readGoogleItem]: Reading Google Play item")
         var description: String? = previousResult.description
         var explicit: Boolean? = previousResult.explicit
         var block: Boolean? = previousResult.block

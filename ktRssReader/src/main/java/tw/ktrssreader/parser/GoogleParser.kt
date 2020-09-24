@@ -37,7 +37,7 @@ class GoogleParser : ParserBase<GoogleChannelData>() {
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readGoogleChannel(standardChannel: RssStandardChannelData): GoogleChannelData {
         require(XmlPullParser.START_TAG, null, CHANNEL)
-        logD("$logTag [readGoogleChannel]: Reading Google Play channel")
+        logD(logTag, "[readGoogleChannel]: Reading Google Play channel")
         var description: String? = null
         var image: Image? = null
         var explicit: Boolean? = null
@@ -102,7 +102,7 @@ class GoogleParser : ParserBase<GoogleChannelData>() {
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readItem(standardItem: RssStandardItem): GoogleItemData {
         require(XmlPullParser.START_TAG, null, ITEM)
-        logD("$logTag [readItem]: Reading Google Play item")
+        logD(logTag, "[readItem]: Reading Google Play item")
         var description: String? = null
         var explicit: Boolean? = null
         var block: Boolean? = null
@@ -139,7 +139,7 @@ class GoogleParser : ParserBase<GoogleChannelData>() {
         val href: String? = getAttributeValue(null, ParserConst.HREF)
         nextTag()
         require(XmlPullParser.END_TAG, null, GOOGLE_IMAGE)
-        logD("$logTag [readImage]: href = $href")
+        logD(logTag, "[readImage]: href = $href")
         return Image(
             link = null,
             title = null,
@@ -170,7 +170,7 @@ class GoogleParser : ParserBase<GoogleChannelData>() {
             }
         }
         require(XmlPullParser.END_TAG, null, GOOGLE_CATEGORY)
-        logD("$logTag [readCategory]: categories = $categories")
+        logD(logTag, "[readCategory]: categories = $categories")
         return categories
     }
 }

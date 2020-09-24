@@ -11,11 +11,13 @@ import tw.ktrssreader.utils.ThreadUtils
 import tw.ktrssreader.utils.logD
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.jvm.Throws
 
 typealias Config = KtRssReaderConfig.() -> Unit
 
 object Reader {
+
+    val logTag: String = this::class.java.simpleName
+
     @Throws(Exception::class)
     inline fun <reified T : RssStandardChannel> read(
         url: String,
@@ -34,6 +36,7 @@ object Reader {
         }
 
         logD(
+            logTag,
             """
                 
 ┌───────────────────────────────────────────────
@@ -45,7 +48,7 @@ object Reader {
         )
 
         return if (cacheChannel == null) {
-            logD("[read] fetch remote data")
+            logD(logTag, "[read] fetch remote data")
             val fetcher = KtRssProvider.provideXmlFetcher()
             val xml = fetcher.fetch(url = url, charset = charset)
             val parser = KtRssProvider.provideParser<T>()
@@ -55,7 +58,7 @@ object Reader {
             }
             channel
         } else {
-            logD("[read] use local cache")
+            logD(logTag, "[read] use local cache")
             cacheChannel
         }
     }
