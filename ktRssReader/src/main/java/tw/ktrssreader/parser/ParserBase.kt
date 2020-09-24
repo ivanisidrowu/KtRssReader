@@ -45,12 +45,14 @@ import tw.ktrssreader.constant.ParserConst.WEB_MASTER
 import tw.ktrssreader.constant.ParserConst.WIDTH
 import tw.ktrssreader.model.channel.*
 import tw.ktrssreader.model.item.*
+import tw.ktrssreader.utils.logD
+import tw.ktrssreader.utils.logW
 import java.io.ByteArrayInputStream
 import java.io.IOException
 
 abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 
-    protected val noValidChannelTag = "No valid channel tag in the RSS feed."
+    abstract val logTag: String
 
     protected inline fun <T> parseChannel(xml: String, action: XmlPullParser.() -> T): T {
         val parser = getXmlParser(xml)
@@ -91,12 +93,14 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             content = text
             nextTag()
             if (eventType != XmlPullParser.END_TAG) {
+                logW("$logTag [readString] Unexpected tag: name = $name, event type = $eventType.")
                 skip()
                 nextTag()
                 content = null
             }
         }
         require(XmlPullParser.END_TAG, null, tagName)
+        logD("$logTag [readString] tag name = $tagName, content = $content")
         return content
     }
 
@@ -111,6 +115,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             action(attr, getAttributeValue(null, attr))
         }
         nextTag()
+        logD("$logTag [readAttributes]: tag name = $tagName, attributes = $attributes")
         require(XmlPullParser.END_TAG, null, tagName)
     }
 
@@ -126,6 +131,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
                 XmlPullParser.START_TAG -> depth++
             }
         }
+        logW("$logTag [skip] tag name = $name, depth is $depth.")
     }
 
     protected fun String.convertYesNo(): Boolean? {
@@ -164,7 +170,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         while (next() != XmlPullParser.END_TAG) {
             if (eventType != XmlPullParser.START_TAG) continue
 
-            when (this.name) {
+            when (name) {
                 TITLE -> title = readString(TITLE)
                 DESCRIPTION -> description = readString(DESCRIPTION)
                 LINK -> link = readString(LINK)
@@ -229,6 +235,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         while (next() != XmlPullParser.END_TAG) {
             if (eventType != XmlPullParser.START_TAG) continue
 
+            logD("$logTag [readRssStandardItem] Reading tag name $name.")
             when (this.name) {
                 TITLE -> title = readString(TITLE)
                 ENCLOSURE -> enclosure = readEnclosure()
@@ -270,7 +277,8 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         while (next() != XmlPullParser.END_TAG) {
             if (eventType != XmlPullParser.START_TAG) continue
 
-            when (this.name) {
+            logD("$logTag [readImage]: RSS 2.0 tag name = $name.")
+            when (name) {
                 LINK -> link = readString(LINK)
                 TITLE -> title = readString(TITLE)
                 URL -> url = readString(URL)
@@ -312,6 +320,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         val domain: String? = getAttributeValue(null, DOMAIN)
         val name: String? = readString(tagName = CATEGORY)
         require(XmlPullParser.END_TAG, null, CATEGORY)
+        logD("$logTag [readCategory]: name = $name, domain = $domain")
         return Category(name = name, domain = domain)
     }
 
@@ -334,6 +343,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
                 PROTOCOL -> protocol = value
             }
         }
+        logD("$logTag [readCloud]: domain = $domain, port = $port, path = $path, registerProcedure = $registerProcedure, protocol = $protocol")
         return Cloud(
             domain = domain,
             port = port,
@@ -362,6 +372,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             }
         }
         require(XmlPullParser.END_TAG, null, TEXT_INPUT)
+        logD("$logTag [readTextInput]: title = $title, description = $description, name = $name, link = $link")
         return TextInput(title = title, description = description, name = name, link = link)
     }
 
@@ -379,6 +390,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         }
 
         require(XmlPullParser.END_TAG, null, SKIP_HOURS)
+        logD("$logTag [readSkipHours]: hours = $hours")
         return if (hours.isEmpty()) null else hours
     }
 
@@ -395,6 +407,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             }
         }
         require(XmlPullParser.END_TAG, null, SKIP_DAYS)
+        logD("$logTag [readSkipDays]: days = $days")
         return if (days.isEmpty()) null else days
     }
 
@@ -404,6 +417,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         val isPermaLink: Boolean? = getAttributeValue(null, PERMALINK)?.toBoolean()
         val value: String? = readString(GUID)
         require(XmlPullParser.END_TAG, null, GUID)
+        logD("$logTag [readGuid] value = $value, isPermaLink = $isPermaLink")
         return Guid(value = value, isPermaLink = isPermaLink)
     }
 
@@ -413,6 +427,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         val url: String? = getAttributeValue(null, URL)
         val title: String? = readString(SOURCE)
         require(XmlPullParser.END_TAG, null, SOURCE)
+        logD("$logTag [readSource]: title = $title, url = $url")
         return Source(title = title, url = url)
     }
 }
