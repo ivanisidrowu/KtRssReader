@@ -10,5 +10,5 @@ class KtRssReaderConfig {
     var useRemote: Boolean = false
 
     @ExperimentalTime
-    var expiredTime: Long = 1.days.toLongMilliseconds()
+    var expiredTimeMillis: Long = 1.days.toLongMilliseconds()
 }

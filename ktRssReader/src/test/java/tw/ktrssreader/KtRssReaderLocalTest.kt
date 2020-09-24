@@ -51,7 +51,7 @@ class KtRssReaderLocalTest {
             val expected = mockkRelaxed<RssStandardChannel>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
-            every { mockRssCache.readCache(fakeUrl, fakeType) } returns null
+            every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
             every { KtRssProvider.provideXmlFetcher() } returns mockFetcher
             every { mockFetcher.fetch(url = fakeUrl, charset = any()) } returns fakeXmlContent
             mockkConstructor(RssStandardParser::class)
@@ -76,7 +76,7 @@ class KtRssReaderLocalTest {
             val expected = mockkRelaxed<RssStandardChannel>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
-            every { mockRssCache.readCache(fakeUrl, fakeType) } returns null
+            every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
             every { KtRssProvider.provideXmlFetcher() } returns mockFetcher
             every { mockFetcher.fetch(any(), any()) } returns fakeXmlContent
             mockkConstructor(RssStandardParser::class)
@@ -89,7 +89,7 @@ class KtRssReaderLocalTest {
             val expected = mockkRelaxed<RssStandardChannel>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
-            every { mockRssCache.readCache(fakeUrl, fakeType) } returns null
+            every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
             every { KtRssProvider.provideXmlFetcher() } returns mockFetcher
             every { mockFetcher.fetch(any(), any()) } returns fakeXmlContent
             mockkConstructor(RssStandardParser::class)
@@ -116,7 +116,7 @@ class KtRssReaderLocalTest {
                 useRemote = true
             }
 
-            never { mockRssCache.readCache(fakeUrl, fakeType) }
+            never { mockRssCache.readCache(fakeUrl, fakeType, any()) }
             verify { mockRssCache.saveCache(fakeUrl, mockItem) }
             actual shouldBe mockItem
         }
