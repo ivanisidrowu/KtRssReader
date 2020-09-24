@@ -40,11 +40,11 @@ Before we get into the basic API usage, let talk about the data models in KtRssR
 
 #### iTunes Format
 
-[`ITunesChannelData`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L64) / [`ITunesChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L52): To get [iTunes](https://help.apple.com/itc/podcasts_connect/#/itcb54353390) tags from a source. If the source you provide doesn't have iTunes tag, it will provide you RSS 2.0 tags and values.
+[`ITunesChannelData`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L64) / [`ITunesChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L52): To get [iTunes](https://help.apple.com/itc/podcasts_connect/#/itcb54353390) tags from a source.
 
 #### Google Play Format
 
-[`GoogleChannelData`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L104) / [`GoogleChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L52): To get [Google Play](https://sgsupport.google.com/podcast-publishers/answer/9889544?hl=en) tags. If the source you provide doesn't have Google Play tags, it will provide you RSS 2.0 tags and values.
+[`GoogleChannelData`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L104) / [`GoogleChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L52): To get [Google Play](https://sgsupport.google.com/podcast-publishers/answer/9889544?hl=en) tags.
 
 #### Auto Mix Data
 
@@ -66,9 +66,29 @@ This is the simplest way to use it. As you can see, `Reader.read()` takes a gene
 
 #### Config
 
+* Global Config
+
+To let KtRssReader works with the database, you need to set the application context in your application.
+
+```kotlin
+class MyApplication : Application() {
+    override fun onCreate() {
+        readerGlobalConfig {
+            applicationContext = this@MyApplication
+            enableLog = true
+        }
+    }
+}
+```
+
+* `applicationContext`: The application context.
+* `enableLog`: If this is enabled, the debug log will be shown on the console.
+
+* Reader Config
+
 ```kotlin
 val result: ITunesChannelData = Reader.read<ITunesChannelData> {
-    charset = "UTF-8",
+    charset = Charsets.UTF_8,
     useRemote = true,
     expiredTime = 600000
 }
