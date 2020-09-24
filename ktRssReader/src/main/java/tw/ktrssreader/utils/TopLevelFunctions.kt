@@ -11,14 +11,14 @@ import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
-const val TAG = "KtRssReader"
+const val TAG_PREFIX = "KtRssReader/"
 
-fun logD(message: String) {
-    if (KtRssReaderGlobalConfig.enableLog) Log.d(TAG, message)
+fun logD(tag: String, message: String) {
+    if (KtRssReaderGlobalConfig.enableLog) Log.d("$TAG_PREFIX$tag", message)
 }
 
-fun logW(message: String) {
-    if (KtRssReaderGlobalConfig.enableLog) Log.w(TAG, message)
+fun logW(tag: String, message: String) {
+    if (KtRssReaderGlobalConfig.enableLog) Log.w("$TAG_PREFIX$tag", message)
 }
 
 fun <T> T.convertToByteArray(): ByteArray {

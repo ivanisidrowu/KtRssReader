@@ -11,6 +11,7 @@ import tw.ktrssreader.utils.logD
 
 class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
 
+    private val logTag = this::class.java.simpleName
     private val db = KtRssProvider.provideDatabase(KtRssReaderGlobalConfig.getApplicationContext())
     private val dao = db.channelDao()
 
@@ -19,7 +20,7 @@ class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
     }
 
     override fun saveCache(url: String, channel: RssStandardChannel) {
-        logD("[saveCache] url: $url")
+        logD(logTag, "[saveCache] url: $url")
 
         dao.insert(
             ChannelEntity(
