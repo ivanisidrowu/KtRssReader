@@ -87,9 +87,9 @@ class MyApplication : Application() {
 * Reader Config
 
 ```kotlin
-val result: ITunesChannelData = Reader.read<ITunesChannelData> {
-    charset = Charsets.UTF_8,
-    useRemote = true,
+val result: ITunesChannelData = Reader.read<ITunesChannelData>(rssSource) {
+    charset = Charsets.UTF_8
+    useRemote = true
     expiredTimeMillis = 600000
 }
 ```
