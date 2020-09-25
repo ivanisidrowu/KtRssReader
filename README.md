@@ -126,6 +126,6 @@ Contributions are always welcome. If you have any ideas or suggestions, you can 
 
 ## Roadmap
 
-* We are planning to provides annotations to let users customize their data class with specified names and tags. This feature will give lib users total control of their parsing results.
-* We also want to implement an annotation processor to process annotation and to generate parsers in compile time.
+* We are planning to provide annotations to let users customize their data class with specified names and tags. This feature will give lib users total control of their parsing results.
+* We also want to implement an annotation processor to process annotation and generate parsers in compile time.
 * Allow users to parse data with raw tag names.
