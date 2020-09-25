@@ -101,7 +101,7 @@ val result: ITunesChannelData = Reader.read<ITunesChannelData>(rssSource) {
 #### With Flow
 
 ```kotlin
-Reader.flow<AutoMixChannelData>(rssSource)
+Reader.flowRead<AutoMixChannelData>(rssSource)
     .flowOn(Dispatchers.IO)
     .collect { data ->
         Log.d("KtRssReader", data)
@@ -112,7 +112,7 @@ Reader.flow<AutoMixChannelData>(rssSource)
 
 ```kotlin
 coroutineScope.launch(Dispatchers.IO) {
-    val result = Reader.suspend<GoogleChannelData>(rssSource)
+    val result = Reader.coRead<GoogleChannelData>(rssSource)
     Log.d("KtRssReader", result)
 }
 ```
