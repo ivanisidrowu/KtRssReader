@@ -74,14 +74,14 @@ To let KtRssReader works with the database, you need to set the application cont
 class MyApplication : Application() {
     override fun onCreate() {
         readerGlobalConfig {
-            applicationContext = this@MyApplication
+            setApplicationContext(this@MyApplication)
             enableLog = true
         }
     }
 }
 ```
 
-* `applicationContext`: The application context.
+* `setApplicationContext()`: The application context.
 * `enableLog`: If this is enabled, the debug log will be shown on the console.
 
 ##### Reader Config
