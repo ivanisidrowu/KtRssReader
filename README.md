@@ -1,6 +1,6 @@
 # KtRssReader
 
-KtRssReader is Kotlin library for parsing RSS feed on Android.
+KtRssReader is a Kotlin library for parsing RSS feed on Android.
 
 * Supports RSS 2.0 standard, iTunes, and Google Play tags
 * Easy-to-use API
@@ -67,7 +67,7 @@ This is the simplest way to use it. As you can see, `Reader.read()` takes a gene
 
 #### Config
 
-* Global Config
+##### Global Config
 
 To let KtRssReader works with the database, you need to set the application context in your application.
 
@@ -75,23 +75,23 @@ To let KtRssReader works with the database, you need to set the application cont
 class MyApplication : Application() {
     override fun onCreate() {
         readerGlobalConfig {
-            applicationContext = this@MyApplication
+            setApplicationContext(this@MyApplication)
             enableLog = true
         }
     }
 }
 ```
 
-* `applicationContext`: The application context.
+* `setApplicationContext()`: The application context.
 * `enableLog`: If this is enabled, the debug log will be shown on the console.
 
-* Reader Config
+##### Reader Config
 
 ```kotlin
 val result: ITunesChannelData = Reader.read<ITunesChannelData>(rssSource) {
     charset = Charsets.UTF_8
     useRemote = true
-    expiredTimeMillis = 600000
+    expiredTimeMillis = 600000L
 }
 ```
 
@@ -130,3 +130,21 @@ Contributions are always welcome. If you have any ideas or suggestions, you can 
 * We are planning to provide annotations to let users customize their data class with specified names and tags. This feature will give lib users total control of their parsing results.
 * We also want to implement an annotation processor to process annotation and generate parsers in compile time.
 * Allow users to parse data with raw tag names.
+
+## License
+
+```
+Copyright 2020 Feng Hsien Hsu, Siao Syuan Yang, Wei-Qi Wang, Ya-Han Tsai, Yu Hao Wu
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
