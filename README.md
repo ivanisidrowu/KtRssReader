@@ -66,7 +66,7 @@ This is the simplest way to use it. As you can see, `Reader.read()` takes a gene
 
 #### Config
 
-* Global Config
+##### Global Config
 
 To let KtRssReader works with the database, you need to set the application context in your application.
 
@@ -84,7 +84,7 @@ class MyApplication : Application() {
 * `applicationContext`: The application context.
 * `enableLog`: If this is enabled, the debug log will be shown on the console.
 
-* Reader Config
+##### Reader Config
 
 ```kotlin
 val result: ITunesChannelData = Reader.read<ITunesChannelData>(rssSource) {
