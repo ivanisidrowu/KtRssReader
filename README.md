@@ -62,7 +62,7 @@ In short, `AutoMixChannelData` and `AutoMixChannel` can provide you the union se
 val result: RssStandardChannelData = Reader.read<RssStandardChannelData>(rssSource)
 ```
 
-This is the simplest way to use it. As you can see, `Reader.read()` takes a generic type called `RssStandardChannelData`. You can also use alternatives such as `ITunesChannelData` or `AutoMixChannelData` depends on you what you need. Alternative classes can found in [Channels.kt](https://github.com/ivgsanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt). The reader method should not be executed in the main thread or it will throw an exception to warn lib users.
+This is the simplest way to use it. As you can see, `Reader.read()` takes a generic type called `RssStandardChannelData`. You can also use alternatives such as `ITunesChannelData` or `AutoMixChannelData` depends on you what you need. Alternative classes can found in [Channels.kt](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt). The reader method should not be executed in the main thread or it will throw an exception to warn lib users.
 
 #### Config
 
