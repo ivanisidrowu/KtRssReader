@@ -36,7 +36,7 @@ Before we get into the basic API usage, let talk about the data models in KtRssR
 
 #### RSS 2.0 Standard Format
 
-[`RssStandardChannelData`](https://github.com/ivgsanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L29) / [`RssStandardChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L6): To get tags and values from [RSS 2.0 standard](https://cyber.harvard.edu/rss/rss.html).
+[`RssStandardChannelData`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L29) / [`RssStandardChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L6): To get tags and values from [RSS 2.0 standard](https://cyber.harvard.edu/rss/rss.html).
 
 #### iTunes Podcast Format
 
