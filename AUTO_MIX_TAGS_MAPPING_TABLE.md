@@ -1,6 +1,6 @@
 ### Auto Mix Channel Tags Mapping Table
 
-|[Atuo Mix Channel Tags](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L145)| [RSS 2.0 Standard](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L29) | [iTunes Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L64) | [Google Play Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L104) |
+|[Auto Mix Channel Tags](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L145)| [RSS 2.0 Standard](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L29) | [iTunes Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L64) | [Google Play Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L104) |
 | ------ | ------ | ------ | ------ |
 |title|title|title|title|
 |description|description|description|googleplay:description|
@@ -34,7 +34,7 @@
 
 ### Auto Mix Item Tags Mapping Table
 
-|[Atuo Mix Item Tags](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L94)| [RSS 2.0 Standard](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L18) | [iTunes Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L42) | [Google Play Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L68)
+|[Auto Mix Item Tags](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L94)| [RSS 2.0 Standard](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L18) | [iTunes Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L42) | [Google Play Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L68)
 | ------ | ------ | ------ | ------ |
 |title | title | title | title |
 |enclosure|enclosure|enclosure|enclosure|
