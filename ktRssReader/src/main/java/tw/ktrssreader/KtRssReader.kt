@@ -1,6 +1,5 @@
 package tw.ktrssreader
 
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import tw.ktrssreader.config.KtRssReaderConfig
 import tw.ktrssreader.config.KtRssReaderGlobalConfig
@@ -27,24 +26,27 @@ object Reader {
 
         val ktRssReaderConfig = KtRssReaderConfig().apply(config)
         val charset = ktRssReaderConfig.charset
+        val expiredTimeMillis = ktRssReaderConfig.expiredTimeMillis
+
         val rssCache = KtRssProvider.provideRssCache<T>()
         val channelType = Const.ChannelType.convertToChannelType<T>()
         val cacheChannel = if (ktRssReaderConfig.useRemote) {
             null
         } else {
-            rssCache.readCache(url = url, type = channelType)
+            rssCache.readCache(url = url, type = channelType, expiredTimeMillis = expiredTimeMillis)
         }
 
         logD(
-            logTag,
+            tag = logTag,
+            message = """
+                            
+            ┌───────────────────────────────────────────────
+            │ url: $url
+            │ channel: ${T::class.simpleName}
+            │ charset: $charset
+            │ expiredTimeMillis: $expiredTimeMillis
+            └───────────────────────────────────────────────
             """
-                
-┌───────────────────────────────────────────────
-│ url: $url
-│ channel: ${T::class.simpleName}
-│ charset: $charset
-└───────────────────────────────────────────────
-"""
         )
 
         return if (cacheChannel == null) {
@@ -67,12 +69,12 @@ object Reader {
     suspend inline fun <reified T : RssStandardChannel> suspend(
         url: String,
         crossinline config: Config = {}
-    ): T = suspendCoroutine { it.resume(read(url = url, config = config)) }
+    ) = suspendCoroutine<T> { it.resume(read(url = url, config = config)) }
 
     inline fun <reified T : RssStandardChannel> flow(
         url: String,
         crossinline config: Config = {}
-    ): Flow<T> = flow<T> { emit(read(url = url, config = config)) }
+    ) = flow<T> { emit(read(url = url, config = config)) }
 
     fun clearCache() {
         ThreadUtils.runOnNewThread("[clear cache]") {

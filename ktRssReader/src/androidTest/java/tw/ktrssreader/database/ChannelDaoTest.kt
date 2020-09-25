@@ -6,10 +6,11 @@ import org.junit.Test
 import tw.ktrssreader.constant.Const
 import tw.ktrssreader.database.base.DaoTestBase
 import tw.ktrssreader.persistence.db.entity.ChannelEntity
+import java.util.*
 
 class ChannelDaoTest : DaoTestBase() {
 
-    private val fakeTime = System.currentTimeMillis()
+    private val fakeTime = Calendar.getInstance().timeInMillis
     private val fakeType = Const.RSS_STANDARD
     private val fakeChannelByteArray = byteArrayOf()
 

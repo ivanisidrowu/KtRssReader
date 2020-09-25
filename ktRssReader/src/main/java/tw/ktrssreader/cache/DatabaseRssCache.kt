@@ -8,6 +8,7 @@ import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.convertToByteArray
 import tw.ktrssreader.utils.convertToObject
 import tw.ktrssreader.utils.logD
+import java.util.*
 
 class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
 
@@ -15,8 +16,16 @@ class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
     private val db = KtRssProvider.provideDatabase(KtRssReaderGlobalConfig.getApplicationContext())
     private val dao = db.channelDao()
 
-    override fun readCache(url: String, type: @Const.ChannelType Int): T? {
-        return dao.getChannel(url, type)?.channel?.convertToObject() as? T
+    override fun readCache(url: String, type: @Const.ChannelType Int, expiredTimeMillis: Long): T? {
+        val entity = dao.getChannel(url, type) ?: return null
+
+        val isCacheValid = (entity.time + expiredTimeMillis) > Calendar.getInstance().timeInMillis
+        return if (isCacheValid) {
+            entity.channel.convertToObject() as? T
+        } else {
+            dao.delete(entity)
+            null
+        }
     }
 
     override fun saveCache(url: String, channel: RssStandardChannel) {
@@ -27,7 +36,7 @@ class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
                 url = url,
                 type = Const.ChannelType.convertChannelToType(channel),
                 channel = channel.convertToByteArray(),
-                time = System.currentTimeMillis()
+                time = Calendar.getInstance().timeInMillis
             )
         )
     }
