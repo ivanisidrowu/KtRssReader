@@ -50,7 +50,8 @@ Before we get into the basic API usage, let talk about the data models in KtRssR
 
 [`AutoMixChannelData`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L145) / [`AutoMixChannel`](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L132): It automatically merges tags by the following order: `RSS 2.0 -> iTunes -> Google Play`.
 
-The first tags it will look into are RSS 2.0 standard tags, if RSS 2.0 doesn't have usable values, the parser will look for iTunes tags as an alternative source. Then, if even iTunes tags don't have usable values, the parser will eventually look for Google Play tags as the second alternative source. For example, we got `<image>` tag in the RSS source. We would like to find usable values of the image. So the parser will look for values by the order of `<image>`, `<itunes:image>`, and `<googleplay:image>`. For merging tags, `AutoMixChannelData` will automatically merge data by their tag names without the platform prefixes.
+The first tags it will look into are RSS 2.0 standard tags, if RSS 2.0 doesn't have usable values, the parser will look for iTunes tags as an alternative source. Then, if even iTunes tags don't have usable values, the parser will eventually look for Google Play tags as the second alternative source. For example, we got `<image>` tag in the RSS source. We would like to find usable values of the image. So the parser will look for values by the order of `<image>`, `<itunes:image>`, and `<googleplay:image>`. For merging tags, `AutoMixChannelData` will automatically merge data by their tag names without the platform prefixes. View the tag mapping table [here](./AUTO_MIX_TAGS_MAPPING_TABLE.md).
+
 
 In short, `AutoMixChannelData` and `AutoMixChannel` can provide you the union set of all tags and values from all formats.
 
