@@ -90,7 +90,7 @@ class MyApplication : Application() {
 val result: ITunesChannelData = Reader.read<ITunesChannelData>(rssSource) {
     charset = Charsets.UTF_8
     useRemote = true
-    expiredTimeMillis = 600000
+    expiredTimeMillis = 600000L
 }
 ```
 
