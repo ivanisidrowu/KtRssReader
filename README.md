@@ -11,7 +11,7 @@ KtRssReader is a Kotlin library for parsing RSS feed on Android.
 
 ### Download
 
-First, you can add this repository to the root of your project `build.gradle` file.
+First, you can add this repository to the root of your project `build.gradle` file under the **`allprojects`**.
 
 ```gradle
 allprojects {
@@ -26,7 +26,7 @@ Then, add this dependency to the `build.gradle` file in app directory.
 
 ```gradle
 dependencies {
-  implemetation "com.github.ivanisidrowu:KtRssReader:1.0.0"
+  implemetation "com.github.ivanisidrowu:KtRssReader:v1.0.0"
 }
 ```
 
