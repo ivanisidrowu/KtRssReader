@@ -82,12 +82,12 @@ object Reader {
     }
 
     @Throws(Exception::class)
-    suspend inline fun <reified T : RssStandardChannel> suspend(
+    suspend inline fun <reified T : RssStandardChannel> coRead(
         url: String,
         crossinline config: Config = {}
     ) = suspendCoroutine<T> { it.resume(read(url = url, config = config)) }
 
-    inline fun <reified T : RssStandardChannel> flow(
+    inline fun <reified T : RssStandardChannel> flowRead(
         url: String,
         crossinline config: Config = {}
     ) = flow<T> { emit(read(url = url, config = config)) }
