@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                             charset = Charset.forName(etCharset.text.toString())
                         }
                     }
-                    else -> throw Exception()
+                    else -> error("Invalid item was checked!")
                 }
 
                 runOnUiThread {
@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                                 charset = Charset.forName(etCharset.text.toString())
                             }
                         }
-                        else -> throw Exception()
+                        else -> error("Invalid item was checked!")
                     }
                 }
 
@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
                         charset = Charset.forName(etCharset.text.toString())
                     }
                 }
-                else -> return@launch
+                else -> error("Invalid item was checked!")
             }
 
             flowChannel.flowOn(Dispatchers.IO)
