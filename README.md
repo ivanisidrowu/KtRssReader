@@ -26,7 +26,7 @@ Then, add this dependency to the `build.gradle` file in app directory.
 
 ```gradle
 dependencies {
-  implemetation "com.github.ivanisidrowu:KtRssReader:${lib_version}"
+  implemetation "com.github.ivanisidrowu:KtRssReader:1.0.0"
 }
 ```
 
@@ -120,7 +120,7 @@ coroutineScope.launch(Dispatchers.IO) {
 
 ## Samples
 
-Working in progress.
+The sample App is in `/app` folder. [Check it out!](https://github.com/ivanisidrowu/KtRssReader/tree/master/app)
 
 ## Contribution
 Contributions are always welcome. If you have any ideas or suggestions, you can contact us or create a Github issue. We will get to you as soon as possible.
