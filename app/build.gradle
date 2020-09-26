@@ -36,4 +36,8 @@ dependencies {
     implementation project(path: ':ktRssReader')
     implementation deps.kotlinxCoroutinesCore
     implementation deps.kotlinxCoroutinesAndroid
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
 }
