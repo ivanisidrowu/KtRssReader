@@ -22,11 +22,11 @@ enum class OrderType {
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Property(
+annotation class RssProperty(
     val name: String = "",
     val order: Array<OrderType> = [OrderType.RSS_STANDARD, OrderType.ITUNES, OrderType.GOOGLE]
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class RawData(val rawTags: Array<String>)
+annotation class RssRawData(val rawTags: Array<String>)

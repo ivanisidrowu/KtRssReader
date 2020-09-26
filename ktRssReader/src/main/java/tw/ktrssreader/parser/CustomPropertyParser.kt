@@ -16,6 +16,8 @@
 
 package tw.ktrssreader.parser
 
-interface Parser<out T> {
-    fun parse(xml: String): T
+class CustomPropertyParser<T>: Parser<T> {
+    override fun parse(xml: String): T {
+        TODO("Not yet implemented")
+    }
 }
