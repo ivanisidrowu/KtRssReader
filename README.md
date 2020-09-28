@@ -1,5 +1,9 @@
 # KtRssReader
 
+
+[![](https://jitpack.io/v/ivanisidrowu/KtRssReader.svg)](https://jitpack.io/#ivanisidrowu/KtRssReader)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 KtRssReader is a Kotlin library for parsing RSS feed on Android.
 
 * Supports RSS 2.0 standard, iTunes, and Google Play tags
