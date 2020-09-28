@@ -14,8 +14,19 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.parser
+package tw.ktrssreader.annotation
 
-interface Parser<out T> {
-    fun parse(xml: String): T
+enum class OrderType {
+    RSS_STANDARD, ITUNES, GOOGLE
 }
+
+@Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class RssProperty(
+    val name: String = "",
+    val order: Array<OrderType> = [OrderType.RSS_STANDARD, OrderType.ITUNES, OrderType.GOOGLE]
+)
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class RssRawData(val rawTags: Array<String>)
