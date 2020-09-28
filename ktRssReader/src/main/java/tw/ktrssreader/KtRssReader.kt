@@ -23,7 +23,7 @@ import tw.ktrssreader.constant.Const
 import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.ThreadUtils
-import tw.ktrssreader.utils.catchOrNull
+import tw.ktrssreader.utils.tryCatch
 import tw.ktrssreader.utils.logD
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -71,22 +71,22 @@ object Reader {
         )
 
         if (flushCache) {
-            catchOrNull { rssCache.removeCache(url) }
+            tryCatch { rssCache.removeCache(url) }
         }
 
-        if (cacheChannel == null) {
+        return if (cacheChannel == null) {
             logD(logTag, "[read] fetch remote data")
             val fetcher = KtRssProvider.provideXmlFetcher()
             val xml = fetcher.fetch(url = url, charset = charset)
             val parser = KtRssProvider.provideParser<T>()
             val channel = parser.parse(xml)
             if (useCache) {
-                catchOrNull { rssCache.saveCache(url = url, channel = channel) } ?: return channel
+                tryCatch { rssCache.saveCache(url = url, channel = channel) }
             }
-            return channel
+            channel
         } else {
             logD(logTag, "[read] use local cache")
-            return cacheChannel
+            cacheChannel
         }
     }
 
