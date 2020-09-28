@@ -71,9 +71,7 @@ object Reader {
             val xml = fetcher.fetch(url = url, charset = charset)
             val parser = KtRssProvider.provideParser<T>()
             val channel = parser.parse(xml)
-            ThreadUtils.runOnNewThread(treadName = "[read cache]") {
-                rssCache.saveCache(url = url, channel = channel)
-            }
+            rssCache.saveCache(url = url, channel = channel)
             channel
         } else {
             logD(logTag, "[read] use local cache")

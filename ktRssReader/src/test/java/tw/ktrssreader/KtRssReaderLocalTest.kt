@@ -56,9 +56,6 @@ class KtRssReaderLocalTest {
             every { mockFetcher.fetch(url = fakeUrl, charset = any()) } returns fakeXmlContent
             mockkConstructor(RssStandardParser::class)
             every { anyConstructed<RssStandardParser>().parse(fakeXmlContent) } returns expected
-            every { ThreadUtils.runOnNewThread(any(), any()) } answers {
-                mockRssCache.saveCache(fakeUrl, expected)
-            }
 
             block(expected)
         }
@@ -94,9 +91,6 @@ class KtRssReaderLocalTest {
             every { mockFetcher.fetch(any(), any()) } returns fakeXmlContent
             mockkConstructor(RssStandardParser::class)
             every { anyConstructed<RssStandardParser>().parse(fakeXmlContent) } returns expected
-            every { ThreadUtils.runOnNewThread(any(), any()) } answers {
-                mockRssCache.saveCache(fakeUrl, expected)
-            }
 
             block(expected)
         }
