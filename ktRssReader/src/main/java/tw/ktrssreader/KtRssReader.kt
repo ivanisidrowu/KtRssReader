@@ -23,6 +23,7 @@ import tw.ktrssreader.constant.Const
 import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.ThreadUtils
+import tw.ktrssreader.utils.catchOrNull
 import tw.ktrssreader.utils.logD
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -42,14 +43,16 @@ object Reader {
 
         val ktRssReaderConfig = KtRssReaderConfig().apply(config)
         val charset = ktRssReaderConfig.charset
+        val useCache = ktRssReaderConfig.useCache
+        val flushCache = ktRssReaderConfig.flushCache
         val expiredTimeMillis = ktRssReaderConfig.expiredTimeMillis
 
         val rssCache = KtRssProvider.provideRssCache<T>()
         val channelType = Const.ChannelType.convertToChannelType<T>()
-        val cacheChannel = if (ktRssReaderConfig.useRemote) {
-            null
-        } else {
+        val cacheChannel = if (useCache) {
             rssCache.readCache(url = url, type = channelType, expiredTimeMillis = expiredTimeMillis)
+        } else {
+            null
         }
 
         logD(
@@ -60,24 +63,30 @@ object Reader {
             │ url: $url
             │ channel: ${T::class.simpleName}
             │ charset: $charset
+            │ useCache: $useCache
+            │ flushCache: $flushCache
             │ expiredTimeMillis: $expiredTimeMillis
             └───────────────────────────────────────────────
             """
         )
 
-        return if (cacheChannel == null) {
+        if (flushCache) {
+            catchOrNull { rssCache.removeCache(url) }
+        }
+
+        if (cacheChannel == null) {
             logD(logTag, "[read] fetch remote data")
             val fetcher = KtRssProvider.provideXmlFetcher()
             val xml = fetcher.fetch(url = url, charset = charset)
             val parser = KtRssProvider.provideParser<T>()
             val channel = parser.parse(xml)
-            ThreadUtils.runOnNewThread(treadName = "[read cache]") {
-                rssCache.saveCache(url = url, channel = channel)
+            if (useCache) {
+                catchOrNull { rssCache.saveCache(url = url, channel = channel) } ?: return channel
             }
-            channel
+            return channel
         } else {
             logD(logTag, "[read] use local cache")
-            cacheChannel
+            return cacheChannel
         }
     }
 

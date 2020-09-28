@@ -56,4 +56,10 @@ class DatabaseRssCache<T : RssStandardChannel> : RssCache<T> {
             )
         )
     }
+
+    override fun removeCache(url: String) {
+        logD(logTag, "[removeCache] url: $url")
+
+        dao.deleteByUrl(url)
+    }
 }

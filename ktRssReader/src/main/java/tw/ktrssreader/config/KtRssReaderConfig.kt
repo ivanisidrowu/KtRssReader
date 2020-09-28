@@ -23,7 +23,9 @@ import kotlin.time.days
 class KtRssReaderConfig {
     var charset: Charset? = null
 
-    var useRemote: Boolean = false
+    var useCache: Boolean = true
+
+    var flushCache: Boolean = false
 
     @ExperimentalTime
     var expiredTimeMillis: Long = 1.days.toLongMilliseconds()
