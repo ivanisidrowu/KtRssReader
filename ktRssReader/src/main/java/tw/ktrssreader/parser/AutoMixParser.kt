@@ -55,13 +55,14 @@ import tw.ktrssreader.model.item.Category
 import tw.ktrssreader.model.item.RssStandardItemData
 import tw.ktrssreader.utils.logD
 import java.io.IOException
+import kotlin.reflect.KClass
 
 
 class AutoMixParser : ParserBase<AutoMixChannelData>() {
 
     override val logTag: String = AutoMixParser::class.java.simpleName
 
-    override fun parse(xml: String) = parseAutoMixChannel(xml)
+    override fun parse(xml: String, kClass: KClass<AutoMixChannelData>?) = parseAutoMixChannel(xml)
 
     /**
      * The priority of reading tags as the following sequence:

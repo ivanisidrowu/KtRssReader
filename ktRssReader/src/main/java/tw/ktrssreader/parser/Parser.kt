@@ -16,6 +16,8 @@
 
 package tw.ktrssreader.parser
 
-interface Parser<out T> {
-    fun parse(xml: String): T
+import kotlin.reflect.KClass
+
+interface Parser<T : Any> {
+    fun parse(xml: String, kClass: KClass<T>? = null): T
 }
