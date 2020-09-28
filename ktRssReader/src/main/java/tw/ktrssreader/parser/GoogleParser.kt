@@ -38,12 +38,13 @@ import tw.ktrssreader.model.item.GoogleItemData
 import tw.ktrssreader.model.item.RssStandardItem
 import tw.ktrssreader.utils.logD
 import java.io.IOException
+import kotlin.reflect.KClass
 
 class GoogleParser : ParserBase<GoogleChannelData>() {
 
     override val logTag: String = GoogleParser::class.java.simpleName
 
-    override fun parse(xml: String) = parserGoogleChannel(xml)
+    override fun parse(xml: String, kClass: KClass<GoogleChannelData>?) = parserGoogleChannel(xml)
 
     private fun parserGoogleChannel(xml: String): GoogleChannelData {
         val standardChannel = parseStandardChannel(xml)

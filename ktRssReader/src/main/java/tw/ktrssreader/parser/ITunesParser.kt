@@ -47,12 +47,13 @@ import tw.ktrssreader.model.item.ITunesItemData
 import tw.ktrssreader.model.item.RssStandardItem
 import tw.ktrssreader.utils.logD
 import java.io.IOException
+import kotlin.reflect.KClass
 
 class ITunesParser : ParserBase<ITunesChannelData>() {
 
     override val logTag: String = ITunesParser::class.java.simpleName
 
-    override fun parse(xml: String) = parseITunesChannel(xml)
+    override fun parse(xml: String, kClass: KClass<ITunesChannelData>?) = parseITunesChannel(xml)
 
     private fun parseITunesChannel(xml: String): ITunesChannelData {
         val standardChannel = parseStandardChannel(xml)

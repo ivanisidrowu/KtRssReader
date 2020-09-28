@@ -66,7 +66,7 @@ import tw.ktrssreader.utils.logW
 import java.io.ByteArrayInputStream
 import java.io.IOException
 
-abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
+abstract class ParserBase<T : Any> : Parser<T> {
 
     abstract val logTag: String
 
