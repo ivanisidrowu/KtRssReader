@@ -58,4 +58,19 @@ class ChannelDaoTest : DaoTestBase() {
         subject.getChannel(fakeUrl2, fakeType) shouldBe null
         subject.getChannel(fakeUrl3, fakeType) shouldBe null
     }
+
+    @Test
+    fun testDeleteCacheByUrl() {
+        val fakeUrl1 = "fakeUrl1"
+        val fakeUrl2 = "fakeUrl2"
+        val subject = database.channelDao()
+        val entity1 = ChannelEntity(fakeUrl1, fakeType, fakeChannelByteArray, fakeTime)
+        val entity2 = ChannelEntity(fakeUrl2, fakeType, fakeChannelByteArray, fakeTime)
+
+        subject.insert(entity1)
+        subject.insert(entity2)
+        subject.deleteByUrl(fakeUrl1)
+        subject.getChannel(fakeUrl1, fakeType) shouldBe null
+        subject.getChannel(fakeUrl2, fakeType) shouldNotBe null
+    }
 }

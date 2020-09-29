@@ -104,4 +104,11 @@ class DatabaseRssCacheLocalTest {
             })
         }
     }
+
+    @Test
+    fun `Remove cache`() {
+        subject.removeCache(fakeUrl)
+
+        verify { mockDao.deleteByUrl(fakeUrl) }
+    }
 }

@@ -94,13 +94,14 @@ class MyApplication : Application() {
 ```kotlin
 val result: ITunesChannelData = Reader.read<ITunesChannelData>(rssSource) {
     charset = Charsets.UTF_8
-    useRemote = true
+    useCache = false
     expiredTimeMillis = 600000L
 }
 ```
 
 * `charset`: Specify an encoding charset, if it's not set, it will use the charset from the RSS source.
-* `useRemote`: Pull data from cache or remote server.
+* `useCache`: Pull data from cache or remote server. The default setting is set to true.
+* `flushCache`: Clear the specific cache by URL.
 * `expiredTimeMillis`: The cache expire time in milliseconds.
 
 #### With Flow
