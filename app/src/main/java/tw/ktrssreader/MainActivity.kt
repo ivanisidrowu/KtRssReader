@@ -78,25 +78,25 @@ class MainActivity : AppCompatActivity() {
                 val channel = when {
                     rbRssStandard.isChecked -> {
                         Reader.read<RssStandardChannelData>(etRss.text.toString()) {
-                            useRemote = rbCacheNo.isChecked
+                            useCache = rbCacheYes.isChecked
                             charset = Charset.forName(etCharset.text.toString())
                         }
                     }
                     rbRssItunes.isChecked -> {
                         Reader.read<ITunesChannelData>(etRss.text.toString()) {
-                            useRemote = rbCacheNo.isChecked
+                            useCache = rbCacheYes.isChecked
                             charset = Charset.forName(etCharset.text.toString())
                         }
                     }
                     rbRssGooglePlay.isChecked -> {
                         Reader.read<GoogleChannelData>(etRss.text.toString()) {
-                            useRemote = rbCacheNo.isChecked
+                            useCache = rbCacheYes.isChecked
                             charset = Charset.forName(etCharset.text.toString())
                         }
                     }
                     rbRssAutoMix.isChecked -> {
                         Reader.read<AutoMixChannelData>(etRss.text.toString()) {
-                            useRemote = rbCacheNo.isChecked
+                            useCache = rbCacheYes.isChecked
                             charset = Charset.forName(etCharset.text.toString())
                         }
                     }
@@ -127,25 +127,25 @@ class MainActivity : AppCompatActivity() {
                     when {
                         rbRssStandard.isChecked -> {
                             Reader.coRead<RssStandardChannelData>(etRss.text.toString()) {
-                                useRemote = rbCacheNo.isChecked
+                                useCache = rbCacheYes.isChecked
                                 charset = Charset.forName(etCharset.text.toString())
                             }
                         }
                         rbRssItunes.isChecked -> {
                             Reader.coRead<ITunesChannelData>(etRss.text.toString()) {
-                                useRemote = rbCacheNo.isChecked
+                                useCache = rbCacheYes.isChecked
                                 charset = Charset.forName(etCharset.text.toString())
                             }
                         }
                         rbRssGooglePlay.isChecked -> {
                             Reader.coRead<GoogleChannelData>(etRss.text.toString()) {
-                                useRemote = rbCacheNo.isChecked
+                                useCache = rbCacheYes.isChecked
                                 charset = Charset.forName(etCharset.text.toString())
                             }
                         }
                         rbRssAutoMix.isChecked -> {
                             Reader.coRead<AutoMixChannelData>(etRss.text.toString()) {
-                                useRemote = rbCacheNo.isChecked
+                                useCache = rbCacheYes.isChecked
                                 charset = Charset.forName(etCharset.text.toString())
                             }
                         }
@@ -168,25 +168,25 @@ class MainActivity : AppCompatActivity() {
             val flowChannel = when {
                 rbRssStandard.isChecked -> {
                     Reader.flowRead<RssStandardChannelData>(etRss.text.toString()) {
-                        useRemote = rbCacheNo.isChecked
+                        useCache = rbCacheYes.isChecked
                         charset = Charset.forName(etCharset.text.toString())
                     }
                 }
                 rbRssItunes.isChecked -> {
                     Reader.flowRead<ITunesChannelData>(etRss.text.toString()) {
-                        useRemote = rbCacheNo.isChecked
+                        useCache = rbCacheYes.isChecked
                         charset = Charset.forName(etCharset.text.toString())
                     }
                 }
                 rbRssGooglePlay.isChecked -> {
                     Reader.flowRead<GoogleChannelData>(etRss.text.toString()) {
-                        useRemote = rbCacheNo.isChecked
+                        useCache = rbCacheYes.isChecked
                         charset = Charset.forName(etCharset.text.toString())
                     }
                 }
                 rbRssAutoMix.isChecked -> {
                     Reader.flowRead<AutoMixChannelData>(etRss.text.toString()) {
-                        useRemote = rbCacheNo.isChecked
+                        useCache = rbCacheYes.isChecked
                         charset = Charset.forName(etCharset.text.toString())
                     }
                 }

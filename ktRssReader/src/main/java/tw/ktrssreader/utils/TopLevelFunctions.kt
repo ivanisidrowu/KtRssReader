@@ -37,6 +37,14 @@ fun logW(tag: String, message: String) {
     if (KtRssReaderGlobalConfig.enableLog) Log.w("$TAG_PREFIX$tag", message)
 }
 
+inline fun tryCatch(block: () -> Unit) {
+    try {
+        block()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
 fun <T> T.convertToByteArray(): ByteArray {
     return ByteArrayOutputStream().use { bos ->
         val oos = ObjectOutputStream(bos)
