@@ -18,13 +18,11 @@ package tw.ktrssreader.parser
 
 import org.xmlpull.v1.XmlPullParserException
 import tw.ktrssreader.model.channel.RssStandardChannel
-import kotlin.jvm.Throws
-import kotlin.reflect.KClass
 
 class RssStandardParser : ParserBase<RssStandardChannel>() {
 
     override val logTag: String = RssStandardParser::class.java.simpleName
 
     @Throws(XmlPullParserException::class)
-    override fun parse(xml: String, kClass: KClass<RssStandardChannel>?) = parseStandardChannel(xml)
+    override fun parse(xml: String) = parseStandardChannel(xml)
 }

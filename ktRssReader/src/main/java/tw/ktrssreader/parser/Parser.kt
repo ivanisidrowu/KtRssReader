@@ -16,8 +16,8 @@
 
 package tw.ktrssreader.parser
 
-import kotlin.reflect.KClass
+import tw.ktrssreader.model.channel.RssStandardChannel
 
-interface Parser<T : Any> {
-    fun parse(xml: String, kClass: KClass<T>? = null): T
+interface Parser<out T : RssStandardChannel> {
+    fun parse(xml: String): T
 }
