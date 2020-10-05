@@ -1,3 +1,5 @@
+include ':processor'
+include ':annotation'
 include ':ktRssReader'
 include ':app'
 rootProject.name = "KtRssReader"

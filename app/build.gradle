@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
@@ -33,7 +34,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
     implementation project(path: ':ktRssReader')
+    implementation project(path: ':annotation')
+    kapt project(path: ':processor')
+
     implementation deps.kotlinxCoroutinesCore
     implementation deps.kotlinxCoroutinesAndroid
 
