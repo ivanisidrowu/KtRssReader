@@ -208,7 +208,6 @@ class ParserGenerator(
             DataType.PRIMITIVE -> {
                 val type = data.type ?: return
                 funSpec.addPrimitiveStatement(tagName = tag, variableName = name, typeString = type)
-                true
             }
             DataType.ATTRIBUTE -> {
                 // Do nothing.
