@@ -36,20 +36,12 @@ fun String.isListType(): Boolean {
     return contains(List::class.java.canonicalName)
 }
 
-fun String.isPrimitive(): Boolean {
-    primitiveJavaPaths.forEach {
-        if (this.contains(it)) return true
-    }
-    return false
-}
+fun String.isPrimitive(): Boolean = primitiveJavaPaths.any { this.contains(it) }
 
 fun String.getFuncName() = "get${this.capitalize(Locale.ROOT)}"
 
-fun String.getGeneratedClassPath() = "${GENERATOR_PACKAGE}.${
-    this.capitalize(
-        Locale.ROOT
-    )
-}${PARSER_SUFFIX}"
+fun String.getGeneratedClassPath() =
+    "${GENERATOR_PACKAGE}.${this.capitalize(Locale.ROOT)}${PARSER_SUFFIX}"
 
 fun String.extractListType() =
     this.substringAfter('<')
