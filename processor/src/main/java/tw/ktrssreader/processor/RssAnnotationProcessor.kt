@@ -16,25 +16,26 @@
 
 package tw.ktrssreader.processor
 
-import com.google.auto.common.MoreElements.getPackage
 import com.google.auto.service.AutoService
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.KModifier
 import tw.ktrssreader.annotation.RssAttribute
 import tw.ktrssreader.annotation.RssRawData
 import tw.ktrssreader.annotation.RssTag
-import javax.annotation.processing.*
+import tw.ktrssreader.processor.const.CHANNEL
+import tw.ktrssreader.processor.util.Logger
+import javax.annotation.processing.AbstractProcessor
+import javax.annotation.processing.Processor
+import javax.annotation.processing.RoundEnvironment
+import javax.annotation.processing.SupportedOptions
 import javax.lang.model.SourceVersion
-import javax.lang.model.element.AnnotationMirror
-import javax.lang.model.element.Element
+import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
-import javax.tools.Diagnostic
 
 
 @SupportedOptions("debug")
 @AutoService(Processor::class)
 class RssAnnotationProcessor : AbstractProcessor() {
+
+    private var isExtensionGenerated = false
 
     override fun getSupportedSourceVersion(): SourceVersion = SourceVersion.latestSupported()
 
@@ -47,25 +48,23 @@ class RssAnnotationProcessor : AbstractProcessor() {
     }
 
     override fun process(p0: MutableSet<out TypeElement>?, p1: RoundEnvironment?): Boolean {
-        // TODO: implementation
-        return true
-    }
-
-    private fun log(msg: String) {
-        if (processingEnv.options.containsKey("debug")) {
-            processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, msg)
+        val logger = Logger(processingEnv.messager)
+        // This 'process' method could be called multiple times, so we use a flag to prevent it generate multiple times.
+        if (!isExtensionGenerated) {
+            ExtensionGenerator(logger).generate().writeTo(processingEnv.filer)
+            isExtensionGenerated = true
         }
-    }
 
-    private fun warn(msg: String) {
-        processingEnv.messager.printMessage(Diagnostic.Kind.WARNING, msg)
-    }
-
-    private fun error(msg: String, element: Element, annotation: AnnotationMirror) {
-        processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, msg, element, annotation)
-    }
-
-    private fun fatalError(msg: String) {
-        processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, "FATAL ERROR: $msg")
+        p1?.getElementsAnnotatedWith(RssTag::class.java)?.forEach {
+            if (it != null && it.kind == ElementKind.CLASS) {
+                val rssTag = it.getAnnotation(RssTag::class.java)
+                ParserGenerator(
+                    element = it,
+                    isRoot = rssTag?.name == CHANNEL,
+                    logger = logger
+                ).generate().writeTo(processingEnv.filer)
+            }
+        }
+        return true
     }
 }
