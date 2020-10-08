@@ -42,7 +42,7 @@ fun String.isPrimitive(): Boolean = primitiveJavaPaths.any { this.contains(it) }
 
 fun String.getFuncName(): String {
     return when {
-        this.contains(GOOGLE_PREFIX) || this.contains(ITUNES_PREFIX) ->
+        this.startsWith(GOOGLE_PREFIX) || this.startsWith(ITUNES_PREFIX) ->
             "get${this.substringAfterLast(':').capitalize(Locale.ROOT)}"
         else -> "get${this.capitalize(Locale.ROOT)}"
     }

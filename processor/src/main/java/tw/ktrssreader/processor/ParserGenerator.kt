@@ -152,7 +152,7 @@ class ParserGenerator(
         val result = mutableMapOf<String, Any?>()
         rootElement.enclosedElements.forEach { child ->
             if (child.kind != ElementKind.METHOD
-                || !child.simpleName.contains(GET_PREFIX)
+                || !child.simpleName.startsWith(GET_PREFIX)
                 || !child.simpleName.contains(ANNOTATION_SIGN)
             ) return@forEach
 
@@ -181,7 +181,7 @@ class ParserGenerator(
         nameToAnnotation: Map<String, Any?>
     ) {
         if (child.kind != ElementKind.METHOD
-            || !child.simpleName.contains(GET_PREFIX)
+            || !child.simpleName.startsWith(GET_PREFIX)
             || child.simpleName.contains(ANNOTATION_SIGN)
         ) return
 
@@ -349,8 +349,8 @@ class ParserGenerator(
 
     private fun String.getVariableName(tag: String): String {
         return when {
-            tag.contains(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.capitalize(Locale.ROOT)}"
-            tag.contains(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.capitalize(Locale.ROOT)}"
+            tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.capitalize(Locale.ROOT)}"
+            tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.capitalize(Locale.ROOT)}"
             else -> this
         }
     }
