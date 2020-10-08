@@ -56,7 +56,7 @@ class RssAnnotationProcessor : AbstractProcessor() {
         }
 
         p1?.getElementsAnnotatedWith(RssTag::class.java)?.forEach {
-            if (it != null && it.kind == ElementKind.CLASS) {
+            if (it?.kind == ElementKind.CLASS) {
                 val rssTag = it.getAnnotation(RssTag::class.java)
                 ParserGenerator(
                     element = it,

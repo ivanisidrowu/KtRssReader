@@ -31,3 +31,6 @@ const val METHOD_SKIP = "skip"
 const val METHOD_GET_PARSER = "getXmlParser"
 const val METHOD_READ_STRING = "readString"
 const val METHOD_TO_BOOLEAN = "toBooleanOrNull"
+
+const val ITUNES_PREFIX = "itunes"
+const val GOOGLE_PREFIX = "googleplay"

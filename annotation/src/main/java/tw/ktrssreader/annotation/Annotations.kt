@@ -29,10 +29,7 @@ annotation class RssTag(
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.SOURCE)
-annotation class RssAttribute(
-    val name: String = "",
-    val order: Array<OrderType> = [OrderType.RSS_STANDARD, OrderType.ITUNES, OrderType.GOOGLE]
-)
+annotation class RssAttribute(val name: String = "")
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.SOURCE)
