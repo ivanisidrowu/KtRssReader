@@ -152,8 +152,8 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 
     protected fun String.convertYesNo(): Boolean? {
         return when (toLowerCase()) {
-            "yes" -> true
-            "no" -> false
+            "yes", "true" -> true
+            "no", "false" -> false
             else -> null
         }
     }
@@ -316,7 +316,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readEnclosure(): Enclosure {
+    protected fun XmlPullParser.readEnclosure(): Enclosure {
         var url: String? = null
         var length: Long? = null
         var type: String? = null
@@ -341,7 +341,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readCloud(): Cloud {
+    protected fun XmlPullParser.readCloud(): Cloud {
         var domain: String? = null
         var port: Int? = null
         var path: String? = null
@@ -370,7 +370,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readTextInput(): TextInput {
+    protected fun XmlPullParser.readTextInput(): TextInput {
         require(XmlPullParser.START_TAG, null, TEXT_INPUT)
         var title: String? = null
         var description: String? = null
@@ -393,7 +393,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readSkipHours(): List<Int>? {
+    protected fun XmlPullParser.readSkipHours(): List<Int>? {
         require(XmlPullParser.START_TAG, null, SKIP_HOURS)
         val hours = mutableListOf<Int>()
         while (next() != XmlPullParser.END_TAG) {
@@ -411,7 +411,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readSkipDays(): List<String>? {
+    protected fun XmlPullParser.readSkipDays(): List<String>? {
         require(XmlPullParser.START_TAG, null, SKIP_DAYS)
         val days = mutableListOf<String>()
         while (next() != XmlPullParser.END_TAG) {
@@ -428,7 +428,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readGuid(): Guid {
+    protected fun XmlPullParser.readGuid(): Guid {
         require(XmlPullParser.START_TAG, null, GUID)
         val isPermaLink: Boolean? = getAttributeValue(null, PERMALINK)?.toBoolean()
         val value: String? = readString(GUID)
@@ -438,7 +438,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readSource(): Source {
+    protected fun XmlPullParser.readSource(): Source {
         require(XmlPullParser.START_TAG, null, SOURCE)
         val url: String? = getAttributeValue(null, URL)
         val title: String? = readString(SOURCE)
