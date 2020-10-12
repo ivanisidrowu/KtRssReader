@@ -72,9 +72,9 @@ inline fun <reified T, R> convertChannelTo(
     // Do NOT change this order
     return when {
         AutoMixChannel::class.java.isAssignableFrom(clazz) -> ifAutoMix()
-        RssStandardChannel::class.java.isAssignableFrom(clazz) -> ifRssStandard()
         ITunesChannel::class.java.isAssignableFrom(clazz) -> ifITunes()
         GoogleChannel::class.java.isAssignableFrom(clazz) -> ifGoogle()
+        RssStandardChannel::class.java.isAssignableFrom(clazz) -> ifRssStandard()
         else -> null
     } as? R
 }

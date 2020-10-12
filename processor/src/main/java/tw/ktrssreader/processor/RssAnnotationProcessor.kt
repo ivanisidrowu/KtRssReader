@@ -65,7 +65,7 @@ class RssAnnotationProcessor : AbstractProcessor() {
                 val isRoot = rssTag?.name == CHANNEL
                 ParserGenerator(
                     element = it,
-                    isRoot = rssTag?.name == CHANNEL,
+                    isRoot = isRoot,
                     logger = logger
                 ).generate().writeTo(processingEnv.filer)
 
