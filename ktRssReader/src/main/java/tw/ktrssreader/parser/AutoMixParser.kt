@@ -467,11 +467,12 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
     }
 
     private fun Image?.replaceInvalidUrlByPriority(vararg priorityHref: String?): Image? {
-        if (this == null || priorityHref.isNullOrEmpty() || url != null) return this
+        if (this == null || url != null) return this
+        val href = priorityHref.firstOrNull { null != it } ?: return this
         return Image(
             link = link,
             title = title,
-            url = priorityHref.find { it != null },
+            url = href,
             description = description,
             height = height,
             width = width
