@@ -17,7 +17,6 @@
 package tw.ktrssreader.processor.util
 
 import javax.annotation.processing.Messager
-import javax.lang.model.element.AnnotationMirror
 import javax.lang.model.element.Element
 import javax.tools.Diagnostic
 
@@ -31,7 +30,7 @@ class Logger(private val log: Messager) {
         log.printMessage(Diagnostic.Kind.WARNING, "$msg\r\n")
     }
 
-    fun error(msg: String, element: Element, annotation: AnnotationMirror) {
-        log.printMessage(Diagnostic.Kind.ERROR, "$msg\r\n", element, annotation)
+    fun error(msg: String, element: Element) {
+        log.printMessage(Diagnostic.Kind.ERROR, "$msg\r\n", element)
     }
 }

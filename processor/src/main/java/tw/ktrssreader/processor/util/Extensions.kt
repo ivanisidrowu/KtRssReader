@@ -17,6 +17,8 @@
 package tw.ktrssreader.processor.util
 
 import tw.ktrssreader.processor.const.GENERATOR_PACKAGE
+import tw.ktrssreader.processor.const.GOOGLE_PREFIX
+import tw.ktrssreader.processor.const.ITUNES_PREFIX
 import tw.ktrssreader.processor.const.PARSER_SUFFIX
 import java.util.*
 import javax.lang.model.element.Element
@@ -38,7 +40,13 @@ fun String.isListType(): Boolean {
 
 fun String.isPrimitive(): Boolean = primitiveJavaPaths.any { this.contains(it) }
 
-fun String.getFuncName() = "get${this.capitalize(Locale.ROOT)}"
+fun String.getFuncName(): String {
+    return when {
+        this.startsWith(GOOGLE_PREFIX) || this.startsWith(ITUNES_PREFIX) ->
+            "get${this.substringAfterLast(':').capitalize(Locale.ROOT)}"
+        else -> "get${this.capitalize(Locale.ROOT)}"
+    }
+}
 
 fun String.getGeneratedClassPath() =
     "${GENERATOR_PACKAGE}.${this.capitalize(Locale.ROOT)}${PARSER_SUFFIX}"

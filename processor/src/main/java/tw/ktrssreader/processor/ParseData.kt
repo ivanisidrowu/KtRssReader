@@ -19,13 +19,13 @@ package tw.ktrssreader.processor
 import javax.lang.model.element.Element
 
 data class ParseData(
-    val tag: String,
     val type: String?,
     val rawType: String?,
     val dataType: DataType,
     val listItemType: String?,
     val packageName: String?,
     val processorElement: Element,
+    val tagCandidates: List<String> = listOf()
 )
 
 enum class DataType {

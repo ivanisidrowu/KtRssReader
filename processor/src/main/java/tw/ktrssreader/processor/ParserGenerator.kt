@@ -17,13 +17,16 @@
 package tw.ktrssreader.processor
 
 import com.squareup.kotlinpoet.*
+import tw.ktrssreader.annotation.OrderType
 import tw.ktrssreader.annotation.RssAttribute
+import tw.ktrssreader.annotation.RssRawData
 import tw.ktrssreader.annotation.RssTag
 import tw.ktrssreader.processor.const.*
 import tw.ktrssreader.processor.util.*
 import java.util.*
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
+import javax.lang.model.element.ExecutableElement
 
 class ParserGenerator(
     private val element: Element,
@@ -39,6 +42,8 @@ class ParserGenerator(
     private val readStringMemberName = MemberName(extensionFullPath, METHOD_READ_STRING)
     private val getParserMemberName = MemberName(extensionFullPath, METHOD_GET_PARSER)
     private val booleanConversionMemberName = MemberName(extensionFullPath, METHOD_TO_BOOLEAN)
+
+    private var topLevelCandidateOrder = emptyArray<OrderType>()
 
     override fun generate(): FileSpec {
         val generatedClassName = "${element.simpleName}$PARSER_SUFFIX"
@@ -87,17 +92,24 @@ class ParserGenerator(
 
     private fun getClassFunSpec(rootElement: Element, outputClassName: String): FunSpec {
         val outputClass = ClassName(rootElement.getPackage(), outputClassName)
-        val annotation = rootElement.getAnnotation(RssTag::class.java)
-        val tagName = annotation?.name?.takeIfNotEmpty() ?: rootElement.simpleName.toString()
+        val rssTag = rootElement.getAnnotation(RssTag::class.java)
+        val rssRawData = rootElement.getAnnotation(RssRawData::class.java)
+        if (rssTag != null && rssRawData != null) {
+            logger.error(
+                "@RssTag and @RssRawData should not be used on the same class!",
+                rootElement
+            )
+        }
+        val tagName = rssTag?.name?.takeIfNotEmpty() ?: rootElement.simpleName.toString()
         val funSpec = FunSpec.builder(tagName.getFuncName())
             .receiver(xmlParserClass)
             .returns(outputClass)
         val propertyToParseData = mutableMapOf<String, ParseData>()
+        topLevelCandidateOrder =
+            rssTag?.order ?: arrayOf(OrderType.RSS_STANDARD, OrderType.ITUNES, OrderType.GOOGLE)
 
-        rootElement.enclosedElements.forEach {
-            preProcessParseData(child = it, parseDataMap = propertyToParseData)
-        }
-        funSpec.addStatement("require(XmlPullParser.START_TAG, null, \"$tagName\")")
+        val annotations = preProcessAnnotations(rootElement)
+        rootElement.enclosedElements.forEach { preProcessParseData(it, propertyToParseData, annotations) }
         propertyToParseData.forEach { generateVariableStatement(it, funSpec) }
         funSpec.addCode(
             """
@@ -114,56 +126,76 @@ class ParserGenerator(
             |       else -> %M()
             |  }
             |}
-            |require(XmlPullParser.END_TAG, null, "$tagName")
             |return $outputClassName(
         """.trimMargin(),
             skipMemberName
         )
         // Generate constructor statements
-        propertyToParseData.forEach { funSpec.addStatement("${it.key} = ${it.key},") }
+        propertyToParseData.forEach {
+            val stringBuilder = StringBuilder()
+            it.value.tagCandidates.forEach { tag ->
+                val variableName = it.key.getVariableName(tag)
+                if (stringBuilder.isEmpty()) {
+                    stringBuilder.append(variableName)
+                } else {
+                    stringBuilder.append(" ?: $variableName")
+                }
+            }
+            funSpec.addStatement("\t${it.key} = $stringBuilder,")
+        }
 
         funSpec.addStatement(")")
         return funSpec.build()
     }
 
-    private fun preProcessParseData(
-        child: Element,
-        parseDataMap: MutableMap<String, ParseData>
-    ) {
-        if (child.kind == ElementKind.METHOD
-            && child.simpleName.contains(GET_PREFIX)
-            && child.simpleName.contains(ANNOTATION_SIGN)
-        ) {
+    private fun preProcessAnnotations(rootElement: Element): Map<String, Any?> {
+        val result = mutableMapOf<String, Any?>()
+        rootElement.enclosedElements.forEach { child ->
+            if (child.kind != ElementKind.METHOD
+                || !child.simpleName.startsWith(GET_PREFIX)
+                || !child.simpleName.contains(ANNOTATION_SIGN)
+            ) return@forEach
+
             // Extract name which is started with 'get' (length = 3).
             // The child simple name example: getList$annotations
             val nameFromMethod = child.simpleName.substring(3)
                 .decapitalize(Locale.ROOT)
                 .substringBeforeLast('$')
-            if (parseDataMap.containsKey(nameFromMethod)) {
-                val rssTag = child.getAnnotation(RssTag::class.java)
-                val rssAttribute = child.getAnnotation(RssAttribute::class.java)
-                val tag = rssAttribute?.name?.takeIfNotEmpty()
-                    ?: rssTag?.name?.takeIfNotEmpty()
-                    ?: nameFromMethod
-                val dataType = if (rssAttribute == null) DataType.LIST else DataType.ATTRIBUTE
-                val clone = parseDataMap[nameFromMethod]
-                    ?.copy(tag = tag, dataType = dataType) ?: return
 
-                parseDataMap[nameFromMethod] = clone
+            val rssTag: RssTag? = child.getAnnotation(RssTag::class.java)
+            val rssAttribute: RssAttribute? = child.getAnnotation(RssAttribute::class.java)
+            val rssRawData: RssRawData? = child.getAnnotation(RssRawData::class.java)
+            val nonNullCount = listOf<Any?>(rssTag, rssAttribute, rssRawData).count { it != null }
+            if (nonNullCount > 1) {
+                logger.error("You can't annotate more than one annotation at a field or property!", child)
             }
+
+            result[nameFromMethod] = rssTag ?: rssAttribute ?: rssRawData
         }
+        return result
+    }
 
-        if (child.kind != ElementKind.FIELD) return
+    private fun preProcessParseData(
+        child: Element,
+        parseDataMap: MutableMap<String, ParseData>,
+        nameToAnnotation: Map<String, Any?>
+    ) {
+        if (child.kind != ElementKind.METHOD
+            || !child.simpleName.startsWith(GET_PREFIX)
+            || child.simpleName.contains(ANNOTATION_SIGN)
+        ) return
 
-        val name = child.simpleName.toString()
-        val rawType = child.asType()?.toString()
-        val tag = parseDataMap[name]?.tag ?: name
+        // Extract name which is started with 'get' (length = 3).
+        // The child simple name example: getList$annotations
+        val nameFromMethod = child.simpleName.substring(3).decapitalize(Locale.ROOT)
+        val exeElement = child as? ExecutableElement ?: return
+        val rawType = exeElement.returnType.toString()
         val type: String?
         val packageName: String?
-        var dataType = parseDataMap[name]?.dataType
+        val dataType: DataType
         var listItemType: String? = null
 
-        if (rawType?.isListType() == true) {
+        if (rawType.isListType()) {
             listItemType = rawType.extractListType()
             type = rawType
                 .substringBeforeLast('<')
@@ -173,51 +205,24 @@ class ParserGenerator(
                 .substringBeforeLast('.')
             dataType = DataType.LIST
         } else {
-            type = rawType?.extractType()
-            if (dataType == null) {
-                dataType =
-                    if (rawType?.isPrimitive() == true) DataType.PRIMITIVE else DataType.OTHER
+            type = rawType.extractType()
+            dataType = when {
+                nameToAnnotation[nameFromMethod] is RssAttribute -> DataType.ATTRIBUTE
+                rawType.isPrimitive() -> DataType.PRIMITIVE
+                else -> DataType.OTHER
             }
-            packageName = rawType?.substringBeforeLast('.')
+            packageName = rawType.substringBeforeLast('.')
         }
-        parseDataMap[name] = ParseData(
-            tag = tag,
+
+        parseDataMap[nameFromMethod] = ParseData(
             type = type,
             rawType = rawType,
             dataType = dataType,
             listItemType = listItemType,
             packageName = packageName,
             processorElement = child,
+            tagCandidates = getTagCandidates(nameToAnnotation, nameFromMethod, child)
         )
-    }
-
-    private fun generateVariableAssignment(
-        entry: Map.Entry<String, ParseData>,
-        funSpec: FunSpec.Builder
-    ) {
-        val data = entry.value
-        val tag = data.tag
-        val name = entry.key
-        when (data.dataType) {
-            DataType.LIST -> {
-                val listItemType = data.listItemType ?: return
-
-                val memberName = MemberName(listItemType.getGeneratedClassPath(), tag.getFuncName())
-                funSpec.addStatement("\t\t\"$tag\" -> $name.add(%M())", memberName)
-            }
-            DataType.PRIMITIVE -> {
-                val type = data.type ?: return
-                funSpec.addPrimitiveStatement(tagName = tag, variableName = name, typeString = type)
-            }
-            DataType.ATTRIBUTE -> {
-                // Do nothing.
-            }
-            else -> {
-                val type = data.type ?: return
-                val memberName = MemberName(type.getGeneratedClassPath(), tag.getFuncName())
-                funSpec.addStatement("\t\t\"$tag\" -> $name = %M()", memberName)
-            }
-        }
     }
 
     private fun generateVariableStatement(
@@ -227,37 +232,126 @@ class ParserGenerator(
         val name = propertyToParseData.key
         val data = propertyToParseData.value
         val packageName = data.packageName ?: return
+        val type = data.type ?: return
 
-        if (data.dataType == DataType.LIST) {
-            data.listItemType ?: return
+        when (data.dataType) {
+            DataType.LIST -> {
+                data.listItemType ?: return
 
-            val itemClassName = ClassName(packageName, data.listItemType)
-            funSpec.addStatement("var ${name}: ArrayList<%T> = arrayListOf()", itemClassName)
-        } else {
-            val type = data.type ?: return
-
-            when (data.dataType) {
-                DataType.PRIMITIVE -> {
-                    val kClass = type.getKPrimitiveClass() ?: return
-
-                    funSpec.addStatement("var ${name}: %T? = null", kClass)
+                val itemClassName = ClassName(packageName, data.listItemType)
+                data.tagCandidates.forEach { tag ->
+                    funSpec.addStatement("var ${name.getVariableName(tag)}: ArrayList<%T> = arrayListOf()", itemClassName)
                 }
-                DataType.ATTRIBUTE -> {
-                    val kClass = type.getKPrimitiveClass() ?: return
+            }
+            DataType.PRIMITIVE -> {
+                val kClass = type.getKPrimitiveClass() ?: return
 
-                    val statement = "var ${name}: %1T? = getAttributeValue(null, \"${data.tag}\")"
-                        .appendTypeConversion(type)
+                data.tagCandidates.forEach { tag ->
+                    funSpec.addStatement("var ${name.getVariableName(tag)}: %T? = null", kClass)
+                }
+            }
+            DataType.ATTRIBUTE -> {
+                val kClass = type.getKPrimitiveClass() ?: return
+
+                data.tagCandidates.forEach { tag ->
+                    val statement =
+                        "var ${name.getVariableName(tag)}: %1T? = getAttributeValue(null, \"$tag\")"
+                            .appendTypeConversion(type)
                     if (type == Boolean::class.java.simpleName) {
                         funSpec.addStatement(statement, kClass, booleanConversionMemberName)
                     } else {
                         funSpec.addStatement(statement, kClass)
                     }
                 }
-                else -> {
-                    val className = ClassName(packageName, type)
-                    funSpec.addStatement("var ${name}: %T? = null", className)
+            }
+            else -> {
+                val className = ClassName(packageName, type)
+                data.tagCandidates.forEach { tag ->
+                    funSpec.addStatement("var ${name.getVariableName(tag)}: %T? = null", className)
                 }
             }
+        }
+    }
+
+    private fun generateVariableAssignment(
+        entry: Map.Entry<String, ParseData>,
+        funSpec: FunSpec.Builder
+    ) {
+        val data = entry.value
+        val name = entry.key
+        when (data.dataType) {
+            DataType.LIST -> {
+                val listItemType = data.listItemType ?: return
+
+                data.tagCandidates.forEach { tag ->
+                    val memberName =
+                        MemberName(listItemType.getGeneratedClassPath(), tag.getFuncName())
+                    funSpec.addStatement("\t\t\"$tag\" -> ${name.getVariableName(tag)}.add(%M())", memberName)
+                }
+            }
+            DataType.PRIMITIVE -> {
+                val type = data.type ?: return
+
+                data.tagCandidates.forEach { tag ->
+                    funSpec.addPrimitiveStatement(tag, name.getVariableName(tag), type)
+                }
+            }
+            DataType.ATTRIBUTE -> {
+                // Do nothing.
+            }
+            else -> {
+                val type = data.type ?: return
+
+                data.tagCandidates.forEach { tag ->
+                    val memberName = MemberName(type.getGeneratedClassPath(), tag.getFuncName())
+                    funSpec.addStatement("\t\t\"$tag\" -> ${name.getVariableName(tag)} = %M()", memberName)
+                }
+            }
+        }
+    }
+
+    private fun getTagCandidates(
+        nameToAnnotation: Map<String, Any?>,
+        nameFromMethod: String,
+        element: Element
+    ): List<String> {
+
+        fun getTags(order: Array<OrderType>, tag: String): List<String> {
+            return order.map { orderType ->
+                when (orderType) {
+                    OrderType.GOOGLE -> "$GOOGLE_PREFIX:$tag"
+                    OrderType.ITUNES -> "$ITUNES_PREFIX:$tag"
+                    else -> tag
+                }
+            }
+        }
+
+        return when (val annotation = nameToAnnotation[nameFromMethod]) {
+            is RssTag -> {
+                val tag = annotation.name.takeIfNotEmpty() ?: nameFromMethod
+                getTags(annotation.order, tag)
+            }
+            is RssAttribute -> {
+                val tag = annotation.name.takeIfNotEmpty() ?: nameFromMethod
+                listOf(tag)
+            }
+            is RssRawData -> {
+                if (annotation.rawTags.isEmpty()) {
+                    logger.error("You have to put raw tags into @RssRawData!", element)
+                }
+                annotation.rawTags.toList()
+            }
+            else -> {
+                getTags(topLevelCandidateOrder, nameFromMethod)
+            }
+        }
+    }
+
+    private fun String.getVariableName(tag: String): String {
+        return when {
+            tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.capitalize(Locale.ROOT)}"
+            tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.capitalize(Locale.ROOT)}"
+            else -> this
         }
     }
 
