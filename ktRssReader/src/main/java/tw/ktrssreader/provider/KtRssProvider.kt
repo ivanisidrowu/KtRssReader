@@ -23,7 +23,6 @@ import tw.ktrssreader.cache.DatabaseRssCache
 import tw.ktrssreader.cache.RssCache
 import tw.ktrssreader.fetcher.Fetcher
 import tw.ktrssreader.fetcher.XmlFetcher
-import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.network.OkHttpRequest
 import tw.ktrssreader.parser.*
 import tw.ktrssreader.persistence.db.KtRssReaderDatabase
@@ -36,7 +35,7 @@ object KtRssProvider {
 
     fun provideXmlFetcher(): Fetcher = XmlFetcher()
 
-    fun <T : RssStandardChannel> provideRssCache(): RssCache<T> = DatabaseRssCache()
+    fun <T> provideRssCache(): RssCache<T> = DatabaseRssCache()
 
     fun providerOkHttpRequest(
         okHttpClient: OkHttpClient = OkHttpClient(),
@@ -45,7 +44,7 @@ object KtRssProvider {
         return OkHttpRequest(okHttpClient = okHttpClient, requestBuilder = requestBuilder)
     }
 
-    inline fun <reified T : RssStandardChannel> provideParser(): Parser<T> {
+    inline fun <reified T> provideParser(): Parser<T>? {
         return convertChannelTo<T, Parser<T>>(
             ifRssStandard = { RssStandardParser() },
             ifITunes = { ITunesParser() },

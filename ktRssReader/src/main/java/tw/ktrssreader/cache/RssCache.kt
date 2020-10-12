@@ -17,10 +17,9 @@
 package tw.ktrssreader.cache
 
 import tw.ktrssreader.constant.Const
-import tw.ktrssreader.model.channel.RssStandardChannel
 
-interface RssCache<out T : RssStandardChannel> {
+interface RssCache<out T> {
     fun readCache(url: String, type: @Const.ChannelType Int, expiredTimeMillis: Long): T?
-    fun saveCache(url: String, channel: RssStandardChannel)
+    fun saveCache(url: String, channel: Any)
     fun removeCache(url: String)
 }

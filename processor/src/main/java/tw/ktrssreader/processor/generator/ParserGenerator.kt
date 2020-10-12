@@ -14,13 +14,15 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.processor
+package tw.ktrssreader.processor.generator
 
 import com.squareup.kotlinpoet.*
 import tw.ktrssreader.annotation.OrderType
 import tw.ktrssreader.annotation.RssAttribute
 import tw.ktrssreader.annotation.RssRawData
 import tw.ktrssreader.annotation.RssTag
+import tw.ktrssreader.processor.DataType
+import tw.ktrssreader.processor.ParseData
 import tw.ktrssreader.processor.const.*
 import tw.ktrssreader.processor.util.*
 import java.util.*

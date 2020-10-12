@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.processor
+package tw.ktrssreader.processor.generator
 
 import com.squareup.kotlinpoet.*
 import tw.ktrssreader.processor.const.*
