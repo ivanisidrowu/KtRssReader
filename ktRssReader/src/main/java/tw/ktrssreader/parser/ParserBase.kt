@@ -150,7 +150,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         logW(logTag, "[skip] tag name = $name, depth is $depth.")
     }
 
-    protected fun String.convertYesNo(): Boolean? {
+    protected fun String.toBoolOrNull(): Boolean? {
         return when (toLowerCase()) {
             "yes", "true" -> true
             "no", "false" -> false
@@ -359,7 +359,10 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
                 PROTOCOL -> protocol = value
             }
         }
-        logD(logTag, "[readCloud]: domain = $domain, port = $port, path = $path, registerProcedure = $registerProcedure, protocol = $protocol")
+        logD(
+            logTag,
+            "[readCloud]: domain = $domain, port = $port, path = $path, registerProcedure = $registerProcedure, protocol = $protocol"
+        )
         return Cloud(
             domain = domain,
             port = port,
@@ -388,7 +391,10 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
             }
         }
         require(XmlPullParser.END_TAG, null, TEXT_INPUT)
-        logD(logTag, "[readTextInput]: title = $title, description = $description, name = $name, link = $link")
+        logD(
+            logTag,
+            "[readTextInput]: title = $title, description = $description, name = $name, link = $link"
+        )
         return TextInput(title = title, description = description, name = name, link = link)
     }
 

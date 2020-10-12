@@ -211,23 +211,23 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
                 ITUNES_IMAGE -> iTunesImageHref = readImageHref(ITUNES_IMAGE)
                 ITUNES_CATEGORY -> readCategory(ITUNES_CATEGORY)?.let { iTunesCategories.add(it) }
                 ITUNES_TITLE -> iTunesSimpleTitle = readString(ITUNES_TITLE)
-                ITUNES_EXPLICIT -> iTunesExplicit = readString(ITUNES_EXPLICIT)?.convertYesNo()
+                ITUNES_EXPLICIT -> iTunesExplicit = readString(ITUNES_EXPLICIT)?.toBoolOrNull()
                 ITUNES_EMAIL -> iTunesEmail = readString(ITUNES_EMAIL)
                 ITUNES_AUTHOR -> iTunesAuthor = readString(ITUNES_AUTHOR)
                 ITUNES_OWNER -> iTunesOwner = readITunesOwner()
                 ITUNES_TYPE -> iTunesType = readString(ITUNES_TYPE)
                 ITUNES_NEW_FEED_URL -> iTunesNewFeedUrl = readString(ITUNES_NEW_FEED_URL)
-                ITUNES_BLOCK -> iTunesBlock = readString(ITUNES_BLOCK)?.convertYesNo()
-                ITUNES_COMPLETE -> iTunesComplete = readString(ITUNES_COMPLETE)?.convertYesNo()
+                ITUNES_BLOCK -> iTunesBlock = readString(ITUNES_BLOCK)?.toBoolOrNull()
+                ITUNES_COMPLETE -> iTunesComplete = readString(ITUNES_COMPLETE)?.toBoolOrNull()
 
                 GOOGLE_DESCRIPTION -> googleDescription = readString(GOOGLE_DESCRIPTION)
                 GOOGLE_IMAGE -> googleImageHref = readImageHref(GOOGLE_IMAGE)
                 GOOGLE_CATEGORY -> googleCategories.add(readCategory(GOOGLE_CATEGORY))
-                GOOGLE_EXPLICIT -> googleExplicit = readString(GOOGLE_EXPLICIT)?.convertYesNo()
+                GOOGLE_EXPLICIT -> googleExplicit = readString(GOOGLE_EXPLICIT)?.toBoolOrNull()
                 GOOGLE_EMAIL -> googleEmail = readString(GOOGLE_EMAIL)
                 GOOGLE_AUTHOR -> googleAuthor = readString(GOOGLE_AUTHOR)
                 GOOGLE_OWNER -> googleOwner = readGoogleOwner()
-                GOOGLE_BLOCK -> googleBlock = readString(GOOGLE_BLOCK)?.convertYesNo()
+                GOOGLE_BLOCK -> googleBlock = readString(GOOGLE_BLOCK)?.toBoolOrNull()
 
                 else -> skip()
             }
@@ -430,15 +430,15 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
                 ITUNES_TITLE -> iTunesSimpleTitle = readString(ITUNES_TITLE)
                 ITUNES_DURATION -> iTunesDuration = readString(ITUNES_DURATION)
                 ITUNES_IMAGE -> iTunesImageHref = readImageHref(ITUNES_IMAGE)
-                ITUNES_EXPLICIT -> iTunesExplicit = readString(ITUNES_EXPLICIT)?.convertYesNo()
+                ITUNES_EXPLICIT -> iTunesExplicit = readString(ITUNES_EXPLICIT)?.toBoolOrNull()
                 ITUNES_EPISODE -> iTunesEpisode = readString(ITUNES_EPISODE)?.toIntOrNull()
                 ITUNES_SEASON -> iTunesSeason = readString(ITUNES_SEASON)?.toIntOrNull()
                 ITUNES_EPISODE_TYPE -> iTunesEpisodeType = readString(ITUNES_EPISODE_TYPE)
-                ITUNES_BLOCK -> iTunesBlock = readString(ITUNES_BLOCK)?.convertYesNo()
+                ITUNES_BLOCK -> iTunesBlock = readString(ITUNES_BLOCK)?.toBoolOrNull()
 
                 GOOGLE_DESCRIPTION -> googleDescription = readString(GOOGLE_DESCRIPTION)
-                GOOGLE_EXPLICIT -> googleExplicit = readString(GOOGLE_EXPLICIT)?.convertYesNo()
-                GOOGLE_BLOCK -> googleBlock = readString(GOOGLE_BLOCK)?.convertYesNo()
+                GOOGLE_EXPLICIT -> googleExplicit = readString(GOOGLE_EXPLICIT)?.toBoolOrNull()
+                GOOGLE_BLOCK -> googleBlock = readString(GOOGLE_BLOCK)?.toBoolOrNull()
                 else -> skip()
             }
         }
@@ -469,6 +469,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
     private fun Image?.replaceInvalidUrlByPriority(vararg priorityHref: String?): Image? {
         if (this == null || url != null) return this
         val href = priorityHref.firstOrNull { null != it } ?: return this
+
         return Image(
             link = link,
             title = title,
@@ -481,6 +482,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
 
     private fun hrefToImage(href: String?): Image? {
         href ?: return null
+
         return Image(
             link = null,
             title = null,

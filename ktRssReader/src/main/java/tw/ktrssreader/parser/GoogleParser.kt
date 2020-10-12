@@ -70,11 +70,11 @@ class GoogleParser : ParserBase<GoogleChannelData>() {
             when (name) {
                 GOOGLE_DESCRIPTION -> description = readString(GOOGLE_DESCRIPTION)
                 GOOGLE_IMAGE -> image = readImage()
-                GOOGLE_EXPLICIT -> explicit = readString(GOOGLE_EXPLICIT)?.convertYesNo()
+                GOOGLE_EXPLICIT -> explicit = readString(GOOGLE_EXPLICIT)?.toBoolOrNull()
                 GOOGLE_CATEGORY -> categories = readCategory()
                 GOOGLE_AUTHOR -> author = readString(GOOGLE_AUTHOR)
                 GOOGLE_OWNER -> owner = Owner(name = null, email = readString(GOOGLE_OWNER))
-                GOOGLE_BLOCK -> block = readString(GOOGLE_BLOCK)?.convertYesNo()
+                GOOGLE_BLOCK -> block = readString(GOOGLE_BLOCK)?.toBoolOrNull()
                 GOOGLE_EMAIL -> email = readString(GOOGLE_EMAIL)
                 ITEM -> {
                     standardChannel.items?.get(itemIndex)?.let {
@@ -127,8 +127,8 @@ class GoogleParser : ParserBase<GoogleChannelData>() {
 
             when (name) {
                 GOOGLE_DESCRIPTION -> description = readString(GOOGLE_DESCRIPTION)
-                GOOGLE_EXPLICIT -> explicit = readString(GOOGLE_EXPLICIT)?.convertYesNo()
-                GOOGLE_BLOCK -> block = readString(GOOGLE_BLOCK)?.convertYesNo()
+                GOOGLE_EXPLICIT -> explicit = readString(GOOGLE_EXPLICIT)?.toBoolOrNull()
+                GOOGLE_BLOCK -> block = readString(GOOGLE_BLOCK)?.toBoolOrNull()
                 else -> skip()
             }
         }
