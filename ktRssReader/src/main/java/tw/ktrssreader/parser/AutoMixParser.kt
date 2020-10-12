@@ -137,6 +137,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
         return (rssStandardMap[key] ?: iTunesMap[key] ?: googlePlayMap[key]) as? R
     }
 
+    @Throws(IOException::class, XmlPullParserException::class)
     private fun parseTag(xml: String) = parseChannel<Unit>(xml = xml) {
         require(XmlPullParser.START_TAG, null, ParserConst.CHANNEL)
 
@@ -343,7 +344,11 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
                 val name: String? = readString(tagName = CATEGORY)
                 require(XmlPullParser.END_TAG, null, CATEGORY)
                 logD(logTag, "[readCategory]: name = $name, domain = $domain")
-                return if (name == null && domain == null) null else Category(name = name, domain = domain)
+                return if (name == null && domain == null) {
+                    null
+                } else {
+                    Category(name = name, domain = domain)
+                }
             }
             else -> return null
         }
@@ -462,14 +467,26 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
     }
 
     private fun Image?.replaceInvalidUrlByPriority(vararg priorityHref: String?): Image? {
-        if (this == null) return null
-        if (priorityHref.isNullOrEmpty() || url != null) return this
-
-        return Image(link = link, title = title, url = priorityHref.find { it != null }, description = description, height = height, width = width)
+        if (this == null || priorityHref.isNullOrEmpty() || url != null) return this
+        return Image(
+            link = link,
+            title = title,
+            url = priorityHref.find { it != null },
+            description = description,
+            height = height,
+            width = width
+        )
     }
 
     private fun hrefToImage(href: String?): Image? {
         href ?: return null
-        return Image(link = null, title = null, url = href, description = null, height = null, width = null)
+        return Image(
+            link = null,
+            title = null,
+            url = href,
+            description = null,
+            height = null,
+            width = null
+        )
     }
 }
