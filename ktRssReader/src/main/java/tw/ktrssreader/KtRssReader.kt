@@ -20,11 +20,10 @@ import kotlinx.coroutines.flow.flow
 import tw.ktrssreader.config.KtRssReaderConfig
 import tw.ktrssreader.config.KtRssReaderGlobalConfig
 import tw.ktrssreader.constant.Const
-import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.ThreadUtils
-import tw.ktrssreader.utils.tryCatch
 import tw.ktrssreader.utils.logD
+import tw.ktrssreader.utils.tryCatch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -35,9 +34,10 @@ object Reader {
     val logTag: String = this::class.java.simpleName
 
     @Throws(Exception::class)
-    inline fun <reified T : RssStandardChannel> read(
+    inline fun <reified T> read(
         url: String,
-        config: Config = {}
+        customParser: ((String) -> T?) = { null },
+        config: Config = {},
     ): T {
         check(!ThreadUtils.isMainThread()) { "Should not be called on main thread." }
 
@@ -79,7 +79,10 @@ object Reader {
             val fetcher = KtRssProvider.provideXmlFetcher()
             val xml = fetcher.fetch(url = url, charset = charset)
             val parser = KtRssProvider.provideParser<T>()
-            val channel = parser.parse(xml)
+            val channel = parser?.parse(xml)
+                ?: customParser(xml)
+                ?: throw IllegalArgumentException("There is no way to parse ${T::class.java}!")
+
             if (useCache) {
                 tryCatch { rssCache.saveCache(url = url, channel = channel) }
             }
@@ -91,15 +94,17 @@ object Reader {
     }
 
     @Throws(Exception::class)
-    suspend inline fun <reified T : RssStandardChannel> coRead(
+    suspend inline fun <reified T> coRead(
         url: String,
+        crossinline customParser: ((String) -> T?) = { null },
         crossinline config: Config = {}
-    ) = suspendCoroutine<T> { it.resume(read(url = url, config = config)) }
+    ) = suspendCoroutine<T> { it.resume(read(url = url, customParser = customParser, config = config)) }
 
-    inline fun <reified T : RssStandardChannel> flowRead(
+    inline fun <reified T> flowRead(
         url: String,
+        crossinline customParser: ((String) -> T?) = { null },
         crossinline config: Config = {}
-    ) = flow<T> { emit(read(url = url, config = config)) }
+    ) = flow<T> { emit(read(url = url, customParser = customParser, config = config)) }
 
     fun clearCache() {
         ThreadUtils.runOnNewThread("[clear cache]") {

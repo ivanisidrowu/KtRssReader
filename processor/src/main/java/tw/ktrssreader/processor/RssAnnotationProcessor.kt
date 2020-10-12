@@ -21,7 +21,11 @@ import tw.ktrssreader.annotation.RssAttribute
 import tw.ktrssreader.annotation.RssRawData
 import tw.ktrssreader.annotation.RssTag
 import tw.ktrssreader.processor.const.CHANNEL
+import tw.ktrssreader.processor.generator.ExtensionGenerator
+import tw.ktrssreader.processor.generator.ParserGenerator
+import tw.ktrssreader.processor.generator.ReaderGenerator
 import tw.ktrssreader.processor.util.Logger
+import tw.ktrssreader.processor.util.getPackage
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
@@ -58,11 +62,19 @@ class RssAnnotationProcessor : AbstractProcessor() {
         p1?.getElementsAnnotatedWith(RssTag::class.java)?.forEach {
             if (it?.kind == ElementKind.CLASS) {
                 val rssTag = it.getAnnotation(RssTag::class.java)
+                val isRoot = rssTag?.name == CHANNEL
                 ParserGenerator(
                     element = it,
-                    isRoot = rssTag?.name == CHANNEL,
+                    isRoot = isRoot,
                     logger = logger
                 ).generate().writeTo(processingEnv.filer)
+
+                if (isRoot) {
+                    ReaderGenerator(
+                        rootClassName = it.simpleName.toString(),
+                        rootClassPackage = it.getPackage()
+                    ).generate().writeTo(processingEnv.filer)
+                }
             }
         }
         return true
