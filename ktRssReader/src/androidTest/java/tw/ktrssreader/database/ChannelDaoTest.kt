@@ -1,11 +1,11 @@
 package tw.ktrssreader.database
 
-import net.ettoday.test.common.shouldBe
-import net.ettoday.test.common.shouldNotBe
 import org.junit.Test
 import tw.ktrssreader.constant.Const
 import tw.ktrssreader.database.base.DaoTestBase
 import tw.ktrssreader.persistence.db.entity.ChannelEntity
+import tw.ktrssreader.test.common.shouldBe
+import tw.ktrssreader.test.common.shouldNotBe
 import java.util.*
 
 class ChannelDaoTest : DaoTestBase() {

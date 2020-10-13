@@ -6,7 +6,7 @@ import io.mockk.verify
 import org.junit.Test
 import tw.ktrssreader.network.OkHttpRequest
 import tw.ktrssreader.provider.KtRssProvider
-import net.ettoday.test.common.mockkRelaxed
+import tw.ktrssreader.test.common.mockkRelaxed
 
 class XmlFetcherLocalTest {
 

@@ -1,4 +1,4 @@
-package net.ettoday.test.common
+package tw.ktrssreader.test.common
 
 import io.mockk.MockKVerificationScope
 import io.mockk.mockk

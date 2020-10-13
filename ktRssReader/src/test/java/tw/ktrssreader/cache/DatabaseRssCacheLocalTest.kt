@@ -2,8 +2,6 @@ package tw.ktrssreader.cache
 
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
-import net.ettoday.test.common.mockkRelaxed
-import net.ettoday.test.common.shouldBe
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -14,6 +12,8 @@ import tw.ktrssreader.persistence.db.KtRssReaderDatabase
 import tw.ktrssreader.persistence.db.dao.ChannelDao
 import tw.ktrssreader.persistence.db.entity.ChannelEntity
 import tw.ktrssreader.provider.KtRssProvider
+import tw.ktrssreader.test.common.mockkRelaxed
+import tw.ktrssreader.test.common.shouldBe
 import tw.ktrssreader.utils.convertToByteArray
 import tw.ktrssreader.utils.convertToObject
 import java.util.*

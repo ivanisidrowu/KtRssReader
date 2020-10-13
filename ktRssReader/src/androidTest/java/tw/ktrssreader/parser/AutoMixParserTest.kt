@@ -1,7 +1,5 @@
 package tw.ktrssreader.parser
 
-import net.ettoday.test.common.XmlFileReader
-import net.ettoday.test.common.shouldBe
 import org.junit.Test
 
 import org.junit.runner.RunWith
@@ -13,6 +11,8 @@ import tw.ktrssreader.parser.ChannelItemTestData.FULL_AUTOMIX_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_AUTOMIX_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_AUTOMIX_CHANNEL_2
 import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
+import tw.ktrssreader.test.common.XmlFileReader
+import tw.ktrssreader.test.common.shouldBe
 
 class AutoMixParserTest {
 

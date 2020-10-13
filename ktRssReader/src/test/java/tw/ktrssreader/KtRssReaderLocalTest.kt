@@ -4,9 +4,6 @@ import app.cash.turbine.test
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.runBlocking
-import net.ettoday.test.common.mockkRelaxed
-import net.ettoday.test.common.never
-import net.ettoday.test.common.shouldBe
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -19,6 +16,9 @@ import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.model.channel.RssStandardChannelData
 import tw.ktrssreader.parser.RssStandardParser
 import tw.ktrssreader.provider.KtRssProvider
+import tw.ktrssreader.test.common.mockkRelaxed
+import tw.ktrssreader.test.common.never
+import tw.ktrssreader.test.common.shouldBe
 import tw.ktrssreader.utils.ThreadUtils
 
 @RunWith(Enclosed::class)

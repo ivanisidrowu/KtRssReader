@@ -1,7 +1,5 @@
 package tw.ktrssreader.parser
 
-import net.ettoday.test.common.XmlFileReader
-import net.ettoday.test.common.shouldBe
 import org.junit.Test
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
@@ -13,6 +11,8 @@ import tw.ktrssreader.parser.ChannelItemTestData.GOOGLE_PLAY_FOLDER
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_GOOGLE_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_GOOGLE_CHANNEL_2
 import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
+import tw.ktrssreader.test.common.XmlFileReader
+import tw.ktrssreader.test.common.shouldBe
 
 @RunWith(Enclosed::class)
 class GoogleParserTest {
