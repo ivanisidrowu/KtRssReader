@@ -163,7 +163,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
         val items = mutableListOf<AutoMixItemData>()
 
         var iTunesImageHref: String? = null
-        val iTunesCategories = mutableListOf<Category>()
+        var iTunesCategories: List<Category>? = null
         var iTunesSimpleTitle: String? = null
         var iTunesExplicit: Boolean? = null
         var iTunesEmail: String? = null
@@ -176,7 +176,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
 
         var googleDescription: String? = null
         var googleImageHref: String? = null
-        val googleCategories = mutableListOf<Category?>()
+        var googleCategories: List<Category>? = null
         var googleExplicit: Boolean? = null
         var googleEmail: String? = null
         var googleAuthor: String? = null
@@ -192,7 +192,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
                 LINK -> link = readString(LINK)
                 IMAGE -> image = readImage()
                 LANGUAGE -> language = readString(LANGUAGE)
-                CATEGORY -> readCategory(CATEGORY)?.let { categories.add(it) }
+                CATEGORY -> readCategory()?.let { categories.add(it) }
                 COPYRIGHT -> copyright = readString(COPYRIGHT)
                 MANAGING_EDITOR -> managingEditor = readString(MANAGING_EDITOR)
                 WEB_MASTER -> webMaster = readString(WEB_MASTER)
@@ -209,7 +209,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
                 ITEM -> items.add(readItem())
 
                 ITUNES_IMAGE -> iTunesImageHref = readImageHref(ITUNES_IMAGE)
-                ITUNES_CATEGORY -> readCategory(ITUNES_CATEGORY)?.let { iTunesCategories.add(it) }
+                ITUNES_CATEGORY -> iTunesCategories = readCategories(ITUNES_CATEGORY)
                 ITUNES_TITLE -> iTunesSimpleTitle = readString(ITUNES_TITLE)
                 ITUNES_EXPLICIT -> iTunesExplicit = readString(ITUNES_EXPLICIT)?.toBoolOrNull()
                 ITUNES_EMAIL -> iTunesEmail = readString(ITUNES_EMAIL)
@@ -222,7 +222,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
 
                 GOOGLE_DESCRIPTION -> googleDescription = readString(GOOGLE_DESCRIPTION)
                 GOOGLE_IMAGE -> googleImageHref = readImageHref(GOOGLE_IMAGE)
-                GOOGLE_CATEGORY -> googleCategories.add(readCategory(GOOGLE_CATEGORY))
+                GOOGLE_CATEGORY -> googleCategories = readCategories(GOOGLE_CATEGORY)
                 GOOGLE_EXPLICIT -> googleExplicit = readString(GOOGLE_EXPLICIT)?.toBoolOrNull()
                 GOOGLE_EMAIL -> googleEmail = readString(GOOGLE_EMAIL)
                 GOOGLE_AUTHOR -> googleAuthor = readString(GOOGLE_AUTHOR)
@@ -258,7 +258,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
         }
         iTunesMap.run {
             put(IMAGE, hrefToImage(iTunesImageHref))
-            put(CATEGORY, iTunesCategories.takeIf { it.isNotEmpty() })
+            put(CATEGORY, iTunesCategories?.takeIf { it.isNotEmpty() })
             put(ITUNES_TITLE, iTunesSimpleTitle)
             put(EXPLICIT, iTunesExplicit)
             put(EMAIL, iTunesEmail)
@@ -272,7 +272,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
         googlePlayMap.run {
             put(DESCRIPTION, googleDescription)
             put(IMAGE, hrefToImage(googleImageHref))
-            put(CATEGORY, googleCategories.takeIf { it.isNotEmpty() })
+            put(CATEGORY, googleCategories?.takeIf { it.isNotEmpty() })
             put(EXPLICIT, googleExplicit)
             put(EMAIL, googleEmail)
             put(AUTHOR, googleAuthor)
@@ -328,32 +328,40 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readCategory(tagName: String): Category? {
-        when (tagName) {
-            ITUNES_CATEGORY, GOOGLE_CATEGORY -> {
-                var text: String? = null
-                readAttributes(tagName, listOf(TEXT)) { attr, value ->
-                    if (attr == TEXT) text = value
-                }
-                text ?: return null
-                return Category(name = text, domain = null)
-            }
-            CATEGORY -> {
-                require(XmlPullParser.START_TAG, null, CATEGORY)
-                val domain: String? = getAttributeValue(null, DOMAIN)
-                val name: String? = readString(tagName = CATEGORY)
-                require(XmlPullParser.END_TAG, null, CATEGORY)
-                logD(logTag, "[readCategory]: name = $name, domain = $domain")
-                return if (name == null && domain == null) {
-                    null
-                } else {
-                    Category(name = name, domain = domain)
-                }
-            }
-            else -> return null
+    private fun XmlPullParser.readCategory(): Category? {
+        require(XmlPullParser.START_TAG, null, CATEGORY)
+        val domain: String? = getAttributeValue(null, DOMAIN)
+        val name: String? = readString(tagName = CATEGORY)
+        require(XmlPullParser.END_TAG, null, CATEGORY)
+        logD(logTag, "[readCategory]: name = $name, domain = $domain")
+        return if (name == null && domain == null) {
+            null
+        } else {
+            Category(name = name, domain = domain)
         }
     }
 
+    @Throws(IOException::class, XmlPullParserException::class)
+    private fun XmlPullParser.readCategories(tagName: String): List<Category> {
+        require(XmlPullParser.START_TAG, null, tagName)
+        val categories = mutableListOf<Category>()
+        getAttributeValue(null, TEXT)?.let { categories.add(Category(name = it, null)) }
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
+
+            when (name) {
+                tagName -> {
+                    getAttributeValue(null, TEXT)
+                        ?.let { categories.add(Category(name = it, domain = null)) }
+                    nextTag()
+                }
+                else -> skip()
+            }
+        }
+        logD(logTag, "[readCategories]: categories = $categories")
+        require(XmlPullParser.END_TAG, null, tagName)
+        return categories
+    }
 
     @Throws(IOException::class, XmlPullParserException::class)
     private fun XmlPullParser.readITunesOwner(): Owner {
@@ -422,7 +430,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
                 DESCRIPTION -> description = readString(DESCRIPTION)
                 LINK -> link = readString(LINK)
                 AUTHOR -> author = readString(AUTHOR)
-                CATEGORY -> readCategory(CATEGORY)?.let { categories.add(it) }
+                CATEGORY -> readCategory()?.let { categories.add(it) }
                 COMMENTS -> comments = readString(COMMENTS)
                 SOURCE -> source = readSource()
 
