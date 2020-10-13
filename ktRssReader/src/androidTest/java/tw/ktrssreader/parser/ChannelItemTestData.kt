@@ -64,6 +64,8 @@ object ChannelItemTestData {
         Category(name = "channel category 1", domain = null)
     private val CHANNEL_CATEGORY_ATTR =
         Category(name = "channel category 2", domain = "http://channel.category.domain")
+    private val CHANNEL_CATEGORY_ATTR_WITHOUT_NAME =
+        Category(name = null, domain = "http://channel.category.domain")
     private const val CHANNEL_LINK_ATTR = "http://channel.link"
     private const val CHANNEL_COPYRIGHT_ATTR = "channel copyright"
     private const val CHANNEL_MANAGING_EDITOR_ATTR = "managingEditor@example.com"
@@ -230,7 +232,8 @@ object ChannelItemTestData {
     private const val GOOGLE_CHANNEL_CATEGORY_ATTR = "Games & Hobbies"
     private const val GOOGLE_CHANNEL_DESCRIPTION_ATTR = "channel description - google play"
     private const val GOOGLE_CHANNEL_LANGUAGE_ATTR = "en"
-    private val googleChannelOwnerAttr = Owner(name = null, email = "channel.owner.googleplay@example.com")
+    private val googleChannelOwnerAttr =
+        Owner(name = null, email = "channel.owner.googleplay@example.com")
 
     private const val GOOGLE_ITEM_DESCRIPTION_ATTR = "item description - google play"
     private val FULL_GOOGLE_ITEM = GoogleItemData(
@@ -344,7 +347,10 @@ object ChannelItemTestData {
     private const val ITUNES_CHANNEL_TITLE_ATTR = "channel title - iTunes"
     private const val ITUNES_CHANNEL_AUTHOR_ATTR = "channel author - iTunes"
     private const val ITUNES_CHANNEL_IMAGE_ATTR = "https://channel.image.itunes"
-    private val ITUNES_CHANNEL_OWNER_ATTR = Owner(name = "channel owner name - iTunes", email = "channel.owner.email.itunes@example.com")
+    private val ITUNES_CHANNEL_OWNER_ATTR = Owner(
+        name = "channel owner name - iTunes",
+        email = "channel.owner.email.itunes@example.com"
+    )
     private const val ITUNES_CHANNEL_CATEGORY_ATTR = "Technology - iTunes"
     private const val ITUNES_CHANNEL_LANGUAGE_ATTR = "en"
     private const val ITUNES_CHANNEL_NEW_FEED_URL_ATTR = "https://channel.new.feed.url.itunes"
@@ -365,7 +371,7 @@ object ChannelItemTestData {
         author = ITUNES_ITEM_AUTHOR_ATTR,
         categories = listOf(
             ITEM_CATEGORY_ATTR,
-            ITEM_CATEGORY_ATTR_WITHOUT_DOMAIN
+            ITEM_CATEGORY_ATTR_WITHOUT_DOMAIN,
         ),
         comments = ITEM_COMMENTS_ATTR,
         source = ITEM_SOURCE_ATTR,
@@ -585,6 +591,21 @@ object ChannelItemTestData {
         complete = true,
         simpleTitle = ITUNES_CHANNEL_TITLE_ATTR,
         email = GOOGLE_CHANNEL_EMAIL_ATTR
+    )
+
+    val CATEGORY_NO_ORDERING_AUTOMIX_CHANNEL = FULL_AUTOMIX_CHANNEL.copy(
+        categories = listOf(
+            CHANNEL_CATEGORY_ATTR_WITHOUT_DOMAIN,
+            CHANNEL_CATEGORY_ATTR,
+            CHANNEL_CATEGORY_ATTR_WITHOUT_NAME
+        )
+    )
+
+    val NESTED_ITUNES_CATEGORY_AUTOMIX_CHANNEL = FULL_AUTOMIX_CHANNEL.copy(
+        categories = listOf(
+            Category(name = ITUNES_CHANNEL_CATEGORY_ATTR, domain = null),
+            Category(name = ITUNES_CHANNEL_CATEGORY_ATTR, domain = null),
+        )
     )
 
     val PARTIAL_AUTOMIX_CHANNEL = FULL_AUTOMIX_CHANNEL.copy(
