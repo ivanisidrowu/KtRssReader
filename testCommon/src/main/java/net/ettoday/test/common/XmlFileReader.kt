@@ -1,4 +1,4 @@
-package tw.ktrssreader.parser
+package net.ettoday.test.common
 
 import okio.ByteString.Companion.readByteString
 

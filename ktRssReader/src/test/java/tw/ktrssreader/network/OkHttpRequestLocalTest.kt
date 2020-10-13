@@ -1,11 +1,11 @@
 package tw.ktrssreader.network
 
-import extensions.mockkRelaxed
-import extensions.shouldBe
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
+import net.ettoday.test.common.mockkRelaxed
+import net.ettoday.test.common.shouldBe
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response

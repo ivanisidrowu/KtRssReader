@@ -1,4 +1,4 @@
-package extensions
+package net.ettoday.test.common
 
 import io.mockk.MockKVerificationScope
 import io.mockk.mockk

@@ -1,7 +1,7 @@
 package tw.ktrssreader.database
 
-import extensions.shouldBe
-import extensions.shouldNotBe
+import net.ettoday.test.common.shouldBe
+import net.ettoday.test.common.shouldNotBe
 import org.junit.Test
 import tw.ktrssreader.constant.Const
 import tw.ktrssreader.database.base.DaoTestBase

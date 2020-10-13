@@ -1,6 +1,7 @@
 package tw.ktrssreader.parser
 
-import extensions.shouldBe
+import net.ettoday.test.common.XmlFileReader
+import net.ettoday.test.common.shouldBe
 import org.junit.Test
 
 import org.junit.runner.RunWith

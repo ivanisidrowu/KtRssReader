@@ -1,12 +1,12 @@
 package tw.ktrssreader
 
 import app.cash.turbine.test
-import extensions.mockkRelaxed
-import extensions.never
-import extensions.shouldBe
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.runBlocking
+import net.ettoday.test.common.mockkRelaxed
+import net.ettoday.test.common.never
+import net.ettoday.test.common.shouldBe
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

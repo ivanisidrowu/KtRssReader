@@ -1,9 +1,9 @@
 package tw.ktrssreader.cache
 
-import extensions.mockkRelaxed
-import extensions.shouldBe
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
+import net.ettoday.test.common.mockkRelaxed
+import net.ettoday.test.common.shouldBe
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
