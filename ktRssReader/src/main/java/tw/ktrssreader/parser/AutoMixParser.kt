@@ -342,7 +342,7 @@ class AutoMixParser : ParserBase<AutoMixChannelData>() {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun XmlPullParser.readCategories(tagName: String): List<Category>? {
+    private fun XmlPullParser.readCategories(tagName: String): List<Category> {
         require(XmlPullParser.START_TAG, null, tagName)
         val categories = mutableListOf<Category>()
         getAttributeValue(null, TEXT)?.let { categories.add(Category(name = it, null)) }
