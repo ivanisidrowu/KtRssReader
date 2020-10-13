@@ -27,7 +27,7 @@ import javax.lang.model.element.PackageElement
 import kotlin.reflect.KClass
 
 private val primitiveJavaPaths = listOf(
-    String::class.java.canonicalName,
+    String::class.java.canonicalName.substringAfterLast('.'),
     Int::class.java.canonicalName,
     Boolean::class.java.canonicalName,
     Long::class.java.canonicalName,
@@ -38,7 +38,7 @@ fun String.isListType(): Boolean {
     return contains(List::class.java.canonicalName)
 }
 
-fun String.isPrimitive(): Boolean = primitiveJavaPaths.any { this.contains(it) }
+fun String.isPrimitive(): Boolean = primitiveJavaPaths.any { this.contains(other = it, ignoreCase = true) }
 
 fun String.getFuncName(): String {
     return when {
@@ -60,12 +60,12 @@ fun String.extractType() =
     this.substringAfterLast('.')
 
 fun String.getKPrimitiveClass(): KClass<*>? {
-    return when (this) {
-        String::class.java.simpleName -> String::class
-        Integer::class.java.simpleName -> Int::class
-        Boolean::class.java.simpleName -> Boolean::class
-        Long::class.java.simpleName -> Long::class
-        Short::class.java.simpleName -> Short::class
+    return when {
+        this.contains(String::class.java.simpleName, ignoreCase = true) -> String::class
+        this.contains(Integer::class.java.simpleName, ignoreCase = true) -> Int::class
+        this.contains(Boolean::class.java.simpleName, ignoreCase = true) -> Boolean::class
+        this.contains(Long::class.java.simpleName, ignoreCase = true) -> Long::class
+        this.contains(Short::class.java.simpleName, ignoreCase = true) -> Short::class
         else -> null
     }
 }
