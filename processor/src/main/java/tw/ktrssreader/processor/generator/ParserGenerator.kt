@@ -134,16 +134,7 @@ class ParserGenerator(
         )
         // Generate constructor statements
         propertyToParseData.forEach {
-            val stringBuilder = StringBuilder()
-            it.value.tagCandidates.forEach { tag ->
-                val variableName = it.key.getVariableName(tag)
-                if (stringBuilder.isEmpty()) {
-                    stringBuilder.append(variableName)
-                } else {
-                    stringBuilder.append(" ?: $variableName")
-                }
-            }
-            funSpec.addStatement("\t${it.key} = $stringBuilder,")
+            generateConstructor(it, funSpec)
         }
 
         funSpec.addStatement(")")
@@ -238,11 +229,19 @@ class ParserGenerator(
 
         when (data.dataType) {
             DataType.LIST -> {
-                data.listItemType ?: return
+                val itemType = data.listItemType ?: return
 
-                val itemClassName = ClassName(packageName, data.listItemType)
-                data.tagCandidates.forEach { tag ->
-                    funSpec.addStatement("var ${name.getVariableName(tag)}: ArrayList<%T> = arrayListOf()", itemClassName)
+                if (itemType.isPrimitive()) {
+                    val kClass = itemType.getKPrimitiveClass() ?: return
+
+                    data.tagCandidates.forEach { tag ->
+                        funSpec.addStatement("var ${name.getVariableName(tag)}: ArrayList<%T> = arrayListOf()", kClass)
+                    }
+                } else {
+                    val itemClassName = ClassName(packageName, data.listItemType)
+                    data.tagCandidates.forEach { tag ->
+                        funSpec.addStatement("var ${name.getVariableName(tag)}: ArrayList<%T> = arrayListOf()", itemClassName)
+                    }
                 }
             }
             DataType.PRIMITIVE -> {
@@ -285,17 +284,26 @@ class ParserGenerator(
             DataType.LIST -> {
                 val listItemType = data.listItemType ?: return
 
-                data.tagCandidates.forEach { tag ->
-                    val memberName =
-                        MemberName(listItemType.getGeneratedClassPath(), tag.getFuncName())
-                    funSpec.addStatement("\t\t\"$tag\" -> ${name.getVariableName(tag)}.add(%M())", memberName)
+                if (listItemType.isPrimitive()) {
+                    data.tagCandidates.forEach { tag ->
+                        val statement = "\t\t\"$tag\" -> %1M(\"$tag\")"
+                        funSpec.addPrimitiveStatement(statement, listItemType)
+                        funSpec.addStatement("?.let { ${name.getVariableName(tag)}.add(it) }")
+                    }
+                } else {
+                    data.tagCandidates.forEach { tag ->
+                        val memberName =
+                            MemberName(listItemType.getGeneratedClassPath(), tag.getFuncName())
+                        funSpec.addStatement("\t\t\"$tag\" -> ${name.getVariableName(tag)}.add(%M())", memberName)
+                    }
                 }
             }
             DataType.PRIMITIVE -> {
                 val type = data.type ?: return
 
                 data.tagCandidates.forEach { tag ->
-                    funSpec.addPrimitiveStatement(tag, name.getVariableName(tag), type)
+                    val variableName = name.getVariableName(tag)
+                    funSpec.addPrimitiveStatement("\t\t\"$tag\" -> $variableName = %1M(\"$tag\")", type)
                 }
             }
             DataType.ATTRIBUTE -> {
@@ -310,6 +318,32 @@ class ParserGenerator(
                 }
             }
         }
+    }
+
+    private fun generateConstructor(
+        parseData: Map.Entry<String, ParseData>,
+        funSpec: FunSpec.Builder
+    ) {
+        val stringBuilder = StringBuilder()
+        val dataType = parseData.value.dataType
+        val tags = parseData.value.tagCandidates
+        tags.forEachIndexed { index, tag ->
+            val variableName = parseData.key.getVariableName(tag)
+            if (stringBuilder.isEmpty()) {
+                if (dataType == DataType.LIST) {
+                    stringBuilder.append("$variableName.takeIf { it.isNotEmpty() }")
+                } else {
+                    stringBuilder.append(variableName)
+                }
+            } else {
+                if (dataType == DataType.LIST && index != tags.lastIndex) {
+                    stringBuilder.append(" ?: $variableName.takeIf { it.isNotEmpty() }")
+                } else {
+                    stringBuilder.append(" ?: $variableName")
+                }
+            }
+        }
+        funSpec.addStatement("\t${parseData.key} = $stringBuilder,")
     }
 
     private fun getTagCandidates(
@@ -358,11 +392,9 @@ class ParserGenerator(
     }
 
     private fun FunSpec.Builder.addPrimitiveStatement(
-        tagName: String,
-        variableName: String,
-        typeString: String,
+        readStringStatement: String,
+        typeString: String
     ) {
-        val readStringStatement = "\t\t\"$tagName\" -> $variableName = %1M(\"$tagName\")"
         val statement = readStringStatement.appendTypeConversion(typeString)
         if (typeString == Boolean::class.java.simpleName) {
             addStatement(statement, readStringMemberName, booleanConversionMemberName)
@@ -372,12 +404,12 @@ class ParserGenerator(
     }
 
     private fun String.appendTypeConversion(typeString: String): String {
-        return when (typeString) {
-            String::class.java.simpleName -> this
-            Integer::class.java.simpleName -> "$this.toIntOrNull()"
-            Boolean::class.java.simpleName -> "$this.%2M()"
-            Long::class.java.simpleName -> "$this.toLongOrNull()"
-            Short::class.java.simpleName -> "$this.toShortOrNull()"
+        return when {
+            typeString.contains(String::class.java.simpleName, ignoreCase = true) -> this
+            typeString.contains(Integer::class.java.simpleName, ignoreCase = true) -> "$this?.toIntOrNull()"
+            typeString.contains(Boolean::class.java.simpleName, ignoreCase = true) -> "$this?.%2M()"
+            typeString.contains(Long::class.java.simpleName, ignoreCase = true) -> "$this?.toLongOrNull()"
+            typeString.contains(Short::class.java.simpleName, ignoreCase = true) -> "$this?.toShortOrNull()"
             else -> this
         }
     }
