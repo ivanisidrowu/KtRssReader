@@ -1,4 +1,4 @@
-package extensions
+package tw.ktrssreader.test.common
 
 import io.mockk.MockKVerificationScope
 import io.mockk.mockk

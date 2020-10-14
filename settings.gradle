@@ -1,3 +1,5 @@
+include ':testCommon'
+include ':processorTest'
 include ':processor'
 include ':annotation'
 include ':ktRssReader'

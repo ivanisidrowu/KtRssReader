@@ -1,9 +1,6 @@
 package tw.ktrssreader
 
 import app.cash.turbine.test
-import extensions.mockkRelaxed
-import extensions.never
-import extensions.shouldBe
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.runBlocking
@@ -19,6 +16,9 @@ import tw.ktrssreader.model.channel.RssStandardChannel
 import tw.ktrssreader.model.channel.RssStandardChannelData
 import tw.ktrssreader.parser.RssStandardParser
 import tw.ktrssreader.provider.KtRssProvider
+import tw.ktrssreader.test.common.mockkRelaxed
+import tw.ktrssreader.test.common.never
+import tw.ktrssreader.test.common.shouldBe
 import tw.ktrssreader.utils.ThreadUtils
 
 @RunWith(Enclosed::class)

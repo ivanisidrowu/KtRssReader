@@ -1,7 +1,5 @@
 package tw.ktrssreader.cache
 
-import extensions.mockkRelaxed
-import extensions.shouldBe
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import org.junit.After
@@ -14,6 +12,8 @@ import tw.ktrssreader.persistence.db.KtRssReaderDatabase
 import tw.ktrssreader.persistence.db.dao.ChannelDao
 import tw.ktrssreader.persistence.db.entity.ChannelEntity
 import tw.ktrssreader.provider.KtRssProvider
+import tw.ktrssreader.test.common.mockkRelaxed
+import tw.ktrssreader.test.common.shouldBe
 import tw.ktrssreader.utils.convertToByteArray
 import tw.ktrssreader.utils.convertToObject
 import java.util.*

@@ -1,7 +1,5 @@
 package tw.ktrssreader.network
 
-import extensions.mockkRelaxed
-import extensions.shouldBe
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -13,6 +11,8 @@ import okhttp3.ResponseBody
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import tw.ktrssreader.test.common.mockkRelaxed
+import tw.ktrssreader.test.common.shouldBe
 import java.io.IOException
 
 class OkHttpRequestLocalTest {

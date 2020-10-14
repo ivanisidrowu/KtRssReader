@@ -1,6 +1,5 @@
 package tw.ktrssreader.parser
 
-import extensions.shouldBe
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -13,6 +12,8 @@ import tw.ktrssreader.parser.ChannelItemTestData.NESTED_ITUNES_CATEGORY_AUTOMIX_
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_AUTOMIX_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_AUTOMIX_CHANNEL_2
 import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
+import tw.ktrssreader.test.common.XmlFileReader
+import tw.ktrssreader.test.common.shouldBe
 
 class AutoMixParserTest {
 

@@ -1,6 +1,5 @@
 package tw.ktrssreader.parser
 
-import extensions.shouldBe
 import org.junit.Test
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
@@ -14,6 +13,8 @@ import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_IMAGE
 import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_TEXT_IMAGE
 import tw.ktrssreader.parser.ChannelItemTestData.RSS_FOLDER
 import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
+import tw.ktrssreader.test.common.XmlFileReader
+import tw.ktrssreader.test.common.shouldBe
 
 @RunWith(Enclosed::class)
 class RssStandardParserTest {
