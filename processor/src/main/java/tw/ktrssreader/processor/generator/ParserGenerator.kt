@@ -138,7 +138,7 @@ class ParserGenerator(
         // Generate constructor statements
         propertyToParseData.forEach { generateConstructor(it, funSpec) }
 
-        funSpec.addStatement("\t)")
+        funSpec.addStatement("$TAB)")
         return funSpec.build()
     }
 
@@ -301,7 +301,7 @@ class ParserGenerator(
 
                 if (listItemType.isPrimitive()) {
                     data.tagCandidates.forEach { tag ->
-                        val statement = "\t\t\"$tag\" -> %1M(\"$tag\")"
+                        val statement = "$TAB$TAB\"$tag\" -> %1M(\"$tag\")"
                         funSpec.addPrimitiveStatement(statement, listItemType)
                         funSpec.addStatement("?.let { ${name.getVariableName(tag)}.add(it) }")
                     }
@@ -309,7 +309,7 @@ class ParserGenerator(
                     data.tagCandidates.forEach { tag ->
                         val memberName =
                             MemberName(listItemType.getGeneratedClassPath(), tag.getFuncName())
-                        funSpec.addStatement("\t\t\"$tag\" -> ${name.getVariableName(tag)}.add(%M())", memberName)
+                        funSpec.addStatement("$TAB$TAB\"$tag\" -> ${name.getVariableName(tag)}.add(%M())", memberName)
                     }
                 }
             }
@@ -319,7 +319,7 @@ class ParserGenerator(
                 data.tagCandidates.forEach { tag ->
                     val variableName = name.getVariableName(tag)
                     funSpec.addPrimitiveStatement(
-                        "\t\t\"$tag\" -> $variableName = %1M(\"$tag\")",
+                        "$TAB$TAB\"$tag\" -> $variableName = %1M(\"$tag\")",
                         type
                     )
                 }
@@ -333,7 +333,7 @@ class ParserGenerator(
                 data.tagCandidates.forEach { tag ->
                     val memberName = MemberName(type.getGeneratedClassPath(), tag.getFuncName())
                     funSpec.addStatement(
-                        "\t\t\"$tag\" -> ${name.getVariableName(tag)} = %M()",
+                        "$TAB$TAB\"$tag\" -> ${name.getVariableName(tag)} = %M()",
                         memberName
                     )
                 }
@@ -352,7 +352,7 @@ class ParserGenerator(
         if (dataType == DataType.VALUE) {
             val name = parseData.key
             val type = parseData.value.type ?: return
-            val statement = "\t\t$name = %M(\"$rootTagName\")".appendTypeConversion(type)
+            val statement = "$TAB$TAB$name = %M(\"$rootTagName\")".appendTypeConversion(type)
             if (type.equals(Boolean::class.java.simpleName, ignoreCase = true)) {
                 funSpec.addStatement(statement, readStringMemberName, booleanConversionMemberName)
             } else {
@@ -377,7 +377,7 @@ class ParserGenerator(
                 }
             }
         }
-        funSpec.addStatement("\t\t${parseData.key} = $stringBuilder,")
+        funSpec.addStatement("$TAB$TAB${parseData.key} = $stringBuilder,")
     }
 
     private fun getTagCandidates(
