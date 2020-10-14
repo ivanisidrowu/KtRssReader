@@ -17,15 +17,11 @@
 package tw.ktrssreader.processor.generator
 
 import com.squareup.kotlinpoet.*
-import tw.ktrssreader.annotation.OrderType
-import tw.ktrssreader.annotation.RssAttribute
-import tw.ktrssreader.annotation.RssRawData
-import tw.ktrssreader.annotation.RssTag
+import tw.ktrssreader.annotation.*
 import tw.ktrssreader.processor.DataType
 import tw.ktrssreader.processor.ParseData
 import tw.ktrssreader.processor.const.*
 import tw.ktrssreader.processor.util.*
-import java.util.*
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.ExecutableElement
@@ -46,6 +42,8 @@ class ParserGenerator(
     private val booleanConversionMemberName = MemberName(extensionFullPath, METHOD_TO_BOOLEAN)
 
     private var topLevelCandidateOrder = emptyArray<OrderType>()
+    private var rootTagName: String? = null
+    private var hasRssValueAnnotation = false
 
     override fun generate(): FileSpec {
         val generatedClassName = "${element.simpleName}$PARSER_SUFFIX"
@@ -75,14 +73,14 @@ class ParserGenerator(
                 |
                 |var result: %1T? = null
                 |while (parser.next() != XmlPullParser.END_TAG) {
-                |    if (parser.eventType != XmlPullParser.START_TAG) continue
+                |${TAB}if (parser.eventType != XmlPullParser.START_TAG) continue
                 |
-                |    if (parser.name == "%2L") {
-                |        result = parser.getChannel()
-                |        break
-                |    } else {
-                |        parser.%4M()
-                |    }
+                |${TAB}if (parser.name == "%2L") {
+                |${TAB}${TAB}result = parser.getChannel()
+                |${TAB}${TAB}break
+                |${TAB}} else {
+                |${TAB}${TAB}parser.%4M()
+                |${TAB}}
                 |}
                 |return result ?: throw %3T("No valid channel tag in the RSS feed.")
                 """.trimMargin(),
@@ -103,6 +101,7 @@ class ParserGenerator(
             )
         }
         val tagName = rssTag?.name?.takeIfNotEmpty() ?: rootElement.simpleName.toString()
+        rootTagName = tagName
         val funSpec = FunSpec.builder(tagName.getFuncName())
             .receiver(xmlParserClass)
             .returns(outputClass)
@@ -113,31 +112,33 @@ class ParserGenerator(
         val annotations = preProcessAnnotations(rootElement)
         rootElement.enclosedElements.forEach { preProcessParseData(it, propertyToParseData, annotations) }
         propertyToParseData.forEach { generateVariableStatement(it, funSpec) }
-        funSpec.addCode(
-            """
+
+        if (!hasRssValueAnnotation) {
+            funSpec.addCode(
+                """
             |while (next() != XmlPullParser.END_TAG) {
-            |if (eventType != XmlPullParser.START_TAG) continue
+            |${TAB}if (eventType != XmlPullParser.START_TAG) continue
             |
-            |when (this.name) {
+            |${TAB}when (this.name) {
             |
-        """.trimMargin()
-        )
-        propertyToParseData.forEach { generateVariableAssignment(it, funSpec) }
-        funSpec.addCode(
-            """
-            |       else -> %M()
-            |  }
+            """.trimMargin()
+            )
+            propertyToParseData.forEach { generateVariableAssignment(it, funSpec) }
+            funSpec.addCode(
+                """
+            |${TAB}${TAB}else -> %M()
+            |${TAB}}
             |}
-            |return $outputClassName(
         """.trimMargin(),
-            skipMemberName
-        )
-        // Generate constructor statements
-        propertyToParseData.forEach {
-            generateConstructor(it, funSpec)
+                skipMemberName
+            )
         }
 
-        funSpec.addStatement(")")
+        funSpec.addStatement("\nreturn $outputClassName(")
+        // Generate constructor statements
+        propertyToParseData.forEach { generateConstructor(it, funSpec) }
+
+        funSpec.addStatement("\t)")
         return funSpec.build()
     }
 
@@ -145,25 +146,30 @@ class ParserGenerator(
         val result = mutableMapOf<String, Any?>()
         rootElement.enclosedElements.forEach { child ->
             if (child.kind != ElementKind.METHOD
-                || !child.simpleName.startsWith(GET_PREFIX)
+                || !child.simpleName.isGetterMethod()
                 || !child.simpleName.contains(ANNOTATION_SIGN)
             ) return@forEach
 
-            // Extract name which is started with 'get' (length = 3).
-            // The child simple name example: getList$annotations
-            val nameFromMethod = child.simpleName.substring(3)
-                .decapitalize(Locale.ROOT)
-                .substringBeforeLast('$')
+            val nameFromMethod = child.simpleName.extractNameFromMethod()
 
+            val rssValue: RssValue? = child.getAnnotation(RssValue::class.java)
             val rssTag: RssTag? = child.getAnnotation(RssTag::class.java)
             val rssAttribute: RssAttribute? = child.getAnnotation(RssAttribute::class.java)
             val rssRawData: RssRawData? = child.getAnnotation(RssRawData::class.java)
             val nonNullCount = listOf<Any?>(rssTag, rssAttribute, rssRawData).count { it != null }
-            if (nonNullCount > 1) {
-                logger.error("You can't annotate more than one annotation at a field or property!", child)
+            val attributeValueCount = listOf<Any?>(rssAttribute, rssValue).count { it != null }
+            if (nonNullCount > 1 || attributeValueCount > 1) {
+                logger.error(
+                    "You can't annotate more than one annotation at a field or property!",
+                    child
+                )
             }
 
-            result[nameFromMethod] = rssTag ?: rssAttribute ?: rssRawData
+            result[nameFromMethod] = rssValue ?: rssTag ?: rssAttribute ?: rssRawData
+
+            if (rssValue != null) {
+                hasRssValueAnnotation = true
+            }
         }
         return result
     }
@@ -174,13 +180,11 @@ class ParserGenerator(
         nameToAnnotation: Map<String, Any?>
     ) {
         if (child.kind != ElementKind.METHOD
-            || !child.simpleName.startsWith(GET_PREFIX)
+            || !child.simpleName.isGetterMethod()
             || child.simpleName.contains(ANNOTATION_SIGN)
         ) return
 
-        // Extract name which is started with 'get' (length = 3).
-        // The child simple name example: getList$annotations
-        val nameFromMethod = child.simpleName.substring(3).decapitalize(Locale.ROOT)
+        val nameFromMethod = child.simpleName.extractNameFromMethod()
         val exeElement = child as? ExecutableElement ?: return
         val rawType = exeElement.returnType.toString()
         val type: String?
@@ -199,8 +203,10 @@ class ParserGenerator(
             dataType = DataType.LIST
         } else {
             type = rawType.extractType()
+            val annotation = nameToAnnotation[nameFromMethod]
             dataType = when {
-                nameToAnnotation[nameFromMethod] is RssAttribute -> DataType.ATTRIBUTE
+                annotation is RssValue -> DataType.VALUE
+                annotation is RssAttribute -> DataType.ATTRIBUTE
                 rawType.isPrimitive() -> DataType.PRIMITIVE
                 else -> DataType.OTHER
             }
@@ -235,12 +241,18 @@ class ParserGenerator(
                     val kClass = itemType.getKPrimitiveClass() ?: return
 
                     data.tagCandidates.forEach { tag ->
-                        funSpec.addStatement("var ${name.getVariableName(tag)}: ArrayList<%T> = arrayListOf()", kClass)
+                        funSpec.addStatement(
+                            "var ${name.getVariableName(tag)}: ArrayList<%T> = arrayListOf()",
+                            kClass
+                        )
                     }
                 } else {
                     val itemClassName = ClassName(packageName, data.listItemType)
                     data.tagCandidates.forEach { tag ->
-                        funSpec.addStatement("var ${name.getVariableName(tag)}: ArrayList<%T> = arrayListOf()", itemClassName)
+                        funSpec.addStatement(
+                            "var ${name.getVariableName(tag)}: ArrayList<%T> = arrayListOf()",
+                            itemClassName
+                        )
                     }
                 }
             }
@@ -256,14 +268,17 @@ class ParserGenerator(
 
                 data.tagCandidates.forEach { tag ->
                     val statement =
-                        "var ${name.getVariableName(tag)}: %1T? = getAttributeValue(null, \"$tag\")"
+                        "var ${name.getVariableName(tag)}: %T? = getAttributeValue(null, \"$tag\")"
                             .appendTypeConversion(type)
-                    if (type == Boolean::class.java.simpleName) {
+                    if (type.equals(Boolean::class.java.simpleName, ignoreCase = true)) {
                         funSpec.addStatement(statement, kClass, booleanConversionMemberName)
                     } else {
                         funSpec.addStatement(statement, kClass)
                     }
                 }
+            }
+            DataType.VALUE -> {
+                // Do nothing
             }
             else -> {
                 val className = ClassName(packageName, type)
@@ -303,10 +318,13 @@ class ParserGenerator(
 
                 data.tagCandidates.forEach { tag ->
                     val variableName = name.getVariableName(tag)
-                    funSpec.addPrimitiveStatement("\t\t\"$tag\" -> $variableName = %1M(\"$tag\")", type)
+                    funSpec.addPrimitiveStatement(
+                        "\t\t\"$tag\" -> $variableName = %1M(\"$tag\")",
+                        type
+                    )
                 }
             }
-            DataType.ATTRIBUTE -> {
+            DataType.ATTRIBUTE, DataType.VALUE -> {
                 // Do nothing.
             }
             else -> {
@@ -314,7 +332,10 @@ class ParserGenerator(
 
                 data.tagCandidates.forEach { tag ->
                     val memberName = MemberName(type.getGeneratedClassPath(), tag.getFuncName())
-                    funSpec.addStatement("\t\t\"$tag\" -> ${name.getVariableName(tag)} = %M()", memberName)
+                    funSpec.addStatement(
+                        "\t\t\"$tag\" -> ${name.getVariableName(tag)} = %M()",
+                        memberName
+                    )
                 }
             }
         }
@@ -327,6 +348,19 @@ class ParserGenerator(
         val stringBuilder = StringBuilder()
         val dataType = parseData.value.dataType
         val tags = parseData.value.tagCandidates
+
+        if (dataType == DataType.VALUE) {
+            val name = parseData.key
+            val type = parseData.value.type ?: return
+            val statement = "\t\t$name = %M(\"$rootTagName\")".appendTypeConversion(type)
+            if (type.equals(Boolean::class.java.simpleName, ignoreCase = true)) {
+                funSpec.addStatement(statement, readStringMemberName, booleanConversionMemberName)
+            } else {
+                funSpec.addStatement(statement, readStringMemberName)
+            }
+            return
+        }
+
         tags.forEachIndexed { index, tag ->
             val variableName = parseData.key.getVariableName(tag)
             if (stringBuilder.isEmpty()) {
@@ -343,7 +377,7 @@ class ParserGenerator(
                 }
             }
         }
-        funSpec.addStatement("\t${parseData.key} = $stringBuilder,")
+        funSpec.addStatement("\t\t${parseData.key} = $stringBuilder,")
     }
 
     private fun getTagCandidates(
@@ -371,6 +405,9 @@ class ParserGenerator(
                 val tag = annotation.name.takeIfNotEmpty() ?: nameFromMethod
                 listOf(tag)
             }
+            is RssValue -> {
+                listOf(nameFromMethod)
+            }
             is RssRawData -> {
                 if (annotation.rawTags.isEmpty()) {
                     logger.error("You have to put raw tags into @RssRawData!", element)
@@ -383,14 +420,6 @@ class ParserGenerator(
         }
     }
 
-    private fun String.getVariableName(tag: String): String {
-        return when {
-            tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.capitalize(Locale.ROOT)}"
-            tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.capitalize(Locale.ROOT)}"
-            else -> this
-        }
-    }
-
     private fun FunSpec.Builder.addPrimitiveStatement(
         readStringStatement: String,
         typeString: String
@@ -400,17 +429,6 @@ class ParserGenerator(
             addStatement(statement, readStringMemberName, booleanConversionMemberName)
         } else {
             addStatement(statement, readStringMemberName)
-        }
-    }
-
-    private fun String.appendTypeConversion(typeString: String): String {
-        return when {
-            typeString.contains(String::class.java.simpleName, ignoreCase = true) -> this
-            typeString.contains(Integer::class.java.simpleName, ignoreCase = true) -> "$this?.toIntOrNull()"
-            typeString.contains(Boolean::class.java.simpleName, ignoreCase = true) -> "$this?.%2M()"
-            typeString.contains(Long::class.java.simpleName, ignoreCase = true) -> "$this?.toLongOrNull()"
-            typeString.contains(Short::class.java.simpleName, ignoreCase = true) -> "$this?.toShortOrNull()"
-            else -> this
         }
     }
 }

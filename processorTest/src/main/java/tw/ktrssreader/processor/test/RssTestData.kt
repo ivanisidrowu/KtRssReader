@@ -16,21 +16,25 @@
 
 package tw.ktrssreader.processor.test
 
+import tw.ktrssreader.annotation.RssAttribute
 import tw.ktrssreader.annotation.RssTag
+import tw.ktrssreader.annotation.RssValue
 import java.io.Serializable
 
 @RssTag(name = "channel")
-data class RssData(
+data class RssTestData(
     val title: String?,
+    @RssTag
     val link: String?,
     val textInput: MyTextInput?,
     @RssTag(name = "item")
     val list: List<RssItem>,
     @RssTag(name = "category")
-    val categories: List<String>,
+    val categories: List<TestCategory>,
     val skipDays: SkipDays?,
     val ttl: Long?,
     val image: TestImage?,
+    val cloud: TestCloud?,
 ): Serializable
 
 @RssTag(name = "textInput")
@@ -43,6 +47,7 @@ data class MyTextInput(
 data class RssItem(
     val title: String?,
     val author: String?,
+    val guid: TestGuid?
 ): Serializable
 
 @RssTag(name = "image")
@@ -51,10 +56,34 @@ data class TestImage(
     val title: String?,
     val height: Int?,
     val width: Int?
-)
+): Serializable
 
 @RssTag(name = "skipDays")
 data class SkipDays(
     @RssTag(name = "day")
     val days: List<String>,
-)
+): Serializable
+
+@RssTag(name = "cloud")
+data class TestCloud(
+    @RssAttribute
+    val domain: String?,
+    @RssAttribute(name = "port")
+    val testPort: Int?,
+    @RssAttribute(name = "path")
+    val path: String?
+): Serializable
+
+@RssTag(name = "guid")
+data class TestGuid(
+    @RssAttribute
+    val isPermaLink: Boolean?
+): Serializable
+
+@RssTag(name = "category")
+data class TestCategory(
+    @RssAttribute
+    val domain: String?,
+    @RssValue
+    val categoryValue: String?
+): Serializable

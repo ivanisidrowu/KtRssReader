@@ -21,6 +21,7 @@ const val PARSER_SUFFIX = "Parser"
 const val PARSER_FUNC_NAME = "parse"
 const val GENERATOR_PACKAGE = "tw.ktrssreader.generated"
 const val GET_PREFIX = "get"
+const val IS_PREFIX = "is"
 const val ANNOTATION_SIGN = "\$annotations"
 const val EXTENSION_NAME = "ParserExtensions"
 const val READER_NAME = "Reader"
@@ -38,3 +39,5 @@ const val METHOD_CO_READ = "coRead"
 
 const val ITUNES_PREFIX = "itunes"
 const val GOOGLE_PREFIX = "googleplay"
+
+const val TAB = '\t'

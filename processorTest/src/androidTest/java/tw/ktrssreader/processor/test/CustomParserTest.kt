@@ -17,37 +17,36 @@
 package tw.ktrssreader.processor.test
 
 import org.junit.Test
-import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import tw.ktrssreader.generated.RssDataParser
+import tw.ktrssreader.generated.RssTestDataParser
 import tw.ktrssreader.processor.test.data.TestData
 import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
 
-@RunWith(Enclosed::class)
-class RssTagParserTest {
+class CustomParserTest {
 
     @RunWith(Parameterized::class)
     class RssStandardParserParseFunctionTest(
         private val rssFilePath: String,
-        private val expectedChannel: RssData?
+        private val expectedChannel: RssTestData?
     ) {
-        // TODO: More tests.
         companion object {
             @JvmStatic
             @Parameterized.Parameters
             fun getTestingData() = listOf(
-                arrayOf("RSS/rss_v2_full.xml", TestData.RSS_DATA),
+                arrayOf("${RSS_FOLDER}/rss_v2_full.xml", TestData.RSS_DATA),
+                arrayOf("${RSS_FOLDER}/rss_v2_has_non_channel_attrs.xml", TestData.RSS_DATA),
+                arrayOf("${RSS_FOLDER}/rss_v2_has_non_channel_attrs_follow_behind.xml", TestData.RSS_DATA),
+                arrayOf("${RSS_FOLDER}/rss_v2_has_non_item_attrs.xml", TestData.RSS_DATA),
+                arrayOf("${RSS_FOLDER}/rss_v2_has_non_item_attrs_follow_behind.xml", TestData.RSS_DATA),
             )
         }
-
-        private val rssStandardParser: RssDataParser = RssDataParser
 
         @Test
         fun parse() {
             val xml = XmlFileReader.readFile(rssFilePath)
-            val actualChannel = rssStandardParser.parse(xml)
+            val actualChannel = RssTestDataParser.parse(xml)
 
             actualChannel shouldBe expectedChannel
         }
