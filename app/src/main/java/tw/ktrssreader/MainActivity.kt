@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.activity_main.*
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tw.ktrssreader.generated.RssDataReader
 import tw.ktrssreader.model.channel.AutoMixChannelData
 import tw.ktrssreader.model.channel.GoogleChannelData
 import tw.ktrssreader.model.channel.ITunesChannelData
@@ -46,10 +48,16 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    enum class RssType {
+        Standard, ITunes, GooglePlay, AutoMix, Custom
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        spinner.adapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, RssType.values())
 
         etRss.setText(DEFAULT_RSS_URL)
         etCharset.setText(DEFAULT_CHARSET)
@@ -75,27 +83,33 @@ class MainActivity : AppCompatActivity() {
 
         thread {
             try {
-                val channel = when {
-                    rbRssStandard.isChecked -> {
+                val channel = when (spinner.selectedItem) {
+                    RssType.Standard -> {
                         Reader.read<RssStandardChannelData>(etRss.text.toString()) {
                             useCache = rbCacheYes.isChecked
                             charset = Charset.forName(etCharset.text.toString())
                         }
                     }
-                    rbRssItunes.isChecked -> {
+                    RssType.ITunes -> {
                         Reader.read<ITunesChannelData>(etRss.text.toString()) {
                             useCache = rbCacheYes.isChecked
                             charset = Charset.forName(etCharset.text.toString())
                         }
                     }
-                    rbRssGooglePlay.isChecked -> {
+                    RssType.GooglePlay -> {
                         Reader.read<GoogleChannelData>(etRss.text.toString()) {
                             useCache = rbCacheYes.isChecked
                             charset = Charset.forName(etCharset.text.toString())
                         }
                     }
-                    rbRssAutoMix.isChecked -> {
+                    RssType.AutoMix -> {
                         Reader.read<AutoMixChannelData>(etRss.text.toString()) {
+                            useCache = rbCacheYes.isChecked
+                            charset = Charset.forName(etCharset.text.toString())
+                        }
+                    }
+                    RssType.Custom -> {
+                        RssDataReader.read(etRss.text.toString()) {
                             useCache = rbCacheYes.isChecked
                             charset = Charset.forName(etCharset.text.toString())
                         }
@@ -124,27 +138,33 @@ class MainActivity : AppCompatActivity() {
 
             try {
                 val channel = withContext(Dispatchers.IO) {
-                    when {
-                        rbRssStandard.isChecked -> {
+                    when (spinner.selectedItem) {
+                        RssType.Standard -> {
                             Reader.coRead<RssStandardChannelData>(etRss.text.toString()) {
                                 useCache = rbCacheYes.isChecked
                                 charset = Charset.forName(etCharset.text.toString())
                             }
                         }
-                        rbRssItunes.isChecked -> {
+                        RssType.ITunes -> {
                             Reader.coRead<ITunesChannelData>(etRss.text.toString()) {
                                 useCache = rbCacheYes.isChecked
                                 charset = Charset.forName(etCharset.text.toString())
                             }
                         }
-                        rbRssGooglePlay.isChecked -> {
+                        RssType.GooglePlay -> {
                             Reader.coRead<GoogleChannelData>(etRss.text.toString()) {
                                 useCache = rbCacheYes.isChecked
                                 charset = Charset.forName(etCharset.text.toString())
                             }
                         }
-                        rbRssAutoMix.isChecked -> {
+                        RssType.AutoMix -> {
                             Reader.coRead<AutoMixChannelData>(etRss.text.toString()) {
+                                useCache = rbCacheYes.isChecked
+                                charset = Charset.forName(etCharset.text.toString())
+                            }
+                        }
+                        RssType.Custom -> {
+                            RssDataReader.coRead(etRss.text.toString()) {
                                 useCache = rbCacheYes.isChecked
                                 charset = Charset.forName(etCharset.text.toString())
                             }
@@ -165,27 +185,33 @@ class MainActivity : AppCompatActivity() {
 
     private fun flowRead() {
         lifecycleScope.launch {
-            val flowChannel = when {
-                rbRssStandard.isChecked -> {
+            val flowChannel = when (spinner.selectedItem) {
+                RssType.Standard -> {
                     Reader.flowRead<RssStandardChannelData>(etRss.text.toString()) {
                         useCache = rbCacheYes.isChecked
                         charset = Charset.forName(etCharset.text.toString())
                     }
                 }
-                rbRssItunes.isChecked -> {
+                RssType.ITunes -> {
                     Reader.flowRead<ITunesChannelData>(etRss.text.toString()) {
                         useCache = rbCacheYes.isChecked
                         charset = Charset.forName(etCharset.text.toString())
                     }
                 }
-                rbRssGooglePlay.isChecked -> {
+                RssType.GooglePlay -> {
                     Reader.flowRead<GoogleChannelData>(etRss.text.toString()) {
                         useCache = rbCacheYes.isChecked
                         charset = Charset.forName(etCharset.text.toString())
                     }
                 }
-                rbRssAutoMix.isChecked -> {
+                RssType.AutoMix -> {
                     Reader.flowRead<AutoMixChannelData>(etRss.text.toString()) {
+                        useCache = rbCacheYes.isChecked
+                        charset = Charset.forName(etCharset.text.toString())
+                    }
+                }
+                RssType.Custom -> {
+                    RssDataReader.flowRead(etRss.text.toString()) {
                         useCache = rbCacheYes.isChecked
                         charset = Charset.forName(etCharset.text.toString())
                     }
