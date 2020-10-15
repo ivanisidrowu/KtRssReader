@@ -27,7 +27,7 @@ import tw.ktrssreader.test.common.shouldBe
 class CustomParserTest {
 
     @RunWith(Parameterized::class)
-    class RssStandardParserParseFunctionTest(
+    class CustomParserParseFunctionTest(
         private val rssFilePath: String,
         private val expectedChannel: TestRssData?
     ) {
