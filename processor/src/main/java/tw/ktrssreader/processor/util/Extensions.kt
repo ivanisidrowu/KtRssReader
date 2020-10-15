@@ -104,7 +104,7 @@ fun Name.extractNameFromMethod(): String {
     val withoutPrefix = if (startsWith(GET_PREFIX)) {
         // Extract name which is started with 'get' (length = 3).
         // The example: getList$annotations
-        substring(3)
+        substring(GET_PREFIX.length)
     } else {
         // If the name is started with 'is', we preserve it.
         // The example: isList$annotations

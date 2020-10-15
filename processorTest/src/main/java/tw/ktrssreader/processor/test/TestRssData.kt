@@ -22,7 +22,7 @@ import tw.ktrssreader.annotation.RssValue
 import java.io.Serializable
 
 @RssTag(name = "channel")
-data class RssTestData(
+data class TestRssData(
     val title: String?,
     @RssTag
     val link: String?,

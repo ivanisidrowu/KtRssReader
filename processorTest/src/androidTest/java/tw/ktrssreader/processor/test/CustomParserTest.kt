@@ -19,7 +19,7 @@ package tw.ktrssreader.processor.test
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import tw.ktrssreader.generated.RssTestDataParser
+import tw.ktrssreader.generated.TestRssDataParser
 import tw.ktrssreader.processor.test.data.TestData
 import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
@@ -29,7 +29,7 @@ class CustomParserTest {
     @RunWith(Parameterized::class)
     class RssStandardParserParseFunctionTest(
         private val rssFilePath: String,
-        private val expectedChannel: RssTestData?
+        private val expectedChannel: TestRssData?
     ) {
         companion object {
             @JvmStatic
@@ -46,7 +46,7 @@ class CustomParserTest {
         @Test
         fun parse() {
             val xml = XmlFileReader.readFile(rssFilePath)
-            val actualChannel = RssTestDataParser.parse(xml)
+            val actualChannel = TestRssDataParser.parse(xml)
 
             actualChannel shouldBe expectedChannel
         }

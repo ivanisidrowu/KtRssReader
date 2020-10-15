@@ -20,7 +20,7 @@ import tw.ktrssreader.processor.test.*
 
 class TestData {
     companion object {
-        val RSS_DATA: RssTestData  = RssTestData(
+        val RSS_DATA: TestRssData  = TestRssData(
             title = "channel title",
             link = "http://channel.link",
             textInput = MyTextInput(title = "channel textInput title", name = "channel textInput name"),
