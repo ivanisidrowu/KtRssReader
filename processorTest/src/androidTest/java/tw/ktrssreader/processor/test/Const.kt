@@ -17,3 +17,4 @@
 package tw.ktrssreader.processor.test
 
 const val RSS_FOLDER = "RSS"
+const val MIX_FOLDER = "AutoMix"

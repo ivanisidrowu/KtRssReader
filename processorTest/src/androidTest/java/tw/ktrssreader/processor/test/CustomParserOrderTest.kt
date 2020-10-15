@@ -19,23 +19,33 @@ package tw.ktrssreader.processor.test
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import tw.ktrssreader.generated.RssMixDataParser
+import tw.ktrssreader.generated.MixRssDataParser
+import tw.ktrssreader.processor.test.data.TestData
 import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
 
 class CustomParserOrderTest {
 
     @RunWith(Parameterized::class)
-    class RssStandardParserParseFunctionTest(
+    class CustomParserParseFunctionTest(
         private val rssFilePath: String,
-        private val expectedChannel: RssMixData?
+        private val expectedChannel: MixRssData?
     ) {
-        // TODO: More tests
-
+        companion object {
+            @JvmStatic
+            @Parameterized.Parameters
+            fun getTestingData() = listOf(
+                arrayOf("$MIX_FOLDER/rss_v2_itunes_google_full.xml", TestData.MIX_RSS_DATA_1),
+                arrayOf("$MIX_FOLDER/rss_v2_itunes_google_category_no_ordering.xml", TestData.MIX_RSS_DATA_1),
+                arrayOf("$MIX_FOLDER/rss_v2_itunes_google_nested_itunes_category.xml", TestData.MIX_RSS_DATA_2),
+                arrayOf("$MIX_FOLDER/rss_v2_itunes_google_without_items.xml", TestData.MIX_RSS_DATA_3),
+                arrayOf("$MIX_FOLDER/rss_v2_itunes_google_without_itunes_attrs.xml", TestData.MIX_RSS_DATA_4),
+            )
+        }
         @Test
         fun parse() {
             val xml = XmlFileReader.readFile(rssFilePath)
-            val actualChannel = RssMixDataParser.parse(xml)
+            val actualChannel = MixRssDataParser.parse(xml)
 
             actualChannel shouldBe expectedChannel
         }
