@@ -16,45 +16,54 @@
 
 package tw.ktrssreader.processor.test
 
+import tw.ktrssreader.annotation.OrderType
+import tw.ktrssreader.annotation.RssAttribute
 import tw.ktrssreader.annotation.RssTag
 import java.io.Serializable
 
 @RssTag(name = "channel")
-data class RssData(
+data class RssMixData(
     val title: String?,
+    @RssTag
     val link: String?,
-    val textInput: MyTextInput?,
+    val textInput: MixTextInput?,
     @RssTag(name = "item")
-    val list: List<RssItem>,
-    @RssTag(name = "category")
+    val list: List<RssMixItem>,
+    @RssTag(name = "category", order = [OrderType.ITUNES, OrderType.GOOGLE, OrderType.RSS_STANDARD])
     val categories: List<String>,
-    val skipDays: SkipDays?,
     val ttl: Long?,
-    val image: TestImage?,
+    val image: MixImage?,
+    val cloud: MixCloud?,
 ): Serializable
 
 @RssTag(name = "textInput")
-data class MyTextInput(
+data class MixTextInput(
     val title: String?,
     val name: String?
 ): Serializable
 
 @RssTag(name = "item")
-data class RssItem(
+data class RssMixItem(
+    @RssTag(order = [OrderType.ITUNES, OrderType.RSS_STANDARD, OrderType.GOOGLE])
     val title: String?,
+    @RssTag(order = [OrderType.GOOGLE, OrderType.ITUNES, OrderType.RSS_STANDARD])
     val author: String?,
 ): Serializable
 
 @RssTag(name = "image")
-data class TestImage(
+data class MixImage(
     val link: String?,
     val title: String?,
     val height: Int?,
     val width: Int?
 )
 
-@RssTag(name = "skipDays")
-data class SkipDays(
-    @RssTag(name = "day")
-    val days: List<String>,
+@RssTag(name = "cloud")
+data class MixCloud(
+    @RssAttribute
+    val domain: String?,
+    @RssAttribute(name = "testPort")
+    val testPort: Int?,
+    @RssAttribute(name = "path")
+    val path: String?
 )

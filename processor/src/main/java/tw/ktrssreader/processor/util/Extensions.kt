@@ -16,13 +16,11 @@
 
 package tw.ktrssreader.processor.util
 
-import tw.ktrssreader.processor.const.GENERATOR_PACKAGE
-import tw.ktrssreader.processor.const.GOOGLE_PREFIX
-import tw.ktrssreader.processor.const.ITUNES_PREFIX
-import tw.ktrssreader.processor.const.PARSER_SUFFIX
+import tw.ktrssreader.processor.const.*
 import java.util.*
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
+import javax.lang.model.element.Name
 import javax.lang.model.element.PackageElement
 import kotlin.reflect.KClass
 
@@ -82,3 +80,43 @@ fun Element.getPackage(): String {
 
     return (thisElement as PackageElement).qualifiedName.toString()
 }
+
+fun String.getVariableName(tag: String): String {
+    return when {
+        tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.capitalize(Locale.ROOT)}"
+        tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.capitalize(Locale.ROOT)}"
+        else -> this
+    }
+}
+
+fun String.appendTypeConversion(typeString: String): String {
+    return when {
+        typeString.contains(String::class.java.simpleName, ignoreCase = true) -> this
+        typeString.contains(Integer::class.java.simpleName, ignoreCase = true) -> "$this?.toIntOrNull()"
+        typeString.contains(Boolean::class.java.simpleName, ignoreCase = true) -> "$this?.%M()"
+        typeString.contains(Long::class.java.simpleName, ignoreCase = true) -> "$this?.toLongOrNull()"
+        typeString.contains(Short::class.java.simpleName, ignoreCase = true) -> "$this?.toShortOrNull()"
+        else -> this
+    }
+}
+
+fun Name.extractNameFromMethod(): String {
+    val withoutPrefix = if (startsWith(GET_PREFIX)) {
+        // Extract name which is started with 'get' (length = 3).
+        // The example: getList$annotations
+        substring(GET_PREFIX.length)
+    } else {
+        // If the name is started with 'is', we preserve it.
+        // The example: isList$annotations
+        this.toString()
+    }
+
+    return withoutPrefix
+        .decapitalize(Locale.ROOT)
+        .substringBeforeLast('$')
+}
+
+fun Name.isGetterMethod(): Boolean {
+    return startsWith(GET_PREFIX) || startsWith(IS_PREFIX)
+}
+

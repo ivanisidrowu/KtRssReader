@@ -20,16 +20,23 @@ import tw.ktrssreader.processor.test.*
 
 class TestData {
     companion object {
-        val RSS_DATA: RssData  = RssData(
+        val RSS_DATA: TestRssData  = TestRssData(
             title = "channel title",
             link = "http://channel.link",
             textInput = MyTextInput(title = "channel textInput title", name = "channel textInput name"),
             list = listOf(
-                RssItem(title = "item title - Full", author = "item.author@example.com"),
-                RssItem(title = "item title - Partial", author = null),
-                RssItem(title = null, author = null)
+                RssItem(title = "item title - Full", author = "item.author@example.com", guid = TestGuid(null)),
+                RssItem(title = "item title - Partial", author = null, guid = TestGuid(true)),
+                RssItem(title = null, author = null, guid = null)
             ),
-            categories = listOf("channel category 1", "channel category 2"),
+            categories = listOf(
+                TestCategory(domain = null,
+                    categoryValue = "channel category 1"
+                ),
+                TestCategory(domain = "http://channel.category.domain",
+                    categoryValue = "channel category 2"
+                ),
+            ),
             skipDays = SkipDays(listOf("Saturday", "Sunday")),
             ttl = 60L,
             image = TestImage(
@@ -37,7 +44,8 @@ class TestData {
                 title = "channel image title",
                 height = 32,
                 width = 96
-            )
+            ),
+            cloud = TestCloud(domain = "channel.cloud.domain", testPort = 80, path = "/RPC2")
         )
     }
 }

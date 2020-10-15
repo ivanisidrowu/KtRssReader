@@ -49,11 +49,11 @@ class ExtensionGenerator(
                 """
                 |
                 |%1T(xml.toByteArray()).use { inputStream ->
-                |    return %2T.newPullParser().apply {
-                |        setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-                |        setInput(inputStream, null)
-                |        nextTag()
-                |    }
+                |${TAB}return %2T.newPullParser().apply {
+                |${TAB}${TAB}setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+                |${TAB}${TAB}setInput(inputStream, null)
+                |${TAB}${TAB}nextTag()
+                |${TAB}}
                 |}
                 |
                 """.trimMargin(),
@@ -73,11 +73,11 @@ class ExtensionGenerator(
             |if (next() == XmlPullParser.TEXT) {
             |content = text
             |nextTag()
-            |    if (eventType != XmlPullParser.END_TAG) {
-            |      skip()
-            |      nextTag()
-            |      content = null
-            |    }
+            |${TAB}if (eventType != XmlPullParser.END_TAG) {
+            |${TAB}${TAB}skip()
+            |${TAB}${TAB}nextTag()
+            |${TAB}${TAB}content = null
+            |${TAB}}
             |}
             |require(XmlPullParser.END_TAG, null, tagName)
             |return content
@@ -91,14 +91,14 @@ class ExtensionGenerator(
         .addCode(
             """
             |if (eventType != XmlPullParser.START_TAG) {
-            |  throw IllegalStateException()
+            |${TAB}throw IllegalStateException()
             |}
             |var depth = 1
             |while (depth != 0) {
-            |    when (next()) {
-            |        XmlPullParser.END_TAG -> depth--
-            |        XmlPullParser.START_TAG -> depth++
-            |    }
+            |${TAB}when (next()) {
+            |${TAB}${TAB}XmlPullParser.END_TAG -> depth--
+            |${TAB}${TAB}XmlPullParser.START_TAG -> depth++
+            |${TAB}}
             |}
             """.trimMargin()
         )
@@ -109,11 +109,9 @@ class ExtensionGenerator(
         .addCode(
             """
             |return when (toLowerCase()) {
-            |    "true" -> true
-            |    "false" -> false
-            |    "yes" -> true
-            |    "no" -> false
-            |    else -> null
+            |${TAB}"true", "yes" -> true
+            |${TAB}"no", "false" -> false
+            |${TAB}else -> null
             |}
         """.trimMargin()
         )

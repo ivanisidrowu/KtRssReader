@@ -20,6 +20,7 @@ import com.google.auto.service.AutoService
 import tw.ktrssreader.annotation.RssAttribute
 import tw.ktrssreader.annotation.RssRawData
 import tw.ktrssreader.annotation.RssTag
+import tw.ktrssreader.annotation.RssValue
 import tw.ktrssreader.processor.const.CHANNEL
 import tw.ktrssreader.processor.generator.ExtensionGenerator
 import tw.ktrssreader.processor.generator.ParserGenerator
@@ -47,7 +48,8 @@ class RssAnnotationProcessor : AbstractProcessor() {
         return mutableSetOf(
             RssTag::class.java.canonicalName,
             RssRawData::class.java.canonicalName,
-            RssAttribute::class.java.canonicalName
+            RssAttribute::class.java.canonicalName,
+            RssValue::class.java.canonicalName
         )
     }
 

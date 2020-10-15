@@ -33,4 +33,8 @@ annotation class RssAttribute(val name: String = "")
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.SOURCE)
+annotation class RssValue
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.SOURCE)
 annotation class RssRawData(val rawTags: Array<String>)
