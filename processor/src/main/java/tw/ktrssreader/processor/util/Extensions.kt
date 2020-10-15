@@ -120,3 +120,4 @@ fun Name.isGetterMethod(): Boolean {
     return startsWith(GET_PREFIX) || startsWith(IS_PREFIX)
 }
 
+fun String.isBooleanType() = equals(Boolean::class.java.simpleName, ignoreCase = true)

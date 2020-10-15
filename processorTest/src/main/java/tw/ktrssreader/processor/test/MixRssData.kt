@@ -22,32 +22,34 @@ import tw.ktrssreader.annotation.RssTag
 import java.io.Serializable
 
 @RssTag(name = "channel")
-data class RssMixData(
+data class MixRssData(
     val title: String?,
     @RssTag
     val link: String?,
-    val textInput: MixTextInput?,
     @RssTag(name = "item")
-    val list: List<RssMixItem>,
+    val list: List<MixRssItem>,
     @RssTag(name = "category", order = [OrderType.ITUNES, OrderType.GOOGLE, OrderType.RSS_STANDARD])
-    val categories: List<String>,
-    val ttl: Long?,
+    val categories: MixCategory?,
+    @RssTag(order = [OrderType.GOOGLE])
+    val description: String?,
+    @RssTag(order = [OrderType.ITUNES, OrderType.RSS_STANDARD])
     val image: MixImage?,
-    val cloud: MixCloud?,
-): Serializable
-
-@RssTag(name = "textInput")
-data class MixTextInput(
-    val title: String?,
-    val name: String?
 ): Serializable
 
 @RssTag(name = "item")
-data class RssMixItem(
+data class MixRssItem(
     @RssTag(order = [OrderType.ITUNES, OrderType.RSS_STANDARD, OrderType.GOOGLE])
     val title: String?,
     @RssTag(order = [OrderType.GOOGLE, OrderType.ITUNES, OrderType.RSS_STANDARD])
     val author: String?,
+    @RssTag(order = [OrderType.ITUNES, OrderType.GOOGLE])
+    val explicit: Boolean?,
+    @RssTag(order = [OrderType.GOOGLE, OrderType.ITUNES])
+    val block: Boolean?,
+    @RssTag(order = [OrderType.RSS_STANDARD, OrderType.ITUNES, OrderType.GOOGLE])
+    val description: String?,
+    @RssTag(order = [OrderType.ITUNES])
+    val image: MixImage?,
 ): Serializable
 
 @RssTag(name = "image")
@@ -55,15 +57,15 @@ data class MixImage(
     val link: String?,
     val title: String?,
     val height: Int?,
-    val width: Int?
-)
-
-@RssTag(name = "cloud")
-data class MixCloud(
+    val width: Int?,
     @RssAttribute
-    val domain: String?,
-    @RssAttribute(name = "testPort")
-    val testPort: Int?,
-    @RssAttribute(name = "path")
-    val path: String?
-)
+    val href: String?,
+): Serializable
+
+@RssTag(name = "category")
+data class MixCategory(
+    @RssTag(name = "category")
+    val categories: List<MixCategory>,
+    @RssAttribute
+    val text: String?,
+): Serializable

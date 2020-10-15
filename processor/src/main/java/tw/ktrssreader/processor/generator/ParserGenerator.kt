@@ -270,7 +270,7 @@ class ParserGenerator(
                     val statement =
                         "var ${name.getVariableName(tag)}: %T? = getAttributeValue(null, \"$tag\")"
                             .appendTypeConversion(type)
-                    if (type.equals(Boolean::class.java.simpleName, ignoreCase = true)) {
+                    if (type.isBooleanType()) {
                         funSpec.addStatement(statement, kClass, booleanConversionMemberName)
                     } else {
                         funSpec.addStatement(statement, kClass)
@@ -301,7 +301,7 @@ class ParserGenerator(
 
                 if (listItemType.isPrimitive()) {
                     data.tagCandidates.forEach { tag ->
-                        val statement = "$TAB$TAB\"$tag\" -> %1M(\"$tag\")"
+                        val statement = "$TAB$TAB\"$tag\" -> %M(\"$tag\")"
                         funSpec.addPrimitiveStatement(statement, listItemType)
                         funSpec.addStatement("?.let { ${name.getVariableName(tag)}.add(it) }")
                     }
@@ -319,7 +319,7 @@ class ParserGenerator(
                 data.tagCandidates.forEach { tag ->
                     val variableName = name.getVariableName(tag)
                     funSpec.addPrimitiveStatement(
-                        "$TAB$TAB\"$tag\" -> $variableName = %1M(\"$tag\")",
+                        "$TAB$TAB\"$tag\" -> $variableName = %M(\"$tag\")",
                         type
                     )
                 }
@@ -353,7 +353,7 @@ class ParserGenerator(
             val name = parseData.key
             val type = parseData.value.type ?: return
             val statement = "$TAB$TAB$name = %M(\"$rootTagName\")".appendTypeConversion(type)
-            if (type.equals(Boolean::class.java.simpleName, ignoreCase = true)) {
+            if (type.isBooleanType()) {
                 funSpec.addStatement(statement, readStringMemberName, booleanConversionMemberName)
             } else {
                 funSpec.addStatement(statement, readStringMemberName)
@@ -425,7 +425,7 @@ class ParserGenerator(
         typeString: String
     ) {
         val statement = readStringStatement.appendTypeConversion(typeString)
-        if (typeString == Boolean::class.java.simpleName) {
+        if (typeString.isBooleanType()) {
             addStatement(statement, readStringMemberName, booleanConversionMemberName)
         } else {
             addStatement(statement, readStringMemberName)
