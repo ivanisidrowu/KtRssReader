@@ -248,6 +248,12 @@ class MainActivity : AppCompatActivity() {
                         charset = Charset.forName(etCharset.text.toString())
                     }
                 }
+                RssType.CustomWithRawData -> {
+                    RssRawDataReader.flowRead(etRss.text.toString()) {
+                        useCache = rbCacheYes.isChecked
+                        charset = Charset.forName(etCharset.text.toString())
+                    }
+                }
                 RssType.CustomWithOrder -> {
                     RssOrderDataReader.flowRead(etRss.text.toString()) {
                         useCache = rbCacheYes.isChecked
