@@ -86,7 +86,7 @@ import java.io.IOException
 
 class AutoMixParser : ParserBase<AutoMixChannelData>() {
 
-    private val rssStandardMap = HashMap<String, Any?>(19)
+    private val rssStandardMap = HashMap<String, Any?>(20)
     private val iTunesMap = HashMap<String, Any?>(11)
     private val googlePlayMap = HashMap<String, Any?>(8)
 

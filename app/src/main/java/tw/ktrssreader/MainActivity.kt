@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tw.ktrssreader.generated.RssDataReader
+import tw.ktrssreader.generated.RssOrderDataReader
+import tw.ktrssreader.generated.RssRawDataReader
 import tw.ktrssreader.model.channel.AutoMixChannelData
 import tw.ktrssreader.model.channel.GoogleChannelData
 import tw.ktrssreader.model.channel.ITunesChannelData
@@ -49,7 +51,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     enum class RssType {
-        Standard, ITunes, GooglePlay, AutoMix, Custom
+        Standard,
+        ITunes,
+        GooglePlay,
+        AutoMix,
+        Custom,
+        CustomWithRawData,
+        CustomWithOrder,
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,6 +122,18 @@ class MainActivity : AppCompatActivity() {
                             charset = Charset.forName(etCharset.text.toString())
                         }
                     }
+                    RssType.CustomWithRawData -> {
+                        RssRawDataReader.read(etRss.text.toString()) {
+                            useCache = rbCacheYes.isChecked
+                            charset = Charset.forName(etCharset.text.toString())
+                        }
+                    }
+                    RssType.CustomWithOrder -> {
+                        RssOrderDataReader.read(etRss.text.toString()) {
+                            useCache = rbCacheYes.isChecked
+                            charset = Charset.forName(etCharset.text.toString())
+                        }
+                    }
                     else -> error("Invalid item was checked!")
                 }
 
@@ -169,6 +189,18 @@ class MainActivity : AppCompatActivity() {
                                 charset = Charset.forName(etCharset.text.toString())
                             }
                         }
+                        RssType.CustomWithRawData -> {
+                            RssRawDataReader.coRead(etRss.text.toString()) {
+                                useCache = rbCacheYes.isChecked
+                                charset = Charset.forName(etCharset.text.toString())
+                            }
+                        }
+                        RssType.CustomWithOrder -> {
+                            RssOrderDataReader.coRead(etRss.text.toString()) {
+                                useCache = rbCacheYes.isChecked
+                                charset = Charset.forName(etCharset.text.toString())
+                            }
+                        }
                         else -> error("Invalid item was checked!")
                     }
                 }
@@ -212,6 +244,18 @@ class MainActivity : AppCompatActivity() {
                 }
                 RssType.Custom -> {
                     RssDataReader.flowRead(etRss.text.toString()) {
+                        useCache = rbCacheYes.isChecked
+                        charset = Charset.forName(etCharset.text.toString())
+                    }
+                }
+                RssType.CustomWithRawData -> {
+                    RssRawDataReader.flowRead(etRss.text.toString()) {
+                        useCache = rbCacheYes.isChecked
+                        charset = Charset.forName(etCharset.text.toString())
+                    }
+                }
+                RssType.CustomWithOrder -> {
+                    RssOrderDataReader.flowRead(etRss.text.toString()) {
                         useCache = rbCacheYes.isChecked
                         charset = Charset.forName(etCharset.text.toString())
                     }
