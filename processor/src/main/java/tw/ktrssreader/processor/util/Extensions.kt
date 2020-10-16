@@ -82,10 +82,11 @@ fun Element.getPackage(): String {
 }
 
 fun String.getVariableName(tag: String): String {
+    val tagCapitalized = tag.substringAfterLast(':').capitalize(Locale.ROOT)
     return when {
-        tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.capitalize(Locale.ROOT)}"
-        tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.capitalize(Locale.ROOT)}"
-        else -> this
+        tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.capitalize(Locale.ROOT)}$tagCapitalized"
+        tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.capitalize(Locale.ROOT)}$tagCapitalized"
+        else -> "$this$tagCapitalized"
     }
 }
 
