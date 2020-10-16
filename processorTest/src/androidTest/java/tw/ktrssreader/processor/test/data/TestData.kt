@@ -219,5 +219,54 @@ class TestData {
                 href = null
             )
         )
+        val RAW_RSS_DATA_1: RawRssData = RawRssData(
+            author = "channel author - google play",
+            owner = RawOwner(
+                name = "channel owner name - iTunes",
+                email = "channel.owner.email.itunes@example.com"
+            ),
+            list = listOf(
+                RawRssItem(
+                    info = "item author - iTunes",
+                    link = "http://item.link",
+                    enclosure = RawEnclosure(
+                        length = 24986239,
+                        url = "http://item.enclosure.url/item.mp3"
+                    ),
+                    explicit = true
+                ),
+                RawRssItem(
+                    info = "item author - iTunes",
+                    link = "http://item.link",
+                    enclosure = RawEnclosure(
+                        length = 24986239,
+                        url = "http://item.enclosure.url/item.mp3"
+                    ),
+                    explicit = true
+                ),
+                RawRssItem(
+                    info = "item title - Partial",
+                    link = "http://item.link",
+                    enclosure = RawEnclosure(
+                        length = 24986239,
+                        url = "http://item.enclosure.url/item.mp3"
+                    ),
+                    explicit = true
+                ),
+            )
+        )
+        val RAW_RSS_DATA_2: RawRssData = RawRssData(
+            author = "channel author - google play",
+            owner = RawOwner(
+                name = "channel owner name - iTunes",
+                email = "channel.owner.email.itunes@example.com"
+            ),
+            list = listOf()
+        )
+        val RAW_RSS_DATA_3: RawRssData = RawRssData(
+            author = "channel author - google play",
+            owner = null,
+            list = listOf()
+        )
     }
 }
