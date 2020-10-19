@@ -154,7 +154,7 @@ Class example:
 ```kotlin
 @RssTag(name = "channel")
 data class RawRssData(
-    @RssRawData(["googleplay:author", "itunes:author"])
+    @RssRawData(rawTags = ["googleplay:author", "itunes:author"])
     val author: String?,
     val title: String?,
 ): Serializable
