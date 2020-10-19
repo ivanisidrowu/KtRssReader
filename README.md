@@ -30,7 +30,7 @@ Then, add this dependency to the `build.gradle` file in app directory.
 
 ```gradle
 dependencies {
-  implemetation "com.github.ivanisidrowu:KtRssReader:v2.0.0"
+  implementation "com.github.ivanisidrowu:KtRssReader:v2.0.0"
 }
 ```
 
