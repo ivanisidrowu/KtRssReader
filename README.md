@@ -224,6 +224,14 @@ PodcastChannelReader.flowRead(rssSource)
 val coResult: PodcastChannel = PodcastChannelReader.coRead(rss)
 ```
 
+### Clear Cache
+
+Clear all cache in the database.
+
+```kotlin
+Reader.clearCache()
+```
+
 ## Config
 
 ### Global Config
@@ -256,7 +264,7 @@ val result: ITunesChannelData = Reader.read<ITunesChannelData>(rssSource) {
 
 * `charset`: Specify an encoding charset, if it's not set, it will use the charset from the RSS source.
 * `useCache`: Pull data from cache or remote server. The default setting is set to true.
-* `clearCache`: Clear the specific cache by URL.
+* `flushCache`: Clear the specific cache by URL.
 * `expiredTimeMillis`: The cache expired time in milliseconds.
 
 ## Samples
