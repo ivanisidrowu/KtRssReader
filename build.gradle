@@ -32,6 +32,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -42,6 +43,25 @@ allprojects {
     repositories {
         google()
         jcenter()
+    }
+}
+
+subprojects { project ->
+    if (project.name == 'annotation' || project.name == 'processor') {
+        apply plugin: 'java'
+        apply plugin: 'maven'
+
+        sourceCompatibility = 1.8 // java 8
+        targetCompatibility = 1.8
+
+        task sourcesJar(type: Jar, dependsOn: classes) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
+
+        artifacts {
+            archives sourcesJar
+        }
     }
 }
 

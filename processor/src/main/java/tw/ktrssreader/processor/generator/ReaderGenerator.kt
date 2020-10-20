@@ -65,7 +65,7 @@ class ReaderGenerator(
             .addParameter(configParameter.build())
             .addModifiers(KModifier.INLINE)
             .addCode(
-                "return %T.read<%T>(url = $URL, customParser = { xml -> %T.parse(xml) }, $CONFIG)",
+                "return %T.read<%T>(url = $URL, customParser = { xml -> %T.parse(xml) }, config = $CONFIG)",
                 readerClassName,
                 outputClassName,
                 parserClassName
@@ -85,7 +85,7 @@ class ReaderGenerator(
             )
             .addModifiers(KModifier.INLINE)
             .addStatement(
-                "return %T.flowRead<%T>(url = $URL, customParser = { xml -> %T.parse(xml) }, $CONFIG)",
+                "return %T.flowRead<%T>(url = $URL, customParser = { xml -> %T.parse(xml) }, config = $CONFIG)",
                 readerClassName,
                 outputClassName,
                 parserClassName
@@ -104,7 +104,7 @@ class ReaderGenerator(
             )
             .addModifiers(KModifier.INLINE, KModifier.SUSPEND)
             .addStatement(
-                "return %T.coRead<%T>(url = $URL, customParser = { xml -> %T.parse(xml) }, $CONFIG)",
+                "return %T.coRead<%T>(url = $URL, customParser = { xml -> %T.parse(xml) }, config = $CONFIG)",
                 readerClassName,
                 outputClassName,
                 parserClassName

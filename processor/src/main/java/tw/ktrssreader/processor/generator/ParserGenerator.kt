@@ -136,7 +136,11 @@ class ParserGenerator(
 
         funSpec.addStatement("\nreturn $outputClassName(")
         // Generate constructor statements
-        propertyToParseData.forEach { generateConstructor(it, funSpec) }
+        var index = 0
+        propertyToParseData.forEach {
+            generateConstructor(it, funSpec, index == propertyToParseData.size - 1)
+            index ++
+        }
 
         funSpec.addStatement("$TAB)")
         return funSpec.build()
@@ -343,7 +347,8 @@ class ParserGenerator(
 
     private fun generateConstructor(
         parseData: Map.Entry<String, ParseData>,
-        funSpec: FunSpec.Builder
+        funSpec: FunSpec.Builder,
+        isLastLine: Boolean
     ) {
         val stringBuilder = StringBuilder()
         val dataType = parseData.value.dataType
@@ -377,7 +382,12 @@ class ParserGenerator(
                 }
             }
         }
-        funSpec.addStatement("$TAB$TAB${parseData.key} = $stringBuilder,")
+
+        if (isLastLine) {
+            funSpec.addStatement("$TAB$TAB${parseData.key} = $stringBuilder")
+        } else {
+            funSpec.addStatement("$TAB$TAB${parseData.key} = $stringBuilder,")
+        }
     }
 
     private fun getTagCandidates(
