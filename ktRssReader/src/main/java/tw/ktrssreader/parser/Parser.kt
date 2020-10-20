@@ -16,8 +16,6 @@
 
 package tw.ktrssreader.parser
 
-import tw.ktrssreader.model.channel.RssStandardChannel
-
-interface Parser<out T : RssStandardChannel> {
+interface Parser<out T> {
     fun parse(xml: String): T
 }

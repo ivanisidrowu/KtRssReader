@@ -23,7 +23,7 @@
 |skipDays|skipDays|skipDays|skipDays|
 |simpleTitle|-|itunes:title|-|
 |explicit|-|itunes:explict|googleplay:explicit|
-|email|-|itunes:email|-|
+|email|-|itunes:email|googleplay:email|
 |author|-|itunes:author|googleplay:author|
 |owner|-|itunes:owner|googleplay:owner|
 |type|-|itunes:type|-|
@@ -42,7 +42,7 @@
 |pubDate|pubDate|pubDate|pubDate|
 |description|description|description|googleplay:description|
 |link|link|link|link|
-|author|author|author|author|
+|author|author|itunes:author|author|
 |categories|category|category|category|
 |comments|comments|comments|comments|
 |source|source|source|source|

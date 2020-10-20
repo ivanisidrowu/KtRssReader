@@ -87,8 +87,8 @@ class ITunesParser : ParserBase<ITunesChannelData>() {
                 ITUNES_TITLE -> simpleTitle = readString(ITUNES_TITLE)
                 ITUNES_TYPE -> type = readString(ITUNES_TYPE)
                 ITUNES_NEW_FEED_URL -> newFeedUrl = readString(ITUNES_NEW_FEED_URL)
-                ITUNES_BLOCK -> block = readString(ITUNES_BLOCK)?.convertYesNo()
-                ITUNES_COMPLETE -> complete = readString(ITUNES_COMPLETE)?.convertYesNo()
+                ITUNES_BLOCK -> block = readString(ITUNES_BLOCK)?.toBoolOrNull()
+                ITUNES_COMPLETE -> complete = readString(ITUNES_COMPLETE)?.toBoolOrNull()
                 ITEM -> {
                     standardChannel.items?.get(itemIndex)?.let {
                         items.add(readItem(it))
@@ -214,7 +214,7 @@ class ITunesParser : ParserBase<ITunesChannelData>() {
                 ITUNES_EPISODE -> episode = readString(ITUNES_EPISODE)?.toIntOrNull()
                 ITUNES_SEASON -> season = readString(ITUNES_SEASON)?.toIntOrNull()
                 ITUNES_EPISODE_TYPE -> episodeType = readString(ITUNES_EPISODE_TYPE)
-                ITUNES_BLOCK -> block = readString(ITUNES_BLOCK)?.convertYesNo()
+                ITUNES_BLOCK -> block = readString(ITUNES_BLOCK)?.toBoolOrNull()
                 ITUNES_AUTHOR -> author = readString(ITUNES_AUTHOR)
                 else -> skip()
             }

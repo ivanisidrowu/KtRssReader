@@ -2,6 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.ivanisidrowu'
 
 android {
     compileSdkVersion 30
@@ -21,16 +24,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    sourceSets {
-        def sharedTestDir = 'src/sharedTest/java'
-        test {
-            java.srcDir sharedTestDir
-        }
-        androidTest {
-            java.srcDir sharedTestDir
         }
     }
 
@@ -64,4 +57,7 @@ dependencies {
     testImplementation testDeps.turbine
 
     androidTestImplementation testDeps.mockk
+
+    testImplementation project(':testCommon')
+    androidTestImplementation project(':testCommon')
 }

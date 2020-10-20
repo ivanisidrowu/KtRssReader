@@ -29,30 +29,32 @@ object Const {
     const val ITUNES = 2
     const val GOOGLE = 3
     const val AUTO_MIX = 4
+    const val CUSTOM = 5
 
     @Target(AnnotationTarget.TYPE)
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-    @IntDef(RSS_STANDARD, ITUNES, GOOGLE, AUTO_MIX)
+    @IntDef(RSS_STANDARD, ITUNES, GOOGLE, AUTO_MIX, CUSTOM)
     annotation class ChannelType {
 
         companion object {
 
-            fun convertChannelToType(channel: RssStandardChannel): Int {
+            fun convertChannelToType(channel: Any): Int {
                 return when (channel) {
                     is ITunesChannel -> ITUNES
                     is GoogleChannel -> GOOGLE
                     is AutoMixChannel -> AUTO_MIX
-                    else -> RSS_STANDARD
+                    is RssStandardChannel -> RSS_STANDARD
+                    else -> CUSTOM
                 }
             }
 
-            inline fun <reified T : RssStandardChannel> convertToChannelType(): Int {
+            inline fun <reified T> convertToChannelType(): Int {
                 return convertChannelTo<T, Int>(
                     ifRssStandard = { RSS_STANDARD },
                     ifITunes = { ITUNES },
                     ifGoogle = { GOOGLE },
-                    ifAutoMix = { AUTO_MIX }
-                )
+                    ifAutoMix = { AUTO_MIX },
+                ) ?: CUSTOM
             }
         }
     }

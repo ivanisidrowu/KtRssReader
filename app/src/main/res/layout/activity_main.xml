@@ -69,45 +69,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCharset" />
 
-    <RadioGroup
-        android:id="@+id/rgRssType"
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/tvRssType"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/etCharset">
-
-        <RadioButton
-            android:id="@+id/rbRssStandard"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="Standard" />
-
-        <RadioButton
-            android:id="@+id/rbRssItunes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="iTunes" />
-
-        <RadioButton
-            android:id="@+id/rbRssGooglePlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Google Play" />
-
-        <RadioButton
-            android:id="@+id/rbRssAutoMix"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="AutoMix" />
-    </RadioGroup>
+        app:layout_constraintTop_toBottomOf="@+id/etCharset" />
 
     <TextView
         android:id="@+id/tvCache"
@@ -181,6 +150,7 @@
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -190,7 +160,6 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
     </ScrollView>

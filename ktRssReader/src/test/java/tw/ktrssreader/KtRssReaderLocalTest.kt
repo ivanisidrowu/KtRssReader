@@ -1,9 +1,6 @@
 package tw.ktrssreader
 
 import app.cash.turbine.test
-import extensions.mockkRelaxed
-import extensions.never
-import extensions.shouldBe
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.runBlocking
@@ -16,8 +13,12 @@ import tw.ktrssreader.cache.DatabaseRssCache
 import tw.ktrssreader.constant.Const
 import tw.ktrssreader.fetcher.XmlFetcher
 import tw.ktrssreader.model.channel.RssStandardChannel
+import tw.ktrssreader.model.channel.RssStandardChannelData
 import tw.ktrssreader.parser.RssStandardParser
 import tw.ktrssreader.provider.KtRssProvider
+import tw.ktrssreader.test.common.mockkRelaxed
+import tw.ktrssreader.test.common.never
+import tw.ktrssreader.test.common.shouldBe
 import tw.ktrssreader.utils.ThreadUtils
 
 @RunWith(Enclosed::class)
@@ -51,7 +52,7 @@ class KtRssReaderLocalTest {
         }
 
         protected fun mockGetRemoteChannelSuccessfully(block: (RssStandardChannel) -> Unit) {
-            val expected = mockkRelaxed<RssStandardChannel>()
+            val expected = mockkRelaxed<RssStandardChannelData>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
@@ -76,7 +77,7 @@ class KtRssReaderLocalTest {
         }
 
         protected fun mockGetCacheChannelSuccessfully(block: (RssStandardChannel) -> Unit, ) {
-            val expected = mockkRelaxed<RssStandardChannel>()
+            val expected = mockkRelaxed<RssStandardChannelData>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
@@ -89,7 +90,7 @@ class KtRssReaderLocalTest {
         }
 
         protected fun mockGetCacheChannelFailed(block: (RssStandardChannel) -> Unit) {
-            val expected = mockkRelaxed<RssStandardChannel>()
+            val expected = mockkRelaxed<RssStandardChannelData>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
@@ -105,7 +106,7 @@ class KtRssReaderLocalTest {
         }
 
         protected fun mockFlushCache(block: (RssStandardChannel) -> Unit) {
-            val expected = mockkRelaxed<RssStandardChannel>()
+            val expected = mockkRelaxed<RssStandardChannelData>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
@@ -118,7 +119,7 @@ class KtRssReaderLocalTest {
         }
 
         protected fun mockFetchDataSuccessfullyButSaveCacheFailed(block: (RssStandardChannel) -> Unit) {
-            val expected = mockkRelaxed<RssStandardChannel>()
+            val expected = mockkRelaxed<RssStandardChannelData>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
