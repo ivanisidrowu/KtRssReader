@@ -21,8 +21,8 @@ First, you can add this repository to the root of your project `build.gradle` fi
 ```gradle
 allprojects {
   repositories {
-  ...
-  maven { url 'https://jitpack.io' }
+   ...
+   maven { url 'https://jitpack.io' }
   }
 }
 ```
