@@ -4,6 +4,7 @@
 [![](https://jitpack.io/v/ivanisidrowu/KtRssReader.svg)](https://jitpack.io/#ivanisidrowu/KtRssReader)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-%23435-red.svg)](http://androidweekly.net/issues/issue-435)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-KtRssReader-yellow.svg?style=flat)](https://android-arsenal.com/details/1/8178)
 
 KtRssReader is a Kotlin library for parsing RSS feed on Android.
 
@@ -20,8 +21,8 @@ First, you can add this repository to the root of your project `build.gradle` fi
 ```gradle
 allprojects {
   repositories {
-  ...
-  maven { url 'https://jitpack.io' }
+   ...
+   maven { url 'https://jitpack.io' }
   }
 }
 ```
