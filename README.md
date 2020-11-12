@@ -31,7 +31,7 @@ Then, add this dependency to the `build.gradle` file in app directory.
 
 ```gradle
 dependencies {
-    implementation "com.github.ivanisidrowu.KtRssReader:ktRssReader:v2.0.0"
+    implementation "com.github.ivanisidrowu.KtRssReader:ktRssReader:v2.0.1"
 }
 ```
 
@@ -41,9 +41,9 @@ If you want to customize data format, you have to add these dependencies.
 apply plugin: 'kotlin-kapt'
 
 dependencies {
-    implementation "com.github.ivanisidrowu.KtRssReader:ktRssReader:v2.0.0"
-    implementation "com.github.ivanisidrowu.KtRssReader:annotation:v2.0.0"
-    kapt "com.github.ivanisidrowu.KtRssReader:processor:v2.0.0"
+    implementation "com.github.ivanisidrowu.KtRssReader:ktRssReader:v2.0.1"
+    implementation "com.github.ivanisidrowu.KtRssReader:annotation:v2.0.1"
+    kapt "com.github.ivanisidrowu.KtRssReader:processor:v2.0.1"
 }
 ```
 
