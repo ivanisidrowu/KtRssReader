@@ -18,7 +18,6 @@ package tw.ktrssreader
 
 import kotlinx.coroutines.flow.flow
 import tw.ktrssreader.config.KtRssReaderConfig
-import tw.ktrssreader.config.KtRssReaderGlobalConfig
 import tw.ktrssreader.constant.Const
 import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.ThreadUtils
@@ -98,7 +97,9 @@ object Reader {
         url: String,
         crossinline customParser: ((String) -> T?) = { null },
         crossinline config: Config = {}
-    ) = suspendCoroutine<T> { it.resume(read(url = url, customParser = customParser, config = config)) }
+    ) = suspendCoroutine<T> {
+        it.resume(read(url = url, customParser = customParser, config = config))
+    }
 
     inline fun <reified T> flowRead(
         url: String,
@@ -108,7 +109,7 @@ object Reader {
 
     fun clearCache() {
         ThreadUtils.runOnNewThread("[clear cache]") {
-            val db = KtRssProvider.provideDatabase(KtRssReaderGlobalConfig.getApplicationContext())
+            val db = KtRssProvider.provideDatabase(KtRssReaderInitializer.applicationContext)
             db.channelDao().clearAll()
         }
     }

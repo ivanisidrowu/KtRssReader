@@ -249,20 +249,16 @@ Reader.clearCache()
 
 ### Global Config
 
-To let KtRssReader works with the database, you need to set the application context in your application.
-
 ```kotlin
 class MyApplication : Application() {
     override fun onCreate() {
         readerGlobalConfig {
-            setApplicationContext(this@MyApplication)
             enableLog = true
         }
     }
 }
 ```
 
-* `setApplicationContext()`: The application context.
 * `enableLog`: If this is enabled, the debug log will be shown on the console.
 
 ### Reader Config
