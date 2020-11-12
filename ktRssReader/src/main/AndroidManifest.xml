@@ -1,5 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="tw.ktrssreader">
 
-    /
+    <application>
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+
+            <meta-data
+                android:name="tw.ktrssreader.KtRssReaderInitializer"
+                android:value="androidx.startup" />
+        </provider>
+    </application>
+
 </manifest>

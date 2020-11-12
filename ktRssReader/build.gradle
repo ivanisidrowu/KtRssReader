@@ -53,6 +53,8 @@ dependencies {
     implementation deps.roomKtx
     kapt deps.roomCompiler
 
+    implementation deps.startup
+
     testImplementation testDeps.mockk
     testImplementation testDeps.turbine
 

@@ -16,7 +16,7 @@
 
 package tw.ktrssreader.cache
 
-import tw.ktrssreader.config.KtRssReaderGlobalConfig
+import tw.ktrssreader.KtRssReaderInitializer
 import tw.ktrssreader.constant.Const
 import tw.ktrssreader.persistence.db.entity.ChannelEntity
 import tw.ktrssreader.provider.KtRssProvider
@@ -28,7 +28,7 @@ import java.util.*
 class DatabaseRssCache<T> : RssCache<T> {
 
     private val logTag = this::class.java.simpleName
-    private val db = KtRssProvider.provideDatabase(KtRssReaderGlobalConfig.getApplicationContext())
+    private val db = KtRssProvider.provideDatabase(KtRssReaderInitializer.applicationContext)
     private val dao = db.channelDao()
 
     override fun readCache(url: String, type: @Const.ChannelType Int, expiredTimeMillis: Long): T? {
