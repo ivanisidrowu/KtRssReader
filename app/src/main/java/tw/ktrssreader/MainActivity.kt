@@ -12,13 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tw.ktrssreader.generated.RssDataReader
-import tw.ktrssreader.generated.RssOrderDataReader
-import tw.ktrssreader.generated.RssRawDataReader
-import tw.ktrssreader.model.channel.AutoMixChannelData
-import tw.ktrssreader.model.channel.GoogleChannelData
-import tw.ktrssreader.model.channel.ITunesChannelData
-import tw.ktrssreader.model.channel.RssStandardChannelData
+import tw.ktrssreader.reader.RssReader
+import tw.ktrssreader.reader.RssType
 import java.nio.charset.Charset
 import kotlin.concurrent.thread
 
@@ -50,15 +45,23 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    enum class RssType {
-        Standard,
-        ITunes,
-        GooglePlay,
-        AutoMix,
-        Custom,
-        CustomWithRawData,
-        CustomWithOrder,
-    }
+    private val rssType
+        get() = spinner.selectedItem as? RssType ?: error("Invalid item was clicked!")
+
+    private val rssText
+        get() = etRss.text.toString()
+
+    private val useCache
+        get() = rbCacheYes.isChecked
+
+    private val charsets = hashMapOf<String, Charset>()
+    private val charset: Charset
+        get() {
+            val charsetText = etCharset.text.toString()
+            return charsets.getOrPut(charsetText) {
+                Charset.forName(charsetText)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,51 +94,7 @@ class MainActivity : AppCompatActivity() {
 
         thread {
             try {
-                val channel = when (spinner.selectedItem) {
-                    RssType.Standard -> {
-                        Reader.read<RssStandardChannelData>(etRss.text.toString()) {
-                            useCache = rbCacheYes.isChecked
-                            charset = Charset.forName(etCharset.text.toString())
-                        }
-                    }
-                    RssType.ITunes -> {
-                        Reader.read<ITunesChannelData>(etRss.text.toString()) {
-                            useCache = rbCacheYes.isChecked
-                            charset = Charset.forName(etCharset.text.toString())
-                        }
-                    }
-                    RssType.GooglePlay -> {
-                        Reader.read<GoogleChannelData>(etRss.text.toString()) {
-                            useCache = rbCacheYes.isChecked
-                            charset = Charset.forName(etCharset.text.toString())
-                        }
-                    }
-                    RssType.AutoMix -> {
-                        Reader.read<AutoMixChannelData>(etRss.text.toString()) {
-                            useCache = rbCacheYes.isChecked
-                            charset = Charset.forName(etCharset.text.toString())
-                        }
-                    }
-                    RssType.Custom -> {
-                        RssDataReader.read(etRss.text.toString()) {
-                            useCache = rbCacheYes.isChecked
-                            charset = Charset.forName(etCharset.text.toString())
-                        }
-                    }
-                    RssType.CustomWithRawData -> {
-                        RssRawDataReader.read(etRss.text.toString()) {
-                            useCache = rbCacheYes.isChecked
-                            charset = Charset.forName(etCharset.text.toString())
-                        }
-                    }
-                    RssType.CustomWithOrder -> {
-                        RssOrderDataReader.read(etRss.text.toString()) {
-                            useCache = rbCacheYes.isChecked
-                            charset = Charset.forName(etCharset.text.toString())
-                        }
-                    }
-                    else -> error("Invalid item was checked!")
-                }
+                val channel = RssReader.read(rssType, rssText, useCache, charset)
 
                 runOnUiThread {
                     textView.text = channel.toString()
@@ -158,51 +117,7 @@ class MainActivity : AppCompatActivity() {
 
             try {
                 val channel = withContext(Dispatchers.IO) {
-                    when (spinner.selectedItem) {
-                        RssType.Standard -> {
-                            Reader.coRead<RssStandardChannelData>(etRss.text.toString()) {
-                                useCache = rbCacheYes.isChecked
-                                charset = Charset.forName(etCharset.text.toString())
-                            }
-                        }
-                        RssType.ITunes -> {
-                            Reader.coRead<ITunesChannelData>(etRss.text.toString()) {
-                                useCache = rbCacheYes.isChecked
-                                charset = Charset.forName(etCharset.text.toString())
-                            }
-                        }
-                        RssType.GooglePlay -> {
-                            Reader.coRead<GoogleChannelData>(etRss.text.toString()) {
-                                useCache = rbCacheYes.isChecked
-                                charset = Charset.forName(etCharset.text.toString())
-                            }
-                        }
-                        RssType.AutoMix -> {
-                            Reader.coRead<AutoMixChannelData>(etRss.text.toString()) {
-                                useCache = rbCacheYes.isChecked
-                                charset = Charset.forName(etCharset.text.toString())
-                            }
-                        }
-                        RssType.Custom -> {
-                            RssDataReader.coRead(etRss.text.toString()) {
-                                useCache = rbCacheYes.isChecked
-                                charset = Charset.forName(etCharset.text.toString())
-                            }
-                        }
-                        RssType.CustomWithRawData -> {
-                            RssRawDataReader.coRead(etRss.text.toString()) {
-                                useCache = rbCacheYes.isChecked
-                                charset = Charset.forName(etCharset.text.toString())
-                            }
-                        }
-                        RssType.CustomWithOrder -> {
-                            RssOrderDataReader.coRead(etRss.text.toString()) {
-                                useCache = rbCacheYes.isChecked
-                                charset = Charset.forName(etCharset.text.toString())
-                            }
-                        }
-                        else -> error("Invalid item was checked!")
-                    }
+                    RssReader.coRead(rssType, rssText, useCache, charset)
                 }
 
                 textView.text = channel.toString()
@@ -217,51 +132,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun flowRead() {
         lifecycleScope.launch {
-            val flowChannel = when (spinner.selectedItem) {
-                RssType.Standard -> {
-                    Reader.flowRead<RssStandardChannelData>(etRss.text.toString()) {
-                        useCache = rbCacheYes.isChecked
-                        charset = Charset.forName(etCharset.text.toString())
-                    }
-                }
-                RssType.ITunes -> {
-                    Reader.flowRead<ITunesChannelData>(etRss.text.toString()) {
-                        useCache = rbCacheYes.isChecked
-                        charset = Charset.forName(etCharset.text.toString())
-                    }
-                }
-                RssType.GooglePlay -> {
-                    Reader.flowRead<GoogleChannelData>(etRss.text.toString()) {
-                        useCache = rbCacheYes.isChecked
-                        charset = Charset.forName(etCharset.text.toString())
-                    }
-                }
-                RssType.AutoMix -> {
-                    Reader.flowRead<AutoMixChannelData>(etRss.text.toString()) {
-                        useCache = rbCacheYes.isChecked
-                        charset = Charset.forName(etCharset.text.toString())
-                    }
-                }
-                RssType.Custom -> {
-                    RssDataReader.flowRead(etRss.text.toString()) {
-                        useCache = rbCacheYes.isChecked
-                        charset = Charset.forName(etCharset.text.toString())
-                    }
-                }
-                RssType.CustomWithRawData -> {
-                    RssRawDataReader.flowRead(etRss.text.toString()) {
-                        useCache = rbCacheYes.isChecked
-                        charset = Charset.forName(etCharset.text.toString())
-                    }
-                }
-                RssType.CustomWithOrder -> {
-                    RssOrderDataReader.flowRead(etRss.text.toString()) {
-                        useCache = rbCacheYes.isChecked
-                        charset = Charset.forName(etCharset.text.toString())
-                    }
-                }
-                else -> error("Invalid item was checked!")
-            }
+            val flowChannel = RssReader.flowRead(rssType, rssText, useCache, charset)
 
             flowChannel.flowOn(Dispatchers.IO)
                 .onStart {
