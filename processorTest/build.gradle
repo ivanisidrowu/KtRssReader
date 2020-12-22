@@ -49,7 +49,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation project(':ktRssReader')
+    implementation project(':android')
     implementation project(':testCommon')
     implementation project(':annotation')
     kapt project(':processor')
