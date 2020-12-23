@@ -14,11 +14,15 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.model.item
+package tw.ktrssreader.kotlin.model.channel
 
 import java.io.Serializable
 
-data class Category(
-    val name: String?,
-    val domain: String?,
+data class Image(
+    val link: String?,
+    val title: String?,
+    val url: String?,
+    val description: String?,
+    val height: Int?,
+    val width: Int?,
 ) : Serializable

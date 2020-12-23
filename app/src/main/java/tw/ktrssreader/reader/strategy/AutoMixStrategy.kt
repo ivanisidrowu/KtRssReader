@@ -2,7 +2,7 @@ package tw.ktrssreader.reader.strategy
 
 import kotlinx.coroutines.flow.Flow
 import tw.ktrssreader.Reader
-import tw.ktrssreader.model.channel.AutoMixChannelData
+import tw.ktrssreader.kotlin.model.channel.AutoMixChannelData
 import java.io.Serializable
 import java.nio.charset.Charset
 

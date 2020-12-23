@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import tw.ktrssreader.config.KtRssReaderGlobalConfig
 import tw.ktrssreader.constant.Const
-import tw.ktrssreader.model.channel.RssStandardChannel
+import tw.ktrssreader.kotlin.model.channel.RssStandardChannel
 import tw.ktrssreader.persistence.db.KtRssReaderDatabase
 import tw.ktrssreader.persistence.db.dao.ChannelDao
 import tw.ktrssreader.persistence.db.entity.ChannelEntity

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.model.item
+package tw.ktrssreader.kotlin.model.item
 
 import java.io.Serializable
 

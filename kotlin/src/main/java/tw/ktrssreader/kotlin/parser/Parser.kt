@@ -14,13 +14,8 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.model.channel
+package tw.ktrssreader.kotlin.parser
 
-import java.io.Serializable
-
-data class TextInput(
-    val title: String?,
-    val description: String?,
-    val name: String?,
-    val link: String?,
-) : Serializable
+interface Parser<out T> {
+    fun parse(xml: String): T
+}

@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.model.channel
+package tw.ktrssreader.kotlin.model.channel
 
-import tw.ktrssreader.model.item.*
+import tw.ktrssreader.kotlin.model.item.*
 import java.io.Serializable
 
 interface RssStandardChannel : Serializable {

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.model.channel
+package tw.ktrssreader.kotlin.model.channel
 
 import java.io.Serializable
 

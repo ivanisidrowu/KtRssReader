@@ -18,10 +18,10 @@ package tw.ktrssreader.utils
 
 import android.util.Log
 import tw.ktrssreader.config.KtRssReaderGlobalConfig
-import tw.ktrssreader.model.channel.AutoMixChannel
-import tw.ktrssreader.model.channel.GoogleChannel
-import tw.ktrssreader.model.channel.ITunesChannel
-import tw.ktrssreader.model.channel.RssStandardChannel
+import tw.ktrssreader.kotlin.model.channel.AutoMixChannel
+import tw.ktrssreader.kotlin.model.channel.GoogleChannel
+import tw.ktrssreader.kotlin.model.channel.ITunesChannel
+import tw.ktrssreader.kotlin.model.channel.RssStandardChannel
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream

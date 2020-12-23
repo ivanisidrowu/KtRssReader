@@ -12,8 +12,8 @@ import org.junit.runner.RunWith
 import tw.ktrssreader.cache.DatabaseRssCache
 import tw.ktrssreader.constant.Const
 import tw.ktrssreader.fetcher.XmlFetcher
-import tw.ktrssreader.model.channel.RssStandardChannel
-import tw.ktrssreader.model.channel.RssStandardChannelData
+import tw.ktrssreader.kotlin.model.channel.RssStandardChannel
+import tw.ktrssreader.kotlin.model.channel.RssStandardChannelData
 import tw.ktrssreader.parser.RssStandardParser
 import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.test.common.mockkRelaxed

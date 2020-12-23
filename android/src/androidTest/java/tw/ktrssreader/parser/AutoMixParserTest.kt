@@ -4,7 +4,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.xmlpull.v1.XmlPullParserException
-import tw.ktrssreader.model.channel.AutoMixChannelData
+import tw.ktrssreader.kotlin.model.channel.AutoMixChannelData
 import tw.ktrssreader.parser.ChannelItemTestData.AUTOMIX_FOLDER
 import tw.ktrssreader.parser.ChannelItemTestData.CATEGORY_NO_ORDERING_AUTOMIX_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.FULL_AUTOMIX_CHANNEL
