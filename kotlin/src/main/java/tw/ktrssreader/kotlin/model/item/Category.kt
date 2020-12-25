@@ -14,12 +14,11 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.model.item
+package tw.ktrssreader.kotlin.model.item
 
 import java.io.Serializable
 
-data class Enclosure(
-    val url: String?,
-    val length: Long?,
-    val type: String?,
+data class Category(
+    val name: String?,
+    val domain: String?,
 ) : Serializable

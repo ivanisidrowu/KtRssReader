@@ -1,7 +1,7 @@
 package tw.ktrssreader.parser
 
-import tw.ktrssreader.model.channel.*
-import tw.ktrssreader.model.item.*
+import tw.ktrssreader.kotlin.model.channel.*
+import tw.ktrssreader.kotlin.model.item.*
 
 object ChannelItemTestData {
     const val RSS_FOLDER = "RSS"

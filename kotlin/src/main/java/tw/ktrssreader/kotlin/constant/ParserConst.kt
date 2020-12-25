@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.constant
+package tw.ktrssreader.kotlin.constant
 
 object ParserConst {
     const val ITUNES = "itunes"

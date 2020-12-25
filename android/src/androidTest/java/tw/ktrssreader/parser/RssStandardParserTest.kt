@@ -5,7 +5,7 @@ import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.xmlpull.v1.XmlPullParserException
-import tw.ktrssreader.model.channel.RssStandardChannelData
+import tw.ktrssreader.kotlin.model.channel.RssStandardChannelData
 import tw.ktrssreader.parser.ChannelItemTestData.FULL_RSS_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_RSS_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.RSS_CHANNEL_PARTIAL_CLOUD

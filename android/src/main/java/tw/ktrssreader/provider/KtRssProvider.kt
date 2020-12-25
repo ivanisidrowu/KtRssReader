@@ -44,8 +44,8 @@ object KtRssProvider {
         return OkHttpRequest(okHttpClient = okHttpClient, requestBuilder = requestBuilder)
     }
 
-    inline fun <reified T> provideParser(): Parser<T>? {
-        return convertChannelTo<T, Parser<T>>(
+    inline fun <reified T> provideParser(): tw.ktrssreader.kotlin.parser.Parser<T>? {
+        return convertChannelTo<T, tw.ktrssreader.kotlin.parser.Parser<T>>(
             ifRssStandard = { RssStandardParser() },
             ifITunes = { ITunesParser() },
             ifGoogle = { GoogleParser() },

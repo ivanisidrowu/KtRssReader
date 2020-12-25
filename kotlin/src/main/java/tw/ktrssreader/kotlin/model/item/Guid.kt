@@ -14,14 +14,8 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.model.channel
+package tw.ktrssreader.kotlin.model.item
 
 import java.io.Serializable
 
-data class Cloud(
-    val domain: String?,
-    val port: Int?,
-    val path: String?,
-    val registerProcedure: String?,
-    val protocol: String?,
-) : Serializable
+data class Guid(val value: String?, val isPermaLink: Boolean?) : Serializable

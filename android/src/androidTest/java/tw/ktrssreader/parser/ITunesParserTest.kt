@@ -5,7 +5,7 @@ import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.xmlpull.v1.XmlPullParserException
-import tw.ktrssreader.model.channel.ITunesChannelData
+import tw.ktrssreader.kotlin.model.channel.ITunesChannelData
 import tw.ktrssreader.parser.ChannelItemTestData.FULL_ITUNES_CHANNEL
 import tw.ktrssreader.parser.ChannelItemTestData.ITUNES_FOLDER
 import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_ITUNES_CHANNEL

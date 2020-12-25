@@ -17,10 +17,10 @@
 package tw.ktrssreader.constant
 
 import androidx.annotation.IntDef
-import tw.ktrssreader.model.channel.AutoMixChannel
-import tw.ktrssreader.model.channel.GoogleChannel
-import tw.ktrssreader.model.channel.ITunesChannel
-import tw.ktrssreader.model.channel.RssStandardChannel
+import tw.ktrssreader.kotlin.model.channel.AutoMixChannel
+import tw.ktrssreader.kotlin.model.channel.GoogleChannel
+import tw.ktrssreader.kotlin.model.channel.ITunesChannel
+import tw.ktrssreader.kotlin.model.channel.RssStandardChannel
 import tw.ktrssreader.utils.convertChannelTo
 
 object Const {

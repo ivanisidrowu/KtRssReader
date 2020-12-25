@@ -14,8 +14,12 @@
  *    limitations under the License.
  */
 
-package tw.ktrssreader.parser
+package tw.ktrssreader.kotlin.model.item
 
-interface Parser<out T> {
-    fun parse(xml: String): T
-}
+import java.io.Serializable
+
+data class Enclosure(
+    val url: String?,
+    val length: Long?,
+    val type: String?,
+) : Serializable
