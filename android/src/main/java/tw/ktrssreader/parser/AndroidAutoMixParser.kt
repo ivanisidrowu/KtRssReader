@@ -84,7 +84,7 @@ import tw.ktrssreader.kotlin.model.item.*
 import tw.ktrssreader.utils.logD
 import java.io.IOException
 
-class AutoMixParser : ParserBase<AutoMixChannelData>() {
+class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
 
     private val rssStandardMap = HashMap<String, Any?>(20)
     private val iTunesMap = HashMap<String, Any?>(11)

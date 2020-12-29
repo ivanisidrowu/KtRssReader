@@ -5,34 +5,34 @@ import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.xmlpull.v1.XmlPullParserException
-import tw.ktrssreader.kotlin.model.channel.ITunesChannelData
-import tw.ktrssreader.parser.ChannelItemTestData.FULL_ITUNES_CHANNEL
-import tw.ktrssreader.parser.ChannelItemTestData.ITUNES_FOLDER
-import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_ITUNES_CHANNEL
-import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_ITUNES_CHANNEL_2
+import tw.ktrssreader.kotlin.model.channel.GoogleChannelData
+import tw.ktrssreader.parser.ChannelItemTestData.FULL_GOOGLE_CHANNEL
+import tw.ktrssreader.parser.ChannelItemTestData.GOOGLE_PLAY_FOLDER
+import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_GOOGLE_CHANNEL
+import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_GOOGLE_CHANNEL_2
 import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
 import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
 
 @RunWith(Enclosed::class)
-class ITunesParserTest {
+class AndroidGoogleParserTest {
 
     @RunWith(Parameterized::class)
-    class ITunesParserParseFunctionTest(
+    class GoogleParserParseFunctionTest(
         private val rssFilePath: String,
-        private val expectedChannel: ITunesChannelData
+        private val expectedChannel: GoogleChannelData
     ) {
         companion object {
             @JvmStatic
             @Parameterized.Parameters
             fun getTestingData() = listOf(
-                arrayOf("${ITUNES_FOLDER}/itunes_rss_v2_full.xml", FULL_ITUNES_CHANNEL),
-                arrayOf("${ITUNES_FOLDER}/itunes_rss_v2_some_channel_attrs_missing.xml", PARTIAL_ITUNES_CHANNEL),
-                arrayOf("${ITUNES_FOLDER}/itunes_rss_v2_without_itunes_attributes.xml", PARTIAL_ITUNES_CHANNEL_2),
-            )
+                arrayOf("$GOOGLE_PLAY_FOLDER/google_play_rss_v2_full.xml", FULL_GOOGLE_CHANNEL),
+                arrayOf("$GOOGLE_PLAY_FOLDER/google_play_rss_v2_without_google_attrs.xml", PARTIAL_GOOGLE_CHANNEL),
+                arrayOf("$GOOGLE_PLAY_FOLDER/google_play_rss_v2_some_channel_attrs_missing.xml", PARTIAL_GOOGLE_CHANNEL_2),
+                )
         }
 
-        private val parser: ITunesParser = ITunesParser()
+        private val parser: AndroidGoogleParser = AndroidGoogleParser()
 
         @Test
         fun parse() {
@@ -43,12 +43,13 @@ class ITunesParserTest {
         }
     }
 
+
     @RunWith(Parameterized::class)
-    class ITunesErrorTagParserErrorTagTest(private val rssFilePath: String): ErrorTagParserBaseTest() {
+    class GoogleErrorTagParserErrorTagTest(private val rssFilePath: String): ErrorTagParserBaseTest() {
 
         @Test(expected = XmlPullParserException::class)
         fun parse() {
-            val parser = ITunesParser()
+            val parser = AndroidGoogleParser()
             val xml = XmlFileReader.readFile(rssFilePath)
 
             parser.parse(xml)

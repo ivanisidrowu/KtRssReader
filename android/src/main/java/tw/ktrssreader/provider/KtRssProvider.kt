@@ -46,10 +46,10 @@ object KtRssProvider {
 
     inline fun <reified T> provideParser(): tw.ktrssreader.kotlin.parser.Parser<T>? {
         return convertChannelTo<T, tw.ktrssreader.kotlin.parser.Parser<T>>(
-            ifRssStandard = { RssStandardParser() },
-            ifITunes = { ITunesParser() },
-            ifGoogle = { GoogleParser() },
-            ifAutoMix = { AutoMixParser() }
+            ifRssStandard = { AndroidRssStandardParser() },
+            ifITunes = { AndroidITunesParser() },
+            ifGoogle = { AndroidGoogleParser() },
+            ifAutoMix = { AndroidAutoMixParser() }
         )
     }
 }

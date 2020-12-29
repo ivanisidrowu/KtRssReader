@@ -48,9 +48,9 @@ import tw.ktrssreader.kotlin.model.item.RssStandardItem
 import tw.ktrssreader.utils.logD
 import java.io.IOException
 
-class ITunesParser : ParserBase<ITunesChannelData>() {
+class AndroidITunesParser : AndroidParserBase<ITunesChannelData>() {
 
-    override val logTag: String = ITunesParser::class.java.simpleName
+    override val logTag: String = AndroidITunesParser::class.java.simpleName
 
     override fun parse(xml: String) = parseITunesChannel(xml)
 

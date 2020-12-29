@@ -14,7 +14,7 @@ import tw.ktrssreader.constant.Const
 import tw.ktrssreader.fetcher.XmlFetcher
 import tw.ktrssreader.kotlin.model.channel.RssStandardChannel
 import tw.ktrssreader.kotlin.model.channel.RssStandardChannelData
-import tw.ktrssreader.parser.RssStandardParser
+import tw.ktrssreader.parser.AndroidRssStandardParser
 import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.test.common.mockkRelaxed
 import tw.ktrssreader.test.common.never
@@ -58,8 +58,8 @@ class KtRssReaderLocalTest {
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
             every { KtRssProvider.provideXmlFetcher() } returns mockFetcher
             every { mockFetcher.fetch(url = fakeUrl, charset = any()) } returns fakeXmlContent
-            mockkConstructor(RssStandardParser::class)
-            every { anyConstructed<RssStandardParser>().parse(fakeXmlContent) } returns expected
+            mockkConstructor(AndroidRssStandardParser::class)
+            every { anyConstructed<AndroidRssStandardParser>().parse(fakeXmlContent) } returns expected
             every { ThreadUtils.runOnNewThread(any(), any()) } answers {
                 mockRssCache.saveCache(fakeUrl, expected)
             }
@@ -83,8 +83,8 @@ class KtRssReaderLocalTest {
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
             every { KtRssProvider.provideXmlFetcher() } returns mockFetcher
             every { mockFetcher.fetch(any(), any()) } returns fakeXmlContent
-            mockkConstructor(RssStandardParser::class)
-            every { anyConstructed<RssStandardParser>().parse(fakeXmlContent) } returns expected
+            mockkConstructor(AndroidRssStandardParser::class)
+            every { anyConstructed<AndroidRssStandardParser>().parse(fakeXmlContent) } returns expected
 
             block(expected)
         }
@@ -96,8 +96,8 @@ class KtRssReaderLocalTest {
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
             every { KtRssProvider.provideXmlFetcher() } returns mockFetcher
             every { mockFetcher.fetch(any(), any()) } returns fakeXmlContent
-            mockkConstructor(RssStandardParser::class)
-            every { anyConstructed<RssStandardParser>().parse(fakeXmlContent) } returns expected
+            mockkConstructor(AndroidRssStandardParser::class)
+            every { anyConstructed<AndroidRssStandardParser>().parse(fakeXmlContent) } returns expected
             every { ThreadUtils.runOnNewThread(any(), any()) } answers {
                 mockRssCache.saveCache(fakeUrl, expected)
             }
@@ -112,8 +112,8 @@ class KtRssReaderLocalTest {
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
             every { KtRssProvider.provideXmlFetcher() } returns mockFetcher
             every { mockFetcher.fetch(any(), any()) } returns fakeXmlContent
-            mockkConstructor(RssStandardParser::class)
-            every { anyConstructed<RssStandardParser>().parse(fakeXmlContent) } returns expected
+            mockkConstructor(AndroidRssStandardParser::class)
+            every { anyConstructed<AndroidRssStandardParser>().parse(fakeXmlContent) } returns expected
 
             block(expected)
         }
@@ -125,8 +125,8 @@ class KtRssReaderLocalTest {
             every { mockRssCache.readCache(fakeUrl, fakeType, any()) } returns null
             every { KtRssProvider.provideXmlFetcher() } returns mockFetcher
             every { mockFetcher.fetch(any(), any()) } returns fakeXmlContent
-            mockkConstructor(RssStandardParser::class)
-            every { anyConstructed<RssStandardParser>().parse(fakeXmlContent) } returns expected
+            mockkConstructor(AndroidRssStandardParser::class)
+            every { anyConstructed<AndroidRssStandardParser>().parse(fakeXmlContent) } returns expected
             every { mockRssCache.saveCache(fakeUrl, expected) } throws mockException
 
             block(expected)

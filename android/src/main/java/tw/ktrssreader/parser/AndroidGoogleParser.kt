@@ -39,9 +39,9 @@ import tw.ktrssreader.kotlin.model.item.RssStandardItem
 import tw.ktrssreader.utils.logD
 import java.io.IOException
 
-class GoogleParser : ParserBase<GoogleChannelData>() {
+class AndroidGoogleParser : AndroidParserBase<GoogleChannelData>() {
 
-    override val logTag: String = GoogleParser::class.java.simpleName
+    override val logTag: String = AndroidGoogleParser::class.java.simpleName
 
     override fun parse(xml: String) = parserGoogleChannel(xml)
 
