@@ -5,7 +5,7 @@ import io.mockk.impl.annotations.RelaxedMockK
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import tw.ktrssreader.config.KtRssReaderGlobalConfig
+import tw.ktrssreader.KtRssReaderInitializer
 import tw.ktrssreader.constant.Const
 import tw.ktrssreader.kotlin.model.channel.RssStandardChannel
 import tw.ktrssreader.persistence.db.KtRssReaderDatabase
@@ -34,8 +34,8 @@ class DatabaseRssCacheLocalTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        mockkObject(KtRssReaderGlobalConfig)
-        every { KtRssReaderGlobalConfig.getApplicationContext() } returns mockkRelaxed()
+        mockkObject(KtRssReaderInitializer)
+        every { KtRssReaderInitializer.applicationContext } returns mockkRelaxed()
 
         val mockDatabase = mockkRelaxed<KtRssReaderDatabase>()
         mockkObject(KtRssProvider)
