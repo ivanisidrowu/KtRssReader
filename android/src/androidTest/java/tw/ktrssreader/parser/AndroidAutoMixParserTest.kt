@@ -15,7 +15,7 @@ import tw.ktrssreader.test.common.ChannelItemTestData.PARTIAL_AUTOMIX_CHANNEL_2
 import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
 
-class AutoMixParserTest {
+class AndroidAutoMixParserTest {
 
     @RunWith(Parameterized::class)
     class AutoMixParserParseFunctionTest(
@@ -49,7 +49,7 @@ class AutoMixParserTest {
             )
         }
 
-        private val parser = AutoMixParser()
+        private val parser = AndroidAutoMixParser()
 
         @Test
         fun parse() {
@@ -66,7 +66,7 @@ class AutoMixParserTest {
 
         @Test(expected = XmlPullParserException::class)
         fun parse() {
-            val parser = AutoMixParser()
+            val parser = AndroidAutoMixParser()
             val xml = XmlFileReader.readFile(rssFilePath)
 
             parser.parse(xml)

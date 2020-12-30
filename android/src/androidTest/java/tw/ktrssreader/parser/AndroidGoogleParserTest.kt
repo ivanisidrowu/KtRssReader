@@ -15,7 +15,7 @@ import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
 
 @RunWith(Enclosed::class)
-class GoogleParserTest {
+class AndroidGoogleParserTest {
 
     @RunWith(Parameterized::class)
     class GoogleParserParseFunctionTest(
@@ -32,7 +32,7 @@ class GoogleParserTest {
                 )
         }
 
-        private val parser: GoogleParser = GoogleParser()
+        private val parser: AndroidGoogleParser = AndroidGoogleParser()
 
         @Test
         fun parse() {
@@ -49,7 +49,7 @@ class GoogleParserTest {
 
         @Test(expected = XmlPullParserException::class)
         fun parse() {
-            val parser = GoogleParser()
+            val parser = AndroidGoogleParser()
             val xml = XmlFileReader.readFile(rssFilePath)
 
             parser.parse(xml)

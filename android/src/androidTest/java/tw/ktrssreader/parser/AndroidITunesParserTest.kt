@@ -15,7 +15,7 @@ import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
 
 @RunWith(Enclosed::class)
-class ITunesParserTest {
+class AndroidITunesParserTest {
 
     @RunWith(Parameterized::class)
     class ITunesParserParseFunctionTest(
@@ -32,7 +32,7 @@ class ITunesParserTest {
             )
         }
 
-        private val parser: ITunesParser = ITunesParser()
+        private val parser: AndroidITunesParser = AndroidITunesParser()
 
         @Test
         fun parse() {
@@ -48,7 +48,7 @@ class ITunesParserTest {
 
         @Test(expected = XmlPullParserException::class)
         fun parse() {
-            val parser = ITunesParser()
+            val parser = AndroidITunesParser()
             val xml = XmlFileReader.readFile(rssFilePath)
 
             parser.parse(xml)
