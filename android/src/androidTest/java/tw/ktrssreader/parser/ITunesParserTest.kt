@@ -6,10 +6,10 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.xmlpull.v1.XmlPullParserException
 import tw.ktrssreader.kotlin.model.channel.ITunesChannelData
-import tw.ktrssreader.parser.ChannelItemTestData.FULL_ITUNES_CHANNEL
-import tw.ktrssreader.parser.ChannelItemTestData.ITUNES_FOLDER
-import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_ITUNES_CHANNEL
-import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_ITUNES_CHANNEL_2
+import tw.ktrssreader.test.common.ChannelItemTestData.FULL_ITUNES_CHANNEL
+import tw.ktrssreader.test.common.ChannelItemTestData.ITUNES_FOLDER
+import tw.ktrssreader.test.common.ChannelItemTestData.PARTIAL_ITUNES_CHANNEL
+import tw.ktrssreader.test.common.ChannelItemTestData.PARTIAL_ITUNES_CHANNEL_2
 import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
 import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe

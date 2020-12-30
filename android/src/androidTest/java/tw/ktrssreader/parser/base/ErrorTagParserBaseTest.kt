@@ -1,8 +1,8 @@
 package tw.ktrssreader.parser.base
 
 import org.junit.runners.Parameterized
-import tw.ktrssreader.parser.ChannelItemTestData.MISMATCH_TAG_FOLDER
-import tw.ktrssreader.parser.ChannelItemTestData.RSS_FOLDER
+import tw.ktrssreader.test.common.ChannelItemTestData.MISMATCH_TAG_FOLDER
+import tw.ktrssreader.test.common.ChannelItemTestData.RSS_FOLDER
 
 open class ErrorTagParserBaseTest {
     companion object {
