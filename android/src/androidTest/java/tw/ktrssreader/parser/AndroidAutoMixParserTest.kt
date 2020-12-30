@@ -5,13 +5,13 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.xmlpull.v1.XmlPullParserException
 import tw.ktrssreader.kotlin.model.channel.AutoMixChannelData
-import tw.ktrssreader.parser.ChannelItemTestData.AUTOMIX_FOLDER
-import tw.ktrssreader.parser.ChannelItemTestData.CATEGORY_NO_ORDERING_AUTOMIX_CHANNEL
-import tw.ktrssreader.parser.ChannelItemTestData.FULL_AUTOMIX_CHANNEL
-import tw.ktrssreader.parser.ChannelItemTestData.NESTED_ITUNES_CATEGORY_AUTOMIX_CHANNEL
-import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_AUTOMIX_CHANNEL
-import tw.ktrssreader.parser.ChannelItemTestData.PARTIAL_AUTOMIX_CHANNEL_2
 import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
+import tw.ktrssreader.test.common.ChannelItemTestData.AUTOMIX_FOLDER
+import tw.ktrssreader.test.common.ChannelItemTestData.CATEGORY_NO_ORDERING_AUTOMIX_CHANNEL
+import tw.ktrssreader.test.common.ChannelItemTestData.FULL_AUTOMIX_CHANNEL
+import tw.ktrssreader.test.common.ChannelItemTestData.NESTED_ITUNES_CATEGORY_AUTOMIX_CHANNEL
+import tw.ktrssreader.test.common.ChannelItemTestData.PARTIAL_AUTOMIX_CHANNEL
+import tw.ktrssreader.test.common.ChannelItemTestData.PARTIAL_AUTOMIX_CHANNEL_2
 import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
 
