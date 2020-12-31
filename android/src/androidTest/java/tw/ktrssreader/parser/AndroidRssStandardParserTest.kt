@@ -12,8 +12,8 @@ import tw.ktrssreader.test.common.ChannelItemTestData.RSS_CHANNEL_PARTIAL_CLOUD
 import tw.ktrssreader.test.common.ChannelItemTestData.RSS_CHANNEL_PARTIAL_IMAGE
 import tw.ktrssreader.test.common.ChannelItemTestData.RSS_CHANNEL_PARTIAL_TEXT_IMAGE
 import tw.ktrssreader.test.common.ChannelItemTestData.RSS_FOLDER
-import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
 import tw.ktrssreader.test.common.XmlFileReader
+import tw.ktrssreader.test.common.base.ErrorTagParserBaseTest
 import tw.ktrssreader.test.common.shouldBe
 
 @RunWith(Enclosed::class)
