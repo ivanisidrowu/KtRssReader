@@ -1,4 +1,4 @@
-package tw.ktrssreader.parser.base
+package tw.ktrssreader.test.common.base
 
 import org.junit.runners.Parameterized
 import tw.ktrssreader.test.common.ChannelItemTestData.MISMATCH_TAG_FOLDER

@@ -10,8 +10,8 @@ import tw.ktrssreader.test.common.ChannelItemTestData.FULL_ITUNES_CHANNEL
 import tw.ktrssreader.test.common.ChannelItemTestData.ITUNES_FOLDER
 import tw.ktrssreader.test.common.ChannelItemTestData.PARTIAL_ITUNES_CHANNEL
 import tw.ktrssreader.test.common.ChannelItemTestData.PARTIAL_ITUNES_CHANNEL_2
-import tw.ktrssreader.parser.base.ErrorTagParserBaseTest
 import tw.ktrssreader.test.common.XmlFileReader
+import tw.ktrssreader.test.common.base.ErrorTagParserBaseTest
 import tw.ktrssreader.test.common.shouldBe
 
 @RunWith(Enclosed::class)
