@@ -17,12 +17,14 @@
 package tw.ktrssreader.kotlin.parser
 
 import org.w3c.dom.Element
-import tw.ktrssreader.kotlin.constant.ParserConst
+import tw.ktrssreader.kotlin.constant.ParserConst.AUTHOR
 import tw.ktrssreader.kotlin.constant.ParserConst.CHANNEL
+import tw.ktrssreader.kotlin.constant.ParserConst.COMMENTS
 import tw.ktrssreader.kotlin.constant.ParserConst.COPYRIGHT
 import tw.ktrssreader.kotlin.constant.ParserConst.DESCRIPTION
 import tw.ktrssreader.kotlin.constant.ParserConst.DOCS
 import tw.ktrssreader.kotlin.constant.ParserConst.GENERATOR
+import tw.ktrssreader.kotlin.constant.ParserConst.ITEM
 import tw.ktrssreader.kotlin.constant.ParserConst.LANGUAGE
 import tw.ktrssreader.kotlin.constant.ParserConst.LAST_BUILD_DATE
 import tw.ktrssreader.kotlin.constant.ParserConst.LINK
@@ -32,7 +34,6 @@ import tw.ktrssreader.kotlin.constant.ParserConst.RATING
 import tw.ktrssreader.kotlin.constant.ParserConst.TITLE
 import tw.ktrssreader.kotlin.constant.ParserConst.TTL
 import tw.ktrssreader.kotlin.constant.ParserConst.WEB_MASTER
-import tw.ktrssreader.kotlin.model.channel.Image
 import tw.ktrssreader.kotlin.model.channel.RssStandardChannel
 import tw.ktrssreader.kotlin.model.channel.RssStandardChannelData
 import tw.ktrssreader.kotlin.model.item.RssStandardItemData
@@ -60,7 +61,7 @@ class RssStandardParser : ParserBase<RssStandardChannel>() {
             val textInput = readTextInput()
             val skipHours = readSkipHours()
             val skipDays = readSkipDays()
-            val items = readItems() ?: listOf()
+            val items = readItems()
 
             RssStandardChannelData(
                 title = title,
@@ -89,20 +90,20 @@ class RssStandardParser : ParserBase<RssStandardChannel>() {
 
     private fun Element.readItems(): List<RssStandardItemData> {
         val result = mutableListOf<RssStandardItemData>()
-        val nodeList = getElementsByTagName(ParserConst.ITEM) ?: return result
+        val nodeList = getElementsByTagName(ITEM) ?: return result
 
         for (i in 0 until nodeList.length) {
             val element = nodeList.item(i) as? Element ?: continue
 
-            val title = element.readString(ParserConst.TITLE)
+            val title = element.readString(TITLE)
             val enclosure = element.readEnclosure()
             val guid = element.readGuid()
-            val pubDate = element.readString(ParserConst.PUB_DATE)
-            val description = element.readString(ParserConst.DESCRIPTION)
-            val link = element.readString(ParserConst.LINK)
-            val author = element.readString(ParserConst.AUTHOR)
-            val categories = element.readCategories(ParserConst.ITEM)
-            val comments = element.readString(ParserConst.COMMENTS)
+            val pubDate = element.readString(PUB_DATE)
+            val description = element.readString(DESCRIPTION)
+            val link = element.readString(LINK)
+            val author = element.readString(AUTHOR)
+            val categories = element.readCategories(ITEM)
+            val comments = element.readString(COMMENTS)
             val source = element.readSource()
             result.add(
                 RssStandardItemData(
@@ -120,24 +121,5 @@ class RssStandardParser : ParserBase<RssStandardChannel>() {
             )
         }
         return result
-    }
-
-    private fun Element.readImage(): Image? {
-        val element = getElementByTag(ParserConst.IMAGE) ?: return null
-
-        val link = element.readString(ParserConst.LINK)
-        val title = element.readString(ParserConst.TITLE)
-        val url = element.readString(ParserConst.URL)
-        val description = element.readString(ParserConst.DESCRIPTION)
-        val height = element.readString(ParserConst.HEIGHT)?.toIntOrNull()
-        val width = element.readString(ParserConst.WIDTH)?.toIntOrNull()
-        return Image(
-            link = link,
-            title = title,
-            url = url,
-            description = description,
-            height = height,
-            width = width
-        )
     }
 }

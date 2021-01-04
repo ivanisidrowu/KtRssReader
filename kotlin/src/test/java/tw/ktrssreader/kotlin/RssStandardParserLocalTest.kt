@@ -20,19 +20,19 @@ import org.junit.Test
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import tw.ktrssreader.kotlin.model.channel.RssStandardChannelData
+import tw.ktrssreader.kotlin.parser.RssStandardParser
 import tw.ktrssreader.test.common.ChannelItemTestData.FULL_RSS_CHANNEL
 import tw.ktrssreader.test.common.ChannelItemTestData.PARTIAL_RSS_CHANNEL
 import tw.ktrssreader.test.common.ChannelItemTestData.RSS_CHANNEL_PARTIAL_CLOUD
 import tw.ktrssreader.test.common.ChannelItemTestData.RSS_CHANNEL_PARTIAL_IMAGE
 import tw.ktrssreader.test.common.ChannelItemTestData.RSS_CHANNEL_PARTIAL_TEXT_IMAGE
 import tw.ktrssreader.test.common.ChannelItemTestData.RSS_FOLDER
-import tw.ktrssreader.kotlin.model.channel.RssStandardChannelData
-import tw.ktrssreader.kotlin.parser.RssStandardParser
 import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
 
 @RunWith(Enclosed::class)
-class RssStandardParserTest {
+class RssStandardParserLocalTest {
 
     @RunWith(Parameterized::class)
     class RssStandardParserParseFunctionTest(

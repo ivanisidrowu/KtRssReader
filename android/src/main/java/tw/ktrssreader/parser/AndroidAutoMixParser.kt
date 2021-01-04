@@ -18,10 +18,10 @@ package tw.ktrssreader.parser
 
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
-import tw.ktrssreader.kotlin.constant.ParserConst
 import tw.ktrssreader.kotlin.constant.ParserConst.AUTHOR
 import tw.ktrssreader.kotlin.constant.ParserConst.BLOCK
 import tw.ktrssreader.kotlin.constant.ParserConst.CATEGORY
+import tw.ktrssreader.kotlin.constant.ParserConst.CHANNEL
 import tw.ktrssreader.kotlin.constant.ParserConst.CLOUD
 import tw.ktrssreader.kotlin.constant.ParserConst.COMMENTS
 import tw.ktrssreader.kotlin.constant.ParserConst.COPYRIGHT
@@ -79,6 +79,8 @@ import tw.ktrssreader.kotlin.constant.ParserConst.TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.URL
 import tw.ktrssreader.kotlin.constant.ParserConst.WEB_MASTER
 import tw.ktrssreader.kotlin.constant.ParserConst.WIDTH
+import tw.ktrssreader.kotlin.extension.hrefToImage
+import tw.ktrssreader.kotlin.extension.replaceInvalidUrlByPriority
 import tw.ktrssreader.kotlin.model.channel.*
 import tw.ktrssreader.kotlin.model.item.*
 import tw.ktrssreader.utils.logD
@@ -93,6 +95,10 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
     override val logTag: String = this::class.java.simpleName
 
     override fun parse(xml: String): AutoMixChannelData {
+        rssStandardMap.clear()
+        iTunesMap.clear()
+        googlePlayMap.clear()
+
         parseTag(xml)
 
         return AutoMixChannelData(
@@ -139,7 +145,7 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
 
     @Throws(IOException::class, XmlPullParserException::class)
     private fun parseTag(xml: String) = parseChannel<Unit>(xml = xml) {
-        require(XmlPullParser.START_TAG, null, ParserConst.CHANNEL)
+        require(XmlPullParser.START_TAG, null, CHANNEL)
 
         var title: String? = null
         var description: String? = null
@@ -232,7 +238,7 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
                 else -> skip()
             }
         }
-        require(XmlPullParser.END_TAG, null, ParserConst.CHANNEL)
+        require(XmlPullParser.END_TAG, null, CHANNEL)
 
         rssStandardMap.run {
             put(TITLE, title)
@@ -257,7 +263,7 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
             put(ITEM, items.takeIf { it.isNotEmpty() })
         }
         iTunesMap.run {
-            put(IMAGE, hrefToImage(iTunesImageHref))
+            put(IMAGE, iTunesImageHref.hrefToImage())
             put(CATEGORY, iTunesCategories?.takeIf { it.isNotEmpty() })
             put(ITUNES_TITLE, iTunesSimpleTitle)
             put(EXPLICIT, iTunesExplicit)
@@ -271,7 +277,7 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
         }
         googlePlayMap.run {
             put(DESCRIPTION, googleDescription)
-            put(IMAGE, hrefToImage(googleImageHref))
+            put(IMAGE, googleImageHref.hrefToImage())
             put(CATEGORY, googleCategories?.takeIf { it.isNotEmpty() })
             put(EXPLICIT, googleExplicit)
             put(EMAIL, googleEmail)
@@ -471,33 +477,6 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
             season = iTunesSeason,
             episodeType = iTunesEpisodeType,
             block = iTunesBlock ?: googleBlock
-        )
-    }
-
-    private fun Image?.replaceInvalidUrlByPriority(vararg priorityHref: String?): Image? {
-        if (this == null || url != null) return this
-        val href = priorityHref.firstOrNull { null != it } ?: return this
-
-        return Image(
-            link = link,
-            title = title,
-            url = href,
-            description = description,
-            height = height,
-            width = width
-        )
-    }
-
-    private fun hrefToImage(href: String?): Image? {
-        href ?: return null
-
-        return Image(
-            link = null,
-            title = null,
-            url = href,
-            description = null,
-            height = null,
-            width = null
         )
     }
 }
