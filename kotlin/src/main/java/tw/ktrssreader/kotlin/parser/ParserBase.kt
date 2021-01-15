@@ -18,11 +18,39 @@ package tw.ktrssreader.kotlin.parser
 
 import com.sun.org.apache.xerces.internal.dom.DeferredElementImpl
 import org.w3c.dom.Element
-import tw.ktrssreader.kotlin.constant.ParserConst
-import tw.ktrssreader.kotlin.model.channel.Cloud
-import tw.ktrssreader.kotlin.model.channel.Image
-import tw.ktrssreader.kotlin.model.channel.RssStandardChannel
-import tw.ktrssreader.kotlin.model.channel.TextInput
+import tw.ktrssreader.kotlin.constant.ParserConst.CATEGORY
+import tw.ktrssreader.kotlin.constant.ParserConst.CHANNEL
+import tw.ktrssreader.kotlin.constant.ParserConst.CLOUD
+import tw.ktrssreader.kotlin.constant.ParserConst.DAY
+import tw.ktrssreader.kotlin.constant.ParserConst.DESCRIPTION
+import tw.ktrssreader.kotlin.constant.ParserConst.DOMAIN
+import tw.ktrssreader.kotlin.constant.ParserConst.ENCLOSURE
+import tw.ktrssreader.kotlin.constant.ParserConst.GOOGLE_OWNER
+import tw.ktrssreader.kotlin.constant.ParserConst.GUID
+import tw.ktrssreader.kotlin.constant.ParserConst.HEIGHT
+import tw.ktrssreader.kotlin.constant.ParserConst.HOUR
+import tw.ktrssreader.kotlin.constant.ParserConst.IMAGE
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EMAIL
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_NAME
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_OWNER
+import tw.ktrssreader.kotlin.constant.ParserConst.LENGTH
+import tw.ktrssreader.kotlin.constant.ParserConst.LINK
+import tw.ktrssreader.kotlin.constant.ParserConst.NAME
+import tw.ktrssreader.kotlin.constant.ParserConst.PATH
+import tw.ktrssreader.kotlin.constant.ParserConst.PERMALINK
+import tw.ktrssreader.kotlin.constant.ParserConst.PORT
+import tw.ktrssreader.kotlin.constant.ParserConst.PROTOCOL
+import tw.ktrssreader.kotlin.constant.ParserConst.REGISTER_PROCEDURE
+import tw.ktrssreader.kotlin.constant.ParserConst.SKIP_DAYS
+import tw.ktrssreader.kotlin.constant.ParserConst.SKIP_HOURS
+import tw.ktrssreader.kotlin.constant.ParserConst.SOURCE
+import tw.ktrssreader.kotlin.constant.ParserConst.TEXT
+import tw.ktrssreader.kotlin.constant.ParserConst.TEXT_INPUT
+import tw.ktrssreader.kotlin.constant.ParserConst.TITLE
+import tw.ktrssreader.kotlin.constant.ParserConst.TYPE
+import tw.ktrssreader.kotlin.constant.ParserConst.URL
+import tw.ktrssreader.kotlin.constant.ParserConst.WIDTH
+import tw.ktrssreader.kotlin.model.channel.*
 import tw.ktrssreader.kotlin.model.item.Category
 import tw.ktrssreader.kotlin.model.item.Enclosure
 import tw.ktrssreader.kotlin.model.item.Guid
@@ -35,7 +63,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         val document = builder.parse(xml.byteInputStream())
         document.documentElement.normalize()
-        val nodeList = document.getElementsByTagName(ParserConst.CHANNEL)
+        val nodeList = document.getElementsByTagName(CHANNEL)
         var result: T? = null
 
         // It can only have a channel.
@@ -48,30 +76,80 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         return result ?: throw IllegalArgumentException("No valid channel tag in the RSS feed.")
     }
 
+    protected fun Element.readImage(): Image? {
+        val element = getElementByTag(IMAGE) ?: return null
+
+        val link = element.readString(LINK)
+        val title = element.readString(TITLE)
+        val url = element.readString(URL)
+        val description = element.readString(DESCRIPTION)
+        val height = element.readString(HEIGHT)?.toIntOrNull()
+        val width = element.readString(WIDTH)?.toIntOrNull()
+        return Image(
+            link = link,
+            title = title,
+            url = url,
+            description = description,
+            height = height,
+            width = width
+        )
+    }
+
     protected fun Element.readCategories(parentTag: String): List<Category> {
         val result = mutableListOf<Category>()
-        val nodeList = getElementsByTagName(ParserConst.CATEGORY) ?: return result
+        val nodeList = getElementsByTagName(CATEGORY) ?: return result
 
         for (i in 0 until nodeList.length) {
             val e = nodeList.item(i) as? Element ?: continue
             val parent = e.parentNode as? DeferredElementImpl
             if (parent?.tagName != parentTag) continue
 
-            val domain: String? = e.getAttributeOrNull(ParserConst.DOMAIN)
-            val name: String? = e.textContent
+            val domain: String? = e.getAttributeOrNull(DOMAIN)
+            val name: String? = e.textContent?.takeIf { it.isNotEmpty() }
             result.add(Category(name = name, domain = domain))
         }
         return result
     }
 
-    protected fun Element.readCloud(): Cloud? {
-        val element = getElementByTag(ParserConst.CLOUD) ?: return null
+    protected fun Element.readCategories(parentTag: String, tagName: String): List<Category>? {
+        val result = mutableListOf<Category>()
+        val nodeList = getElementsByTagName(tagName) ?: return null
 
-        val domain: String? = element.getAttributeOrNull(ParserConst.DOMAIN)
-        val port: Int? = element.getAttributeOrNull(ParserConst.PORT)?.toIntOrNull()
-        val path: String? = element.getAttributeOrNull(ParserConst.PATH)
-        val registerProcedure: String? = element.getAttributeOrNull(ParserConst.REGISTER_PROCEDURE)
-        val protocol: String? = element.getAttributeOrNull(ParserConst.PROTOCOL)
+        for (i in 0 until nodeList.length) {
+            val e = nodeList.item(i) as? Element ?: continue
+            val parent = e.parentNode as? DeferredElementImpl
+            if (parent?.tagName == parentTag || parent?.tagName == tagName) {
+                result.add(Category(name = e.getAttributeOrNull(TEXT), domain = null))
+            }
+        }
+        return result
+    }
+
+    protected fun Element.readITunesOwner(): Owner? {
+        val nodeList = getElementsByTagName(ITUNES_OWNER) ?: return null
+        if (nodeList.length == 0) return null
+
+        val element = getElementByTag(ITUNES_OWNER)
+        val name = element?.readString(ITUNES_NAME)
+        val email = element?.readString(ITUNES_EMAIL)
+        return Owner(name = name, email = email)
+    }
+
+    protected fun Element.readGoogleOwner(): Owner? {
+        val nodeList = getElementsByTagName(GOOGLE_OWNER)
+        if (nodeList.length == 0) return null
+
+        return Owner(name = null, email = readString(GOOGLE_OWNER))
+    }
+
+    protected fun Element.readCloud(): Cloud? {
+        val element = getElementByTag(CLOUD) ?: return null
+
+        val domain: String? = element.getAttributeOrNull(DOMAIN)
+        val port: Int? = element.getAttributeOrNull(PORT)?.toIntOrNull()
+        val path: String? = element.getAttributeOrNull(PATH)
+        val registerProcedure: String? = element.getAttributeOrNull(REGISTER_PROCEDURE)
+        val protocol: String? = element.getAttributeOrNull(PROTOCOL)
 
         return Cloud(
             domain = domain,
@@ -83,20 +161,20 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     protected fun Element.readTextInput(): TextInput? {
-        val element = getElementByTag(ParserConst.TEXT_INPUT) ?: return null
+        val element = getElementByTag(TEXT_INPUT) ?: return null
 
-        val title: String? = element.readString(ParserConst.TITLE)
-        val description: String? = element.readString(name = ParserConst.DESCRIPTION, parentTag = ParserConst.TEXT_INPUT)
-        val name: String? = element.readString(ParserConst.NAME)
-        val link: String? = element.readString(ParserConst.LINK)
+        val title: String? = element.readString(TITLE)
+        val description: String? = element.readString(name = DESCRIPTION, parentTag = TEXT_INPUT)
+        val name: String? = element.readString(NAME)
+        val link: String? = element.readString(LINK)
         return TextInput(title = title, description = description, name = name, link = link)
     }
 
     protected fun Element.readSkipHours(): List<Int>? {
-        val element = getElementByTag(ParserConst.SKIP_HOURS) ?: return null
+        val element = getElementByTag(SKIP_HOURS) ?: return null
 
         val hours = mutableListOf<Int>()
-        val nodes = element.getElementsByTagName(ParserConst.HOUR)
+        val nodes = element.getElementsByTagName(HOUR)
         for (i in 0 until nodes.length) {
             val e = nodes.item(i) as? Element
             e?.textContent?.toIntOrNull()?.let { hours.add(it) }
@@ -105,10 +183,10 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     protected fun Element.readSkipDays(): List<String>? {
-        val element = getElementByTag(ParserConst.SKIP_DAYS) ?: return null
+        val element = getElementByTag(SKIP_DAYS) ?: return null
 
         val days = mutableListOf<String>()
-        val nodes = element.getElementsByTagName(ParserConst.DAY)
+        val nodes = element.getElementsByTagName(DAY)
         for (i in 0 until nodes.length) {
             val e = nodes.item(i) as? Element
             e?.textContent?.let { days.add(it) }
@@ -117,27 +195,27 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     protected fun Element.readEnclosure(): Enclosure? {
-        val element = getElementByTag(ParserConst.ENCLOSURE) ?: return null
+        val element = getElementByTag(ENCLOSURE) ?: return null
 
-        val url = element.getAttributeOrNull(ParserConst.URL)
-        val length = element.getAttributeOrNull(ParserConst.LENGTH)?.toLongOrNull()
-        val type = element.getAttributeOrNull(ParserConst.TYPE)
+        val url = element.getAttributeOrNull(URL)
+        val length = element.getAttributeOrNull(LENGTH)?.toLongOrNull()
+        val type = element.getAttributeOrNull(TYPE)
         return Enclosure(url = url, length = length, type = type)
     }
 
     protected fun Element.readGuid(): Guid? {
-        val element = getElementByTag(ParserConst.GUID) ?: return null
+        val element = getElementByTag(GUID) ?: return null
 
-        val isPermaLink = element.getAttributeOrNull(ParserConst.PERMALINK)?.toBoolean()
-        val value = readString(ParserConst.GUID)
+        val isPermaLink = element.getAttributeOrNull(PERMALINK)?.toBoolean()
+        val value = readString(GUID)
         return Guid(value = value, isPermaLink = isPermaLink)
     }
 
     protected fun Element.readSource(): Source? {
-        val element = getElementByTag(ParserConst.SOURCE) ?: return null
+        val element = getElementByTag(SOURCE) ?: return null
 
-        val url = element.getAttributeOrNull(ParserConst.URL)
-        val title = readString(ParserConst.SOURCE)
+        val url = element.getAttributeOrNull(URL)
+        val title = readString(SOURCE)
         return Source(title = title, url = url)
     }
 
@@ -158,7 +236,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     protected fun Element.getAttributeOrNull(tag: String): String? {
-        val attr = getAttribute(tag)
+        val attr = getAttribute(tag) ?: return null
         return if (attr.isEmpty() || attr.isBlank()) null else attr
     }
 

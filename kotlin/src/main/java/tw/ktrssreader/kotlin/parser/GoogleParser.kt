@@ -16,7 +16,6 @@
 
 package tw.ktrssreader.kotlin.parser
 
-import com.sun.org.apache.xerces.internal.dom.DeferredElementImpl
 import org.w3c.dom.Element
 import tw.ktrssreader.kotlin.constant.ParserConst.AUTHOR
 import tw.ktrssreader.kotlin.constant.ParserConst.CHANNEL
@@ -31,7 +30,6 @@ import tw.ktrssreader.kotlin.constant.ParserConst.GOOGLE_DESCRIPTION
 import tw.ktrssreader.kotlin.constant.ParserConst.GOOGLE_EMAIL
 import tw.ktrssreader.kotlin.constant.ParserConst.GOOGLE_EXPLICIT
 import tw.ktrssreader.kotlin.constant.ParserConst.GOOGLE_IMAGE
-import tw.ktrssreader.kotlin.constant.ParserConst.GOOGLE_OWNER
 import tw.ktrssreader.kotlin.constant.ParserConst.HREF
 import tw.ktrssreader.kotlin.constant.ParserConst.ITEM
 import tw.ktrssreader.kotlin.constant.ParserConst.LANGUAGE
@@ -40,14 +38,11 @@ import tw.ktrssreader.kotlin.constant.ParserConst.LINK
 import tw.ktrssreader.kotlin.constant.ParserConst.MANAGING_EDITOR
 import tw.ktrssreader.kotlin.constant.ParserConst.PUB_DATE
 import tw.ktrssreader.kotlin.constant.ParserConst.RATING
-import tw.ktrssreader.kotlin.constant.ParserConst.TEXT
 import tw.ktrssreader.kotlin.constant.ParserConst.TITLE
 import tw.ktrssreader.kotlin.constant.ParserConst.TTL
 import tw.ktrssreader.kotlin.constant.ParserConst.WEB_MASTER
 import tw.ktrssreader.kotlin.model.channel.GoogleChannelData
 import tw.ktrssreader.kotlin.model.channel.Image
-import tw.ktrssreader.kotlin.model.channel.Owner
-import tw.ktrssreader.kotlin.model.item.Category
 import tw.ktrssreader.kotlin.model.item.GoogleItemData
 
 class GoogleParser : ParserBase<GoogleChannelData>() {
@@ -75,7 +70,8 @@ class GoogleParser : ParserBase<GoogleChannelData>() {
             val description = readString(name = GOOGLE_DESCRIPTION, parentTag = CHANNEL)
             val image = getElementByTag(GOOGLE_IMAGE)?.readGoogleImage()
             val explicit = readString(GOOGLE_EXPLICIT)?.toBoolOrNull()
-            val categories = readGoogleCategories(parentTag = CHANNEL) ?: listOf()
+            val categories =
+                readCategories(parentTag = CHANNEL, tagName = GOOGLE_CATEGORY) ?: listOf()
             val author = readString(GOOGLE_AUTHOR)
             val owner = readGoogleOwner()
             val block = readString(GOOGLE_BLOCK)?.toBoolOrNull()
@@ -112,7 +108,7 @@ class GoogleParser : ParserBase<GoogleChannelData>() {
     }
 
     private fun Element.readGoogleImage(): Image {
-        val href = getAttribute(HREF)
+        val href = getAttributeOrNull(HREF)
         return Image(
             link = null,
             title = null,
@@ -121,28 +117,6 @@ class GoogleParser : ParserBase<GoogleChannelData>() {
             height = null,
             width = null
         )
-    }
-
-    private fun Element.readGoogleOwner(): Owner? {
-        val nodeList = getElementsByTagName(GOOGLE_OWNER)
-        if (nodeList.length == 0) return null
-
-        return Owner(name = null, email = readString(GOOGLE_OWNER))
-    }
-
-    private fun Element.readGoogleCategories(parentTag: String): List<Category> {
-        val result = mutableListOf<Category>()
-        val nodeList = getElementsByTagName(GOOGLE_CATEGORY) ?: return result
-
-        for (i in 0 until nodeList.length) {
-            val e = nodeList.item(i) as? Element ?: continue
-            val parent = e.parentNode as? DeferredElementImpl
-            if (parent?.tagName == parentTag || parent?.tagName == GOOGLE_CATEGORY) {
-                val name: String? = e.getAttributeOrNull(TEXT)
-                result.add(Category(name = name, domain = null))
-            }
-        }
-        return result
     }
 
     private fun Element.readItems(): List<GoogleItemData> {

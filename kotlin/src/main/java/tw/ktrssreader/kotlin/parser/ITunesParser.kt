@@ -16,7 +16,6 @@
 
 package tw.ktrssreader.kotlin.parser
 
-import com.sun.org.apache.xerces.internal.dom.DeferredElementImpl
 import org.w3c.dom.Element
 import tw.ktrssreader.kotlin.constant.ParserConst.CHANNEL
 import tw.ktrssreader.kotlin.constant.ParserConst.COMMENTS
@@ -31,14 +30,11 @@ import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_BLOCK
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_CATEGORY
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_COMPLETE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_DURATION
-import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EMAIL
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE_TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EXPLICIT
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_IMAGE
-import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_NAME
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_NEW_FEED_URL
-import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_OWNER
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SEASON
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TITLE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TYPE
@@ -48,7 +44,6 @@ import tw.ktrssreader.kotlin.constant.ParserConst.LINK
 import tw.ktrssreader.kotlin.constant.ParserConst.MANAGING_EDITOR
 import tw.ktrssreader.kotlin.constant.ParserConst.PUB_DATE
 import tw.ktrssreader.kotlin.constant.ParserConst.RATING
-import tw.ktrssreader.kotlin.constant.ParserConst.TEXT
 import tw.ktrssreader.kotlin.constant.ParserConst.TITLE
 import tw.ktrssreader.kotlin.constant.ParserConst.TTL
 import tw.ktrssreader.kotlin.constant.ParserConst.WEB_MASTER
@@ -82,7 +77,8 @@ class ITunesParser : ParserBase<ITunesChannelData>() {
 
             val image: Image? = readITunesImage()
             val explicit: Boolean? = readString(ITUNES_EXPLICIT)?.toBoolean()
-            val categories: List<Category>? = readITunesCategories(parentTag = CHANNEL)
+            val categories: List<Category>? =
+                readCategories(parentTag = CHANNEL, tagName = ITUNES_CATEGORY)
             val author: String? = readString(ITUNES_AUTHOR)
             val owner: Owner? = readITunesOwner()
             val simpleTitle: String? = readString(ITUNES_TITLE)
@@ -127,7 +123,7 @@ class ITunesParser : ParserBase<ITunesChannelData>() {
 
     private fun Element.readITunesImage(): Image? {
         val element = getElementByTag(ITUNES_IMAGE) ?: return null
-        val href = element.getAttribute(HREF)
+        val href = element.getAttributeOrNull(HREF)
         return Image(
             link = null,
             title = null,
@@ -136,30 +132,6 @@ class ITunesParser : ParserBase<ITunesChannelData>() {
             height = null,
             width = null
         )
-    }
-
-    private fun Element.readITunesCategories(parentTag: String): List<Category>? {
-        val result = mutableListOf<Category>()
-        val nodeList = getElementsByTagName(ITUNES_CATEGORY) ?: return null
-
-        for (i in 0 until nodeList.length) {
-            val e = nodeList.item(i) as? Element ?: continue
-            val parent = e.parentNode as? DeferredElementImpl
-            if (parent?.tagName == parentTag || parent?.tagName == ITUNES_CATEGORY) {
-                result.add(Category(name = e.getAttributeOrNull(TEXT), domain = null))
-            }
-        }
-        return result
-    }
-
-    private fun Element.readITunesOwner(): Owner? {
-        val nodeList = getElementsByTagName(ITUNES_OWNER) ?: return null
-        if (nodeList.length == 0) return null
-
-        val element = getElementByTag(ITUNES_OWNER)
-        val name = element?.readString(ITUNES_NAME)
-        val email = element?.readString(ITUNES_EMAIL)
-        return Owner(name = name, email = email)
     }
 
     private fun Element.readItems(): List<ITunesItemData> {
@@ -181,7 +153,7 @@ class ITunesParser : ParserBase<ITunesChannelData>() {
 
             val simpleTitle: String? = element.readString(ITUNES_TITLE)
             val duration: String? = element.readString(ITUNES_DURATION)
-            val image: String? = element.getElementByTag(ITUNES_IMAGE)?.getAttribute(HREF)
+            val image: String? = element.getElementByTag(ITUNES_IMAGE)?.getAttributeOrNull(HREF)
             val explicit: Boolean? = element.readString(ITUNES_EXPLICIT)?.toBoolOrNull()
             val episode: Int? = element.readString(ITUNES_EPISODE)?.toIntOrNull()
             val season: Int? = element.readString(ITUNES_SEASON)?.toIntOrNull()
