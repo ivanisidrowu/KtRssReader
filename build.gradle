@@ -49,7 +49,7 @@ allprojects {
 }
 
 subprojects { project ->
-    if (project.name == 'annotation' || project.name == 'processor') {
+    if (project.name == 'annotation' || project.name == 'processor' || project.name == 'kotlin') {
         apply plugin: 'java'
         apply plugin: 'maven'
 
