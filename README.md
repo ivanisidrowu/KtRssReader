@@ -77,8 +77,10 @@ dependencies {
 
 ## How to Use KtRssReader?
 Please check out documentation for more information.
-[Android](https://github.com/ivanisidrowu/KtRssReader/wiki/Android)
-[Kotlin](https://github.com/ivanisidrowu/KtRssReader/wiki/Kotlin)
+
+**[Android](https://github.com/ivanisidrowu/KtRssReader/wiki/Android)**
+
+**[Kotlin](https://github.com/ivanisidrowu/KtRssReader/wiki/Kotlin)**
 
 ## Contribution
 
