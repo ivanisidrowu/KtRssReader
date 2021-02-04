@@ -19,11 +19,13 @@ package tw.ktrssreader.processor.generator
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import tw.ktrssreader.processor.const.*
+import tw.ktrssreader.processor.util.Logger
 
-class ReaderGenerator(
+class AndroidReaderParserGenerator(
     private val rootClassName: String,
-    rootClassPackage: String
-) : Generator {
+    rootClassPackage: String,
+    logger: Logger
+) : ParserGenerator(logger) {
 
     companion object {
         private const val URL = "url"

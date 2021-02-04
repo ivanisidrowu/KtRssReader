@@ -24,8 +24,10 @@ import javax.lang.model.element.Name
 import javax.lang.model.element.PackageElement
 import kotlin.reflect.KClass
 
+private val stringJavaPath = String::class.java.canonicalName.substringAfterLast('.')
+
 private val primitiveJavaPaths = listOf(
-    String::class.java.canonicalName.substringAfterLast('.'),
+    stringJavaPath,
     Int::class.java.canonicalName,
     Boolean::class.java.canonicalName,
     Long::class.java.canonicalName,
@@ -36,6 +38,8 @@ fun String.isListType(): Boolean {
     return contains(List::class.java.canonicalName)
 }
 
+fun String.isTypeString(): Boolean = this == stringJavaPath
+
 fun String.isPrimitive(): Boolean = primitiveJavaPaths.any { this.contains(other = it, ignoreCase = true) }
 
 fun String.getFuncName(): String {
@@ -43,6 +47,15 @@ fun String.getFuncName(): String {
         this.startsWith(GOOGLE_PREFIX) || this.startsWith(ITUNES_PREFIX) ->
             "get${this.substringAfterLast(':').capitalize(Locale.ROOT)}"
         else -> "get${this.capitalize(Locale.ROOT)}"
+    }
+}
+
+fun String.getListFuncName(): String {
+    val tagCapitalized = substringAfterLast(':').capitalize(Locale.ROOT)
+    return when {
+        startsWith(GOOGLE_PREFIX) -> "get${GOOGLE_PREFIX.capitalize(Locale.ROOT)}${tagCapitalized}List"
+        startsWith(ITUNES_PREFIX) -> "get${ITUNES_PREFIX.capitalize(Locale.ROOT)}${tagCapitalized}List"
+        else -> "get${tagCapitalized}List"
     }
 }
 
