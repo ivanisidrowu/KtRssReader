@@ -22,9 +22,8 @@ import tw.ktrssreader.annotation.RssRawData
 import tw.ktrssreader.annotation.RssTag
 import tw.ktrssreader.annotation.RssValue
 import tw.ktrssreader.processor.const.CHANNEL
-import tw.ktrssreader.processor.generator.ExtensionGenerator
-import tw.ktrssreader.processor.generator.ParserGenerator
-import tw.ktrssreader.processor.generator.ReaderGenerator
+import tw.ktrssreader.processor.const.KAPT_OPTION_KEY
+import tw.ktrssreader.processor.generator.*
 import tw.ktrssreader.processor.util.Logger
 import tw.ktrssreader.processor.util.getPackage
 import javax.annotation.processing.AbstractProcessor
@@ -32,6 +31,7 @@ import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedOptions
 import javax.lang.model.SourceVersion
+import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
 
@@ -53,32 +53,63 @@ class RssAnnotationProcessor : AbstractProcessor() {
         )
     }
 
-    override fun process(p0: MutableSet<out TypeElement>?, p1: RoundEnvironment?): Boolean {
+    override fun process(typeElementSet: MutableSet<out TypeElement>?, roundEnvironment: RoundEnvironment?): Boolean {
         val logger = Logger(processingEnv.messager)
-        // This 'process' method could be called multiple times, so we use a flag to prevent it generate multiple times.
+        val isPureKotlinParser = processingEnv.options[KAPT_OPTION_KEY]?.toBoolean() ?: false
+        if (isPureKotlinParser) {
+            generateClassesForKotlin(logger, roundEnvironment)
+        } else {
+            generateClassesForAndroid(logger, roundEnvironment)
+        }
+        return true
+    }
+
+    private fun generateClassesForKotlin(logger: Logger, roundEnvironment: RoundEnvironment?) {
         if (!isExtensionGenerated) {
-            ExtensionGenerator(logger).generate().writeTo(processingEnv.filer)
+            KotlinExtensionGenerator(logger).generate().writeTo(processingEnv.filer)
             isExtensionGenerated = true
         }
 
-        p1?.getElementsAnnotatedWith(RssTag::class.java)?.forEach {
+        generateParsers(roundEnvironment) { isRoot, element ->
+            logger.log("[RssAnnotationProcessor][generateClassesForKotlin] isRoot = $isRoot, element = $element")
+            KotlinParserGenerator(
+                element = element,
+                isRoot = isRoot,
+                logger = logger
+            ).generate().writeTo(processingEnv.filer)
+        }
+    }
+
+    private fun generateClassesForAndroid(logger: Logger, roundEnvironment: RoundEnvironment?) {
+        // This 'process' method could be called multiple times, so we use a flag to prevent it generate multiple times.
+        if (!isExtensionGenerated) {
+            AndroidExtensionGenerator(logger).generate().writeTo(processingEnv.filer)
+            isExtensionGenerated = true
+        }
+        generateParsers(roundEnvironment) { isRoot, element ->
+            AndroidParserGenerator(
+                element = element,
+                isRoot = isRoot,
+                logger = logger
+            ).generate().writeTo(processingEnv.filer)
+
+            if (isRoot) {
+                AndroidReaderParserGenerator(
+                    rootClassName = element.simpleName.toString(),
+                    rootClassPackage = element.getPackage(),
+                    logger
+                ).generate().writeTo(processingEnv.filer)
+            }
+        }
+    }
+
+    private inline fun generateParsers(roundEnv: RoundEnvironment?, crossinline action: (Boolean, Element) -> Unit) {
+        roundEnv?.getElementsAnnotatedWith(RssTag::class.java)?.forEach {
             if (it?.kind == ElementKind.CLASS) {
                 val rssTag = it.getAnnotation(RssTag::class.java)
                 val isRoot = rssTag?.name == CHANNEL
-                ParserGenerator(
-                    element = it,
-                    isRoot = isRoot,
-                    logger = logger
-                ).generate().writeTo(processingEnv.filer)
-
-                if (isRoot) {
-                    ReaderGenerator(
-                        rootClassName = it.simpleName.toString(),
-                        rootClassPackage = it.getPackage()
-                    ).generate().writeTo(processingEnv.filer)
-                }
+                action(isRoot, it)
             }
         }
-        return true
     }
 }

@@ -16,6 +16,8 @@
 
 package tw.ktrssreader.processor.const
 
+const val KAPT_OPTION_KEY = "pureKotlinParser"
+
 const val CHANNEL = "channel"
 const val PARSER_SUFFIX = "Parser"
 const val PARSER_FUNC_NAME = "parse"
@@ -33,6 +35,8 @@ const val METHOD_SKIP = "skip"
 const val METHOD_GET_PARSER = "getXmlParser"
 const val METHOD_READ_STRING = "readString"
 const val METHOD_TO_BOOLEAN = "toBooleanOrNull"
+const val METHOD_GET_ATTR_OR_NULL = "getAttributeOrNull"
+const val METHOD_GET_ELEMENT_BY_TAG = "getElementByTag"
 const val METHOD_READ = "read"
 const val METHOD_FLOW_READ = "flowRead"
 const val METHOD_CO_READ = "coRead"

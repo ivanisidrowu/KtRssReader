@@ -16,7 +16,9 @@
 
 package tw.ktrssreader.processor.generator
 
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.MemberName
 import tw.ktrssreader.annotation.*
 import tw.ktrssreader.processor.DataType
 import tw.ktrssreader.processor.ParseData
@@ -26,127 +28,17 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.ExecutableElement
 
-class ParserGenerator(
-    private val element: Element,
-    private val isRoot: Boolean,
-    private val logger: Logger
-) : Generator {
+abstract class ParserGenerator(protected val logger: Logger) : Generator {
+    protected val extensionFullPath = "$GENERATOR_PACKAGE.$EXTENSION_NAME"
+    protected val booleanConversionMemberName = MemberName(extensionFullPath, METHOD_TO_BOOLEAN)
 
-    private val outputClass = ClassName(element.getPackage(), element.simpleName.toString())
-    private val xmlParserClass = ClassName(XML_PULL_PACKAGE, XML_PULL_NAME)
-    private val xmlParserExceptionClass = ClassName(XML_PULL_PACKAGE, XML_PULL_EXCEPTION_NAME)
-    private val extensionFullPath = "$GENERATOR_PACKAGE.$EXTENSION_NAME"
-    private val skipMemberName = MemberName(extensionFullPath, METHOD_SKIP)
+    protected var rootTagName: String? = null
+    protected var hasRssValueAnnotation: Boolean = false
+    protected var topLevelCandidateOrder = emptyArray<OrderType>()
+
     private val readStringMemberName = MemberName(extensionFullPath, METHOD_READ_STRING)
-    private val getParserMemberName = MemberName(extensionFullPath, METHOD_GET_PARSER)
-    private val booleanConversionMemberName = MemberName(extensionFullPath, METHOD_TO_BOOLEAN)
 
-    private var topLevelCandidateOrder = emptyArray<OrderType>()
-    private var rootTagName: String? = null
-    private var hasRssValueAnnotation = false
-
-    override fun generate(): FileSpec {
-        val generatedClassName = "${element.simpleName}$PARSER_SUFFIX"
-        return FileSpec.builder(GENERATOR_PACKAGE, generatedClassName)
-            .addType(getObjectTypeSpec(generatedClassName))
-            .build()
-    }
-
-    private fun getObjectTypeSpec(className: String): TypeSpec {
-        val builder = TypeSpec.objectBuilder(className)
-        val outputClassName = element.simpleName.toString()
-
-        if (isRoot) {
-            builder.addFunction(getParseFuncSpec())
-        }
-        return builder
-            .addFunction(getClassFunSpec(element, outputClassName))
-            .build()
-    }
-
-    private fun getParseFuncSpec(): FunSpec {
-        return FunSpec.builder(PARSER_FUNC_NAME)
-            .addParameter("xml", String::class)
-            .addCode(
-                """
-                |val parser = %5M(xml)
-                |
-                |var result: %1T? = null
-                |while (parser.next() != XmlPullParser.END_TAG) {
-                |${TAB}if (parser.eventType != XmlPullParser.START_TAG) continue
-                |
-                |${TAB}if (parser.name == "%2L") {
-                |${TAB}${TAB}result = parser.getChannel()
-                |${TAB}${TAB}break
-                |${TAB}} else {
-                |${TAB}${TAB}parser.%4M()
-                |${TAB}}
-                |}
-                |return result ?: throw %3T("No valid channel tag in the RSS feed.")
-                """.trimMargin(),
-                outputClass, CHANNEL, xmlParserExceptionClass, skipMemberName, getParserMemberName
-            )
-            .returns(outputClass)
-            .build()
-    }
-
-    private fun getClassFunSpec(rootElement: Element, outputClassName: String): FunSpec {
-        val outputClass = ClassName(rootElement.getPackage(), outputClassName)
-        val rssTag = rootElement.getAnnotation(RssTag::class.java)
-        val rssRawData = rootElement.getAnnotation(RssRawData::class.java)
-        if (rssTag != null && rssRawData != null) {
-            logger.error(
-                "@RssTag and @RssRawData should not be used on the same class!",
-                rootElement
-            )
-        }
-        val tagName = rssTag?.name?.takeIfNotEmpty() ?: rootElement.simpleName.toString()
-        rootTagName = tagName
-        val funSpec = FunSpec.builder(tagName.getFuncName())
-            .receiver(xmlParserClass)
-            .returns(outputClass)
-        val propertyToParseData = mutableMapOf<String, ParseData>()
-        topLevelCandidateOrder =
-            rssTag?.order ?: arrayOf(OrderType.RSS_STANDARD, OrderType.ITUNES, OrderType.GOOGLE)
-
-        val annotations = preProcessAnnotations(rootElement)
-        rootElement.enclosedElements.forEach { preProcessParseData(it, propertyToParseData, annotations) }
-        propertyToParseData.forEach { generateVariableStatement(it, funSpec) }
-
-        if (!hasRssValueAnnotation) {
-            funSpec.addCode(
-                """
-            |while (next() != XmlPullParser.END_TAG) {
-            |${TAB}if (eventType != XmlPullParser.START_TAG) continue
-            |
-            |${TAB}when (this.name) {
-            |
-            """.trimMargin()
-            )
-            propertyToParseData.forEach { generateVariableAssignment(it, funSpec) }
-            funSpec.addCode(
-                """
-            |${TAB}${TAB}else -> %M()
-            |${TAB}}
-            |}
-        """.trimMargin(),
-                skipMemberName
-            )
-        }
-
-        funSpec.addStatement("\nreturn $outputClassName(")
-        // Generate constructor statements
-        var index = 0
-        propertyToParseData.forEach {
-            generateConstructor(it, funSpec, index == propertyToParseData.size - 1)
-            index ++
-        }
-
-        funSpec.addStatement("$TAB)")
-        return funSpec.build()
-    }
-
-    private fun preProcessAnnotations(rootElement: Element): Map<String, Any?> {
+    protected fun preProcessAnnotations(rootElement: Element): Map<String, Any?> {
         val result = mutableMapOf<String, Any?>()
         rootElement.enclosedElements.forEach { child ->
             if (child.kind != ElementKind.METHOD
@@ -178,7 +70,7 @@ class ParserGenerator(
         return result
     }
 
-    private fun preProcessParseData(
+    protected fun preProcessParseData(
         child: Element,
         parseDataMap: MutableMap<String, ParseData>,
         nameToAnnotation: Map<String, Any?>
@@ -228,7 +120,7 @@ class ParserGenerator(
         )
     }
 
-    private fun generateVariableStatement(
+    protected fun generateVariableStatement(
         propertyToParseData: Map.Entry<String, ParseData>,
         funSpec: FunSpec.Builder
     ) {
@@ -293,7 +185,7 @@ class ParserGenerator(
         }
     }
 
-    private fun generateVariableAssignment(
+    protected fun generateVariableAssignment(
         entry: Map.Entry<String, ParseData>,
         funSpec: FunSpec.Builder
     ) {
@@ -345,7 +237,7 @@ class ParserGenerator(
         }
     }
 
-    private fun generateConstructor(
+    open fun generateConstructor(
         parseData: Map.Entry<String, ParseData>,
         funSpec: FunSpec.Builder,
         isLastLine: Boolean
@@ -430,7 +322,7 @@ class ParserGenerator(
         }
     }
 
-    private fun FunSpec.Builder.addPrimitiveStatement(
+    protected fun FunSpec.Builder.addPrimitiveStatement(
         readStringStatement: String,
         typeString: String
     ) {
