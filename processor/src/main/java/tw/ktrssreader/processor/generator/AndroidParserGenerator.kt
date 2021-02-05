@@ -127,8 +127,9 @@ class AndroidParserGenerator(
         funSpec.addStatement("\nreturn $outputClassName(")
         // Generate constructor statements
         var index = 0
+        val lastIndex = propertyToParseData.size - 1
         propertyToParseData.forEach {
-            generateConstructor(it, funSpec, index == propertyToParseData.size - 1)
+            generateConstructor(it, funSpec, index == lastIndex)
             index ++
         }
 
