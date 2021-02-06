@@ -22,60 +22,6 @@ KtRssReader is a Kotlin library for parsing RSS feed.
 * Easy-to-use API
 * Customizes output data with annotations
 
-## Download
-
-### Android
-First, you can add this repository to the root of your project `build.gradle` file under the **`allprojects`**.
-
-```gradle
-allprojects {
-  repositories {
-   ...
-   maven { url 'https://jitpack.io' }
-  }
-}
-```
-
-Then, add this dependency to the `build.gradle` file in app directory.
-
-```gradle
-dependencies {
-    implementation "com.github.ivanisidrowu.KtRssReader:android:v2.0.2"
-}
-```
-
-If you want to customize data format, you have to add these dependencies.
-
-```gradle
-apply plugin: 'kotlin-kapt'
-
-dependencies {
-    implementation "com.github.ivanisidrowu.KtRssReader:android:v2.0.2"
-    implementation "com.github.ivanisidrowu.KtRssReader:annotation:v2.0.2"
-    kapt "com.github.ivanisidrowu.KtRssReader:processor:v2.0.2"
-}
-```
-
-### Kotlin
-First, you can add this repository to the root of your project `build.gradle` file under the **`allprojects`**.
-
-```gradle
-allprojects {
-  repositories {
-   ...
-   maven { url 'https://jitpack.io' }
-  }
-}
-```
-
-Then, add this dependency to the `build.gradle` file in app directory.
-
-```gradle
-dependencies {
-    implementation "com.github.ivanisidrowu.KtRssReader:kotlin:v2.0.2"
-}
-```
-
 ## How to Use KtRssReader?
 Please check out documentation for more information.
 
