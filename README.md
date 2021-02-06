@@ -89,7 +89,7 @@ Contributions are always welcome. If you have any ideas or suggestions, you can 
 ## Roadmap
 
 - [X] Add pure Kotlin parsers.
-- [ ] Implement an annotation processor to generate custom Kotlin parsers.
+- [X] Implement an annotation processor to generate custom Kotlin parsers.
 
 ## License
 
