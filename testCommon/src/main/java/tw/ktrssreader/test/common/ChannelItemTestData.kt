@@ -377,6 +377,9 @@ object ChannelItemTestData {
     private const val ITUNES_ITEM_DURATION_ATTR = "2:00"
     private const val ITUNES_ITEM_IMAGE_ATTR = "https://item.image.itunes"
     private const val ITUNES_ITEM_EPISODE_ATTR = "full"
+    private const val ITUNES_ITEM_SUMMARY_ATTR = "summary"
+    private const val ITUNES_ITEM_SUBTITLE_ATTR = "subtitle"
+    private const val ITUNES_ITEM_KEYWORDS_ATTR = "keyword1,keyword2"
     private val FULL_ITUNES_ITEM = ITunesItemData(
         title = ITEM_TITLE_ATTR,
         enclosure = ITEM_ENCLOSURE_ATTR,
@@ -399,6 +402,9 @@ object ChannelItemTestData {
         episode = 1,
         season = 1,
         episodeType = ITUNES_ITEM_EPISODE_ATTR,
+        summary = ITUNES_ITEM_SUMMARY_ATTR,
+        subtitle = ITUNES_ITEM_SUBTITLE_ATTR,
+        keywords = ITUNES_ITEM_KEYWORDS_ATTR,
     )
 
     private val PARTIAL_ITUNES_ITEM_1 = FULL_ITUNES_ITEM.copy(
@@ -418,7 +424,10 @@ object ChannelItemTestData {
         episode = null,
         season = null,
         episodeType = null,
-        block = false
+        block = false,
+        summary = null,
+        subtitle = null,
+        keywords = null,
     )
 
     private val PARTIAL_ITUNES_ITEM_2 = FULL_ITUNES_ITEM.copy(
@@ -438,7 +447,10 @@ object ChannelItemTestData {
         episode = null,
         season = null,
         episodeType = null,
-        block = null
+        block = null,
+        summary = null,
+        subtitle = null,
+        keywords = null,
     )
 
     val FULL_ITUNES_CHANNEL = ITunesChannelData(
@@ -533,7 +545,10 @@ object ChannelItemTestData {
         season = 1,
         episodeType = ITUNES_ITEM_EPISODE_ATTR,
         block = true,
-        simpleTitle = ITUNES_ITEM_TITLE_ATTR
+        simpleTitle = ITUNES_ITEM_TITLE_ATTR,
+        summary = ITUNES_ITEM_SUMMARY_ATTR,
+        subtitle = ITUNES_ITEM_SUBTITLE_ATTR,
+        keywords = ITUNES_ITEM_KEYWORDS_ATTR,
     )
 
     private val PARTIAL_AUTOMIX_ITEM_1 = FULL_AUTOMIX_ITEM.copy(
@@ -550,7 +565,10 @@ object ChannelItemTestData {
         episode = 1,
         season = 1,
         episodeType = ITUNES_ITEM_EPISODE_ATTR,
-        block = true
+        block = true,
+        summary = null,
+        subtitle = null,
+        keywords = null,
     )
 
     private val PARTIAL_AUTOMIX_ITEM_2 = AutoMixItemData(
@@ -571,7 +589,10 @@ object ChannelItemTestData {
         season = null,
         episodeType = null,
         block = true,
-        simpleTitle = null
+        simpleTitle = null,
+        summary = null,
+        subtitle = null,
+        keywords = null,
     )
 
     val FULL_AUTOMIX_CHANNEL = AutoMixChannelData(

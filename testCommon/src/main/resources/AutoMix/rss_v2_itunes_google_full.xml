@@ -84,6 +84,9 @@
           <itunes:episode>1</itunes:episode>
           <itunes:season>1</itunes:season>
           <itunes:episodeType>full</itunes:episodeType>
+          <itunes:summary>summary</itunes:summary>
+          <itunes:subtitle>subtitle</itunes:subtitle>
+          <itunes:keywords>keyword1,keyword2</itunes:keywords>
           <googleplay:description>item description - google play</googleplay:description>
           <googleplay:explicit>no</googleplay:explicit>
           <googleplay:block>no</googleplay:block>

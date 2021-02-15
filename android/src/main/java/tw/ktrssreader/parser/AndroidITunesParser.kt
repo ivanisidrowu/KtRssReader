@@ -31,10 +31,13 @@ import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE_TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EXPLICIT
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_IMAGE
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_KEYWORDS
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_NAME
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_NEW_FEED_URL
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_OWNER
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SEASON
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SUBTITLE
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SUMMARY
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TITLE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.TEXT
@@ -203,6 +206,9 @@ class AndroidITunesParser : AndroidParserBase<ITunesChannelData>() {
         var episodeType: String? = null
         var block: Boolean? = null
         var author: String? = null
+        var summary: String? = null
+        var subtitle: String? = null
+        var keywords: String? = null
         while (next() != XmlPullParser.END_TAG) {
             if (eventType != XmlPullParser.START_TAG) continue
 
@@ -216,6 +222,9 @@ class AndroidITunesParser : AndroidParserBase<ITunesChannelData>() {
                 ITUNES_EPISODE_TYPE -> episodeType = readString(ITUNES_EPISODE_TYPE)
                 ITUNES_BLOCK -> block = readString(ITUNES_BLOCK)?.toBoolOrNull()
                 ITUNES_AUTHOR -> author = readString(ITUNES_AUTHOR)
+                ITUNES_SUMMARY -> summary = readString(ITUNES_SUMMARY)
+                ITUNES_SUBTITLE -> subtitle = readString(ITUNES_SUBTITLE)
+                ITUNES_KEYWORDS -> keywords = readString(ITUNES_KEYWORDS)
                 else -> skip()
             }
         }
@@ -239,7 +248,10 @@ class AndroidITunesParser : AndroidParserBase<ITunesChannelData>() {
             episode = episode,
             season = season,
             episodeType = episodeType,
-            block = block
+            block = block,
+            summary = summary,
+            subtitle = subtitle,
+            keywords = keywords,
         )
     }
 }
