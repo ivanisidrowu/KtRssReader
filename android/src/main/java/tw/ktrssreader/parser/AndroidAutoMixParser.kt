@@ -55,10 +55,13 @@ import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE_TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EXPLICIT
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_IMAGE
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_KEYWORDS
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_NAME
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_NEW_FEED_URL
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_OWNER
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SEASON
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SUBTITLE
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SUMMARY
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TITLE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.LANGUAGE
@@ -419,6 +422,9 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
         var iTunesSeason: Int? = null
         var iTunesEpisodeType: String? = null
         var iTunesBlock: Boolean? = null
+        var iTunesSummary: String? = null
+        var iTunesSubtitle: String? = null
+        var iTunesKeywords: String? = null
 
         var googleDescription: String? = null
         var googleExplicit: Boolean? = null
@@ -449,6 +455,9 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
                 ITUNES_SEASON -> iTunesSeason = readString(ITUNES_SEASON)?.toIntOrNull()
                 ITUNES_EPISODE_TYPE -> iTunesEpisodeType = readString(ITUNES_EPISODE_TYPE)
                 ITUNES_BLOCK -> iTunesBlock = readString(ITUNES_BLOCK)?.toBoolOrNull()
+                ITUNES_SUMMARY -> iTunesSummary = readString(ITUNES_SUMMARY)
+                ITUNES_SUBTITLE -> iTunesSubtitle = readString(ITUNES_SUBTITLE)
+                ITUNES_KEYWORDS -> iTunesKeywords = readString(ITUNES_KEYWORDS)
 
                 GOOGLE_DESCRIPTION -> googleDescription = readString(GOOGLE_DESCRIPTION)
                 GOOGLE_EXPLICIT -> googleExplicit = readString(GOOGLE_EXPLICIT)?.toBoolOrNull()
@@ -476,7 +485,10 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
             episode = iTunesEpisode,
             season = iTunesSeason,
             episodeType = iTunesEpisodeType,
-            block = iTunesBlock ?: googleBlock
+            block = iTunesBlock ?: googleBlock,
+            summary = iTunesSummary,
+            subtitle = iTunesSubtitle,
+            keywords = iTunesKeywords,
         )
     }
 }

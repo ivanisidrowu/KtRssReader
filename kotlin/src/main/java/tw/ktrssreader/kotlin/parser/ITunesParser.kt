@@ -34,8 +34,11 @@ import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE_TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EXPLICIT
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_IMAGE
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_KEYWORDS
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_NEW_FEED_URL
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SEASON
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SUBTITLE
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SUMMARY
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TITLE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.LANGUAGE
@@ -116,7 +119,7 @@ class ITunesParser : ParserBase<ITunesChannelData>() {
                 type = type,
                 newFeedUrl = newFeedUrl,
                 block = block,
-                complete = complete
+                complete = complete,
             )
         }
     }
@@ -160,6 +163,9 @@ class ITunesParser : ParserBase<ITunesChannelData>() {
             val episodeType: String? = element.readString(ITUNES_EPISODE_TYPE)
             val block: Boolean? = element.readString(ITUNES_BLOCK)?.toBoolOrNull()
             val author: String? = element.readString(ITUNES_AUTHOR)
+            val summary: String? = element.readString(ITUNES_SUMMARY)
+            val subtitle: String? = element.readString(ITUNES_SUBTITLE)
+            val keywords: String? = element.readString(ITUNES_KEYWORDS)
 
             result.add(
                 ITunesItemData(
@@ -180,7 +186,10 @@ class ITunesParser : ParserBase<ITunesChannelData>() {
                     episode = episode,
                     season = season,
                     episodeType = episodeType,
-                    block = block
+                    block = block,
+                    summary = summary,
+                    subtitle = subtitle,
+                    keywords = keywords,
                 )
             )
         }

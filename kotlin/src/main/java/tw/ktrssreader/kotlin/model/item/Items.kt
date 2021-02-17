@@ -53,6 +53,9 @@ interface ITunesItem: RssStandardItem {
     val season: Int?
     val episodeType: String?
     val block: Boolean?
+    val summary: String?
+    val subtitle: String?
+    val keywords: String?
 }
 
 data class ITunesItemData(
@@ -74,6 +77,9 @@ data class ITunesItemData(
     override val season: Int?,
     override val episodeType: String?,
     override val block: Boolean?,
+    override val summary: String?,
+    override val subtitle: String?,
+    override val keywords: String?,
 ) : ITunesItem
 
 interface GoogleItem : RssStandardItem {
@@ -126,4 +132,7 @@ data class AutoMixItemData(
     override val season: Int?,
     override val episodeType: String?,
     override val block: Boolean?,
+    override val summary: String?,
+    override val subtitle: String?,
+    override val keywords: String?,
 ) : AutoMixItem

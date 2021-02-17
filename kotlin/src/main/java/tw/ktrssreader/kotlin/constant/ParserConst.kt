@@ -83,6 +83,9 @@ object ParserConst {
     const val ITUNES_EPISODE = "$ITUNES:episode"
     const val ITUNES_SEASON = "$ITUNES:season"
     const val ITUNES_EPISODE_TYPE = "$ITUNES:episodeType"
+    const val ITUNES_SUMMARY = "$ITUNES:summary"
+    const val ITUNES_SUBTITLE = "$ITUNES:subtitle"
+    const val ITUNES_KEYWORDS = "$ITUNES:keywords"
 
     const val GOOGLE_DESCRIPTION = "$GOOGLE_PLAY:$DESCRIPTION"
     const val GOOGLE_IMAGE = "$GOOGLE_PLAY:$IMAGE"
