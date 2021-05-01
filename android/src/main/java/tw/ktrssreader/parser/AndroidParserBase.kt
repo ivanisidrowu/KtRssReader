@@ -151,7 +151,7 @@ abstract class AndroidParserBase<out T : RssStandardChannel> : tw.ktrssreader.ko
     }
 
     protected fun String.toBoolOrNull(): Boolean? {
-        return when (toLowerCase()) {
+        return when (lowercase()) {
             "yes", "true" -> true
             "no", "false" -> false
             else -> null

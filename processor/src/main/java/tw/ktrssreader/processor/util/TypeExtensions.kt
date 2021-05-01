@@ -45,22 +45,35 @@ fun String.isPrimitive(): Boolean = primitiveJavaPaths.any { this.contains(other
 fun String.getFuncName(): String {
     return when {
         this.startsWith(GOOGLE_PREFIX) || this.startsWith(ITUNES_PREFIX) ->
-            "get${this.substringAfterLast(':').capitalize(Locale.ROOT)}"
-        else -> "get${this.capitalize(Locale.ROOT)}"
+            "get${this.substringAfterLast(':')
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }}"
+        else -> "get${this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }}"
     }
 }
 
 fun String.getListFuncName(): String {
-    val tagCapitalized = substringAfterLast(':').capitalize(Locale.ROOT)
+    val tagCapitalized = substringAfterLast(':').replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(
+            Locale.ROOT
+        ) else it.toString()
+    }
     return when {
-        startsWith(GOOGLE_PREFIX) -> "get${GOOGLE_PREFIX.capitalize(Locale.ROOT)}${tagCapitalized}List"
-        startsWith(ITUNES_PREFIX) -> "get${ITUNES_PREFIX.capitalize(Locale.ROOT)}${tagCapitalized}List"
+        startsWith(GOOGLE_PREFIX) -> "get${GOOGLE_PREFIX.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.ROOT
+            ) else it.toString()
+        }}${tagCapitalized}List"
+        startsWith(ITUNES_PREFIX) -> "get${ITUNES_PREFIX.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.ROOT
+            ) else it.toString()
+        }}${tagCapitalized}List"
         else -> "get${tagCapitalized}List"
     }
 }
 
 fun String.getGeneratedClassPath() =
-    "${GENERATOR_PACKAGE}.${this.capitalize(Locale.ROOT)}${PARSER_SUFFIX}"
+    "${GENERATOR_PACKAGE}.${this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }}${PARSER_SUFFIX}"
 
 fun String.extractListType() =
     this.substringAfter('<')
@@ -95,10 +108,19 @@ fun Element.getPackage(): String {
 }
 
 fun String.getVariableName(tag: String): String {
-    val tagCapitalized = tag.substringAfterLast(':').capitalize(Locale.ROOT)
+    val tagCapitalized = tag.substringAfterLast(':')
+        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
     return when {
-        tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.capitalize(Locale.ROOT)}$tagCapitalized"
-        tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.capitalize(Locale.ROOT)}$tagCapitalized"
+        tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.ROOT
+            ) else it.toString()
+        }}$tagCapitalized"
+        tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.ROOT
+            ) else it.toString()
+        }}$tagCapitalized"
         else -> "$this$tagCapitalized"
     }
 }
@@ -126,7 +148,7 @@ fun Name.extractNameFromMethod(): String {
     }
 
     return withoutPrefix
-        .decapitalize(Locale.ROOT)
+        .replaceFirstChar { it.lowercase(Locale.ROOT) }
         .substringBeforeLast('$')
 }
 

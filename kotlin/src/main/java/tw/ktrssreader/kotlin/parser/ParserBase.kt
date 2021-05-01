@@ -247,7 +247,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
     }
 
     protected fun String.toBoolOrNull(): Boolean? {
-        return when (toLowerCase()) {
+        return when (lowercase()) {
             "yes", "true" -> true
             "no", "false" -> false
             else -> null
