@@ -45,35 +45,30 @@ fun String.isPrimitive(): Boolean = primitiveJavaPaths.any { this.contains(other
 fun String.getFuncName(): String {
     return when {
         this.startsWith(GOOGLE_PREFIX) || this.startsWith(ITUNES_PREFIX) ->
-            "get${this.substringAfterLast(':')
-                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }}"
-        else -> "get${this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }}"
+            "get${this.substringAfterLast(':').capitalize()}"
+        else -> "get${this.capitalize()}"
     }
 }
 
 fun String.getListFuncName(): String {
-    val tagCapitalized = substringAfterLast(':').replaceFirstChar {
-        if (it.isLowerCase()) it.titlecase(
-            Locale.ROOT
-        ) else it.toString()
-    }
+    val tagCapitalized = substringAfterLast(':').capitalize()
     return when {
-        startsWith(GOOGLE_PREFIX) -> "get${GOOGLE_PREFIX.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase(
-                Locale.ROOT
-            ) else it.toString()
-        }}${tagCapitalized}List"
-        startsWith(ITUNES_PREFIX) -> "get${ITUNES_PREFIX.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase(
-                Locale.ROOT
-            ) else it.toString()
-        }}${tagCapitalized}List"
+        startsWith(GOOGLE_PREFIX) -> "get${GOOGLE_PREFIX.capitalize()}${tagCapitalized}List"
+        startsWith(ITUNES_PREFIX) -> "get${ITUNES_PREFIX.capitalize()}${tagCapitalized}List"
         else -> "get${tagCapitalized}List"
     }
 }
 
+internal fun String.capitalize(): String = replaceFirstChar {
+    if (it.isLowerCase()) {
+        it.titlecase(Locale.ROOT)
+    } else {
+        it.toString()
+    }
+}
+
 fun String.getGeneratedClassPath() =
-    "${GENERATOR_PACKAGE}.${this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }}${PARSER_SUFFIX}"
+    "${GENERATOR_PACKAGE}.${this.capitalize()}${PARSER_SUFFIX}"
 
 fun String.extractListType() =
     this.substringAfter('<')
@@ -109,18 +104,10 @@ fun Element.getPackage(): String {
 
 fun String.getVariableName(tag: String): String {
     val tagCapitalized = tag.substringAfterLast(':')
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+        .capitalize()
     return when {
-        tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase(
-                Locale.ROOT
-            ) else it.toString()
-        }}$tagCapitalized"
-        tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase(
-                Locale.ROOT
-            ) else it.toString()
-        }}$tagCapitalized"
+        tag.startsWith(GOOGLE_PREFIX) -> "$this${GOOGLE_PREFIX.capitalize()}$tagCapitalized"
+        tag.startsWith(ITUNES_PREFIX) -> "$this${ITUNES_PREFIX.capitalize()}$tagCapitalized"
         else -> "$this$tagCapitalized"
     }
 }
