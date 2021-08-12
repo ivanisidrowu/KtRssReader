@@ -37,6 +37,7 @@ Contributions are always welcome. If you have any ideas or suggestions, you can 
 
 - [X] Add pure Kotlin parsers.
 - [X] Implement an annotation processor to generate custom Kotlin parsers.
+- [ ] Use KSP to speed up the annotation processor.
 
 ## License
 
