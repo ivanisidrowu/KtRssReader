@@ -8,7 +8,7 @@ group='com.github.ivanisidrowu'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.0"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 23
@@ -18,6 +18,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 
     buildTypes {
@@ -32,6 +37,10 @@ android {
                 '-Xopt-in=kotlin.time.ExperimentalTime',
                 '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi',
         ]
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 

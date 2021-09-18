@@ -49,8 +49,11 @@ import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EPISODE_TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_EXPLICIT
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_IMAGE
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_KEYWORDS
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_NEW_FEED_URL
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SEASON
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SUBTITLE
+import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_SUMMARY
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TITLE
 import tw.ktrssreader.kotlin.constant.ParserConst.ITUNES_TYPE
 import tw.ktrssreader.kotlin.constant.ParserConst.LANGUAGE
@@ -253,6 +256,9 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
                 val iTunesSeason: Int? = readString(ITUNES_SEASON)?.toIntOrNull()
                 val iTunesEpisodeType: String? = readString(ITUNES_EPISODE_TYPE)
                 val iTunesBlock: Boolean? = readString(ITUNES_BLOCK)?.toBoolOrNull()
+                val iTunesSummary: String? = element.readString(ITUNES_SUMMARY)
+                val iTunesSubtitle: String? = element.readString(ITUNES_SUBTITLE)
+                val iTunesKeywords: String? = element.readString(ITUNES_KEYWORDS)
 
                 val googleDescription: String? = readString(GOOGLE_DESCRIPTION)
                 val googleExplicit: Boolean? = readString(GOOGLE_EXPLICIT)?.toBoolOrNull()
@@ -277,7 +283,10 @@ class AutoMixParser : ParserBase<AutoMixChannel>() {
                         episode = iTunesEpisode,
                         season = iTunesSeason,
                         episodeType = iTunesEpisodeType,
-                        block = iTunesBlock ?: googleBlock
+                        block = iTunesBlock ?: googleBlock,
+                        summary = iTunesSummary,
+                        subtitle = iTunesSubtitle,
+                        keywords = iTunesKeywords,
                     )
                 )
             }

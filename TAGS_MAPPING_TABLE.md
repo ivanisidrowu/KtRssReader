@@ -1,6 +1,6 @@
 ### Channel Mapping Table
 
-|[Auto Mix](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L145)| [RSS 2.0 Standard](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L29) | [iTunes Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L64) | [Google Play Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/channel/Channels.kt#L104) |
+|[Auto Mix](https://github.com/ivanisidrowu/KtRssReader/blob/master/kotlin/src/main/java/tw/ktrssreader/kotlin/model/channel/Channels.kt#L161)| [RSS 2.0 Standard](https://github.com/ivanisidrowu/KtRssReader/blob/master/kotlin/src/main/java/tw/ktrssreader/kotlin/model/channel/Channels.kt#L45) | [iTunes Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/kotlin/src/main/java/tw/ktrssreader/kotlin/model/channel/Channels.kt#L80) | [Google Play Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/kotlin/src/main/java/tw/ktrssreader/kotlin/model/channel/Channels.kt#L120) |
 | ------ | ------ | ------ | ------ |
 |title|title|title|title|
 |description|description|description|googleplay:description|
@@ -34,7 +34,7 @@
 
 ### Item Mapping Table
 
-|[Auto Mix](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L94)| [RSS 2.0 Standard](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L18) | [iTunes Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L42) | [Google Play Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/ktRssReader/src/main/java/tw/ktrssreader/model/item/Items.kt#L68)
+|[Auto Mix](https://github.com/ivanisidrowu/KtRssReader/blob/master/kotlin/src/main/java/tw/ktrssreader/kotlin/model/item/Items.kt#L116)| [RSS 2.0 Standard](https://github.com/ivanisidrowu/KtRssReader/blob/master/kotlin/src/main/java/tw/ktrssreader/kotlin/model/item/Items.kt#L34) | [iTunes Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/kotlin/src/main/java/tw/ktrssreader/kotlin/model/item/Items.kt#L61) | [Google Play Podcast](https://github.com/ivanisidrowu/KtRssReader/blob/master/kotlin/src/main/java/tw/ktrssreader/kotlin/model/item/Items.kt#L90)
 | ------ | ------ | ------ | ------ |
 |title | title | title | title |
 |enclosure|enclosure|enclosure|enclosure|
@@ -54,3 +54,6 @@
 |season|-|itunes:season|-|
 |episodeType|-|itunes:episodeType|-|
 |block|-|itunes:block|googleplay:block|
+|summary|-|itunes:summary|-|
+|subtitle|-|itunes:subtitle|-|
+|keywords|-|itunes:keywords|-|

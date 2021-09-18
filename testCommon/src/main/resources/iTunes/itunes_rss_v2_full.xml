@@ -70,6 +70,9 @@
           <itunes:episode>1</itunes:episode>
           <itunes:season>1</itunes:season>
           <itunes:episodeType>full</itunes:episodeType>
+          <itunes:summary>summary</itunes:summary>
+          <itunes:subtitle>subtitle</itunes:subtitle>
+          <itunes:keywords>keyword1,keyword2</itunes:keywords>
           <unknown>unknown attribute</unknown>
           <title>item title - Full</title>
           <link>http://item.link</link>
