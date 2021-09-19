@@ -14,17 +14,19 @@
  *    limitations under the License.
  */
 
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
-apply plugin: 'kotlin-kapt'
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':annotation')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.squareup:kotlinpoet:1.6.0'
-    implementation "com.google.auto.service:auto-service:1.0-rc6"
+plugins {
+    id ("java-library")
+    id ("kotlin")
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+dependencies {
+    implementation(Libs.kotlinStdLibJdk7)
+    implementation(Libs.junit)
+
+    implementation(Libs.coroutinesCore)
+    implementation(Libs.okio)
+
+    implementation(Libs.mockk)
+    implementation(Libs.turbine)
+    implementation(project(":kotlin"))
+}

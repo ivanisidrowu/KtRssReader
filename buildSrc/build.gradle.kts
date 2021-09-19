@@ -14,13 +14,12 @@
  *    limitations under the License.
  */
 
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+import org.gradle.kotlin.dsl.`kotlin-dsl`
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+plugins {
+    `kotlin-dsl`
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+repositories {
+    mavenCentral()
+}

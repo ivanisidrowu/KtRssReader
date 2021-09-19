@@ -15,12 +15,10 @@
  */
 
 plugins {
-    id 'java-library'
-    id 'kotlin'
+    id("java-library")
+    id("kotlin")
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testImplementation 'junit:junit:4.12'
-    testImplementation project(':testCommon')
+    implementation(Libs.kotlinStdLibJdk7)
 }

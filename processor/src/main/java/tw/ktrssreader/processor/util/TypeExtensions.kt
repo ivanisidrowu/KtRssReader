@@ -67,15 +67,6 @@ internal fun String.capitalize(): String = replaceFirstChar {
     }
 }
 
-fun String.getListFuncName(): String {
-    val tagCapitalized = substringAfterLast(':').capitalize(Locale.ROOT)
-    return when {
-        startsWith(GOOGLE_PREFIX) -> "get${GOOGLE_PREFIX.capitalize(Locale.ROOT)}${tagCapitalized}List"
-        startsWith(ITUNES_PREFIX) -> "get${ITUNES_PREFIX.capitalize(Locale.ROOT)}${tagCapitalized}List"
-        else -> "get${tagCapitalized}List"
-    }
-}
-
 fun String.getGeneratedClassPath() =
     "${GENERATOR_PACKAGE}.${this.capitalize()}${PARSER_SUFFIX}"
 
