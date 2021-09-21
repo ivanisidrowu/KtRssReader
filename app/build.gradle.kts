@@ -14,8 +14,8 @@ android {
         applicationId = "tw.ktrssreader"
         minSdkVersion(23)
         targetSdkVersion(30)
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = AndroidVersions.versionCode
+        versionName = AndroidVersions.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
