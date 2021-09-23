@@ -15,19 +15,12 @@
  */
 
 plugins {
-    id 'java-library'
-    id 'kotlin'
+    id("java-library")
+    id("kotlin")
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'junit:junit:4.12'
-
-    implementation deps.kotlinxCoroutinesCore
-    implementation "com.squareup.okio:okio:2.9.0"
-
-    implementation testDeps.mockk
-    implementation testDeps.turbine
-    implementation project(path: ':kotlin')
+    implementation(Libs.kotlinStdLib)
+    testImplementation(Libs.junit)
+    testImplementation(project(":testCommon"))
 }

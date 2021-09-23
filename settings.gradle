@@ -1,8 +1,0 @@
-include ':kotlin'
-include ':testCommon'
-include ':processorTest'
-include ':processor'
-include ':annotation'
-include ':android'
-include ':app'
-rootProject.name = "KtRssReader"
