@@ -1,4 +1,6 @@
-`/*
+package tw.ktrssreader.processor
+
+/*
  * Copyright 2020 Feng Hsien Hsu, Siao Syuan Yang, Wei-Qi Wang, Ya-Han Tsai, Yu Hao Wu
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +15,6 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
-package tw.ktrssreader.processor
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.KSPLogger
