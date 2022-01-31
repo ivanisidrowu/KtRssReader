@@ -1,5 +1,6 @@
 
 plugins {
+    id("com.google.devtools.ksp") version "1.5.30-1.0.0"
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
@@ -45,6 +46,7 @@ dependencies {
     implementation(project(":android"))
     implementation(project(":annotation"))
     kapt(project(":processor"))
+    ksp(project(":processor"))
 
     implementation(Libs.coroutinesCore)
     implementation(Libs.coroutinesAndroid)

@@ -14,23 +14,19 @@
  *    limitations under the License.
  */
 
-object Versions {
-    const val KOTLIN = "1.5.30"
-    const val COROUTINES = "1.5.0"
-    const val ROOM = "2.2.6"
-    const val OKHTTP = "4.9.0"
-    const val STARTUP = "1.0.0"
-    const val KTX = "1.3.2"
-    const val APP_COMPAT = "1.2.0"
-    const val CONSTRAINT_LAYOUT = "2.0.1"
-    const val LIFECYCLE_KTX = "2.2.0"
-    const val KOTLIN_POET = "1.6.0"
-    const val AUTO_SERVICE = "1.0-rc6"
-    const val OKIO = "2.9.0"
+package tw.ktrssreader.processor
 
-    const val JUNIT = "4.12"
-    const val MOCKK = "1.10.0"
-    const val TURBINE = "0.5.0"
-    const val JUNIT_EXT = "1.1.2"
-    const val ESPRESSO = "3.3.0"
+import com.google.devtools.ksp.processing.SymbolProcessor
+import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
+import com.google.devtools.ksp.processing.SymbolProcessorProvider
+
+class KspProcessorProvider : SymbolProcessorProvider {
+
+    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
+        return KspProcessor(
+            codeGenerator = environment.codeGenerator,
+            logger = environment.logger,
+            options = environment.options
+        )
+    }
 }

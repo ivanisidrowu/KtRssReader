@@ -15,6 +15,7 @@
  */
 
 plugins {
+    kotlin("jvm")
     id("java-library")
     id("kotlin")
     id("kotlin-kapt")
@@ -22,6 +23,7 @@ plugins {
 
 dependencies {
     implementation(project(":annotation"))
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.5.30-1.0.0")
     implementation(Libs.kotlinStdLibJdk7)
     implementation(Libs.kotlinPoet)
     implementation(Libs.autoService)

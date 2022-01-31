@@ -15,17 +15,9 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-    }
-}
-
 subprojects {
     if (name == "annotation" || name == "processor" || name == "kotlin") {
         apply(plugin = "java")
-        apply(plugin = "maven")
         apply(plugin = "maven-publish")
 
         configure<JavaPluginExtension> {
