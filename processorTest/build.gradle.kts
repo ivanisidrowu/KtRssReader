@@ -15,7 +15,7 @@
  */
 
 plugins {
-    id("com.google.devtools.ksp") version "1.5.30-1.0.0"
+    id("com.google.devtools.ksp") version Versions.KSP
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-android-extensions")

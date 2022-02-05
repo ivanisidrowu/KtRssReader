@@ -15,7 +15,7 @@
  */
 
 object Versions {
-    const val KOTLIN = "1.5.30"
+    const val KOTLIN = "1.6.10"
     const val COROUTINES = "1.5.0"
     const val ROOM = "2.2.6"
     const val OKHTTP = "4.9.0"
@@ -27,6 +27,7 @@ object Versions {
     const val KOTLIN_POET = "1.6.0"
     const val AUTO_SERVICE = "1.0-rc6"
     const val OKIO = "2.9.0"
+    const val KSP = "1.6.10-1.0.2"
 
     const val JUNIT = "4.12"
     const val MOCKK = "1.10.0"
