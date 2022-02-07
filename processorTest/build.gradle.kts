@@ -15,6 +15,7 @@
  */
 
 plugins {
+    id("com.google.devtools.ksp") version Versions.KSP
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-android-extensions")
@@ -50,6 +51,10 @@ kapt {
     }
 }
 
+ksp {
+    arg("pureKotlinParser", "true")
+}
+
 dependencies {
     implementation(Libs.kotlinStdLib)
     implementation(Libs.ktx)
@@ -61,7 +66,9 @@ dependencies {
     implementation(project(":android"))
     implementation(project(":testCommon"))
     implementation(project(":annotation"))
+    // TODO: Remove KAPT once the KSP is ready.
     kapt(project(":processor"))
+    ksp(project(":processor"))
 
     implementation(Libs.coroutinesCore)
     implementation(Libs.coroutinesAndroid)

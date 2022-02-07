@@ -14,17 +14,19 @@
  *    limitations under the License.
  */
 
-plugins {
-    kotlin("jvm")
-    id("java-library")
-    id("kotlin")
-    id("kotlin-kapt")
-}
+package tw.ktrssreader.processor
 
-dependencies {
-    implementation(project(":annotation"))
-    implementation("com.google.devtools.ksp:symbol-processing-api:${Versions.KSP}")
-    implementation(Libs.kotlinStdLibJdk7)
-    implementation(Libs.kotlinPoet)
-    implementation(Libs.autoService)
+import com.google.devtools.ksp.processing.SymbolProcessor
+import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
+import com.google.devtools.ksp.processing.SymbolProcessorProvider
+
+class KspProcessorProvider : SymbolProcessorProvider {
+
+    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
+        return KspProcessor(
+            codeGenerator = environment.codeGenerator,
+            logger = environment.logger,
+            options = environment.options
+        )
+    }
 }
