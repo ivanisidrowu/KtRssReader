@@ -16,19 +16,19 @@
 
 package tw.ktrssreader.processor.generator
 
+import com.google.devtools.ksp.processing.KSPLogger
 import com.squareup.kotlinpoet.*
 import org.w3c.dom.Element
 import tw.ktrssreader.processor.const.*
-import tw.ktrssreader.processor.util.Logger
 
 class KotlinExtensionGenerator(
-    private val logger: Logger
+    private val logger: KSPLogger
 ) : ExtensionGenerator() {
 
     private val elementClass = ClassName("org.w3c.dom", "Element")
 
     override fun generate(): FileSpec {
-        logger.log("Generating $EXTENSION_NAME for Kotlin.")
+        logger.info("Generating $EXTENSION_NAME for Kotlin.")
         return FileSpec.builder(GENERATOR_PACKAGE, EXTENSION_NAME)
             .addType(
                 TypeSpec.objectBuilder(EXTENSION_NAME)

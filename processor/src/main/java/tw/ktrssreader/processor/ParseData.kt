@@ -16,7 +16,7 @@
 
 package tw.ktrssreader.processor
 
-import javax.lang.model.element.Element
+import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 
 data class ParseData(
     val type: String?,
@@ -24,7 +24,7 @@ data class ParseData(
     val dataType: DataType,
     val listItemType: String?,
     val packageName: String?,
-    val processorElement: Element,
+    val declaration: KSPropertyDeclaration,
     val tagCandidates: List<String> = listOf()
 )
 

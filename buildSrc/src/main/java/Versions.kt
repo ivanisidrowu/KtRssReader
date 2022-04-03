@@ -24,7 +24,7 @@ object Versions {
     const val APP_COMPAT = "1.2.0"
     const val CONSTRAINT_LAYOUT = "2.0.1"
     const val LIFECYCLE_KTX = "2.2.0"
-    const val KOTLIN_POET = "1.6.0"
+    const val KOTLIN_POET = "1.10.2"
     const val AUTO_SERVICE = "1.0-rc6"
     const val OKIO = "2.9.0"
     const val KSP = "1.6.10-1.0.2"

@@ -16,18 +16,18 @@
 
 package tw.ktrssreader.processor.generator
 
+import com.google.devtools.ksp.processing.KSPLogger
 import com.squareup.kotlinpoet.*
 import tw.ktrssreader.processor.const.*
-import tw.ktrssreader.processor.util.Logger
 
 class AndroidExtensionGenerator(
-    private val logger: Logger
+    private val logger: KSPLogger
 ): ExtensionGenerator() {
 
     private val xmlParserClass = ClassName(XML_PULL_PACKAGE, XML_PULL_NAME)
 
     override fun generate(): FileSpec {
-        logger.log("Generating $EXTENSION_NAME for Android.")
+        logger.info("Generating $EXTENSION_NAME for Android.")
         return FileSpec.builder(GENERATOR_PACKAGE, EXTENSION_NAME)
             .addType(
                 TypeSpec.objectBuilder(EXTENSION_NAME)

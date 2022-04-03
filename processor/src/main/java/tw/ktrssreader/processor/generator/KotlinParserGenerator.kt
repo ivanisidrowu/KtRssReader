@@ -16,6 +16,11 @@
 
 package tw.ktrssreader.processor.generator
 
+import com.google.devtools.ksp.KspExperimental
+import com.google.devtools.ksp.getAnnotationsByType
+import com.google.devtools.ksp.getDeclaredProperties
+import com.google.devtools.ksp.processing.KSPLogger
+import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import tw.ktrssreader.annotation.OrderType
@@ -25,15 +30,15 @@ import tw.ktrssreader.processor.DataType
 import tw.ktrssreader.processor.ParseData
 import tw.ktrssreader.processor.const.*
 import tw.ktrssreader.processor.util.*
-import javax.lang.model.element.Element
 
 class KotlinParserGenerator(
-    private val element: Element,
+    private val declaration: KSClassDeclaration,
     private val isRoot: Boolean,
-    logger: Logger
+    logger: KSPLogger
 ) : ParserGenerator(logger) {
 
-    private val outputClass = ClassName(element.getPackage(), element.simpleName.toString())
+    override val outputClassName = ClassName(declaration.packageName.asString(), declaration.simpleName.asString())
+
     private val exceptionClass = ClassName("java.lang", "IllegalStateException")
     private val docBuilderFactoryClass = ClassName("javax.xml.parsers", "DocumentBuilderFactory")
     private val elementClassName = ClassName("org.w3c.dom", "Element")
@@ -42,7 +47,7 @@ class KotlinParserGenerator(
     private val getElementByTagMemberName = MemberName(extensionFullPath, METHOD_GET_ELEMENT_BY_TAG)
 
     override fun generate(): FileSpec {
-        val generatedClassName = "${element.simpleName}$PARSER_SUFFIX"
+        val generatedClassName = "${declaration.simpleName.asString()}$PARSER_SUFFIX"
         return FileSpec.builder(GENERATOR_PACKAGE, generatedClassName)
             .addType(getObjectTypeSpec(generatedClassName))
             .build()
@@ -50,13 +55,13 @@ class KotlinParserGenerator(
 
     private fun getObjectTypeSpec(className: String): TypeSpec {
         val builder = TypeSpec.objectBuilder(className)
-        val outputClassName = element.simpleName.toString()
+        val outputClassName = declaration.simpleName.asString()
 
         if (isRoot) {
             builder.addFunction(getParseFuncSpec())
         }
         return builder
-            .addFunction(getClassFunSpec(element, outputClassName, builder))
+            .addFunction(getClassFunSpec(declaration, outputClassName, builder))
             .build()
     }
 
@@ -79,27 +84,28 @@ class KotlinParserGenerator(
                 | }
                 | return result ?: throw %3T("No valid channel tag in the RSS feed.")
                 | """.trimMargin(),
-                outputClass, CHANNEL, exceptionClass, docBuilderFactoryClass
+                outputClassName, CHANNEL, exceptionClass, docBuilderFactoryClass
             )
-            .returns(outputClass)
+            .returns(outputClassName)
             .build()
     }
 
+    @OptIn(KspExperimental::class)
     private fun getClassFunSpec(
-        rootElement: Element,
+        classDeclaration: KSClassDeclaration,
         outputClassName: String,
         objectBuilder: TypeSpec.Builder
     ): FunSpec {
-        val outputClass = ClassName(rootElement.getPackage(), outputClassName)
-        val rssTag = rootElement.getAnnotation(RssTag::class.java)
-        val rssRawData = rootElement.getAnnotation(RssRawData::class.java)
+        val outputClass = ClassName(classDeclaration.packageName.asString(), outputClassName)
+        val rssTag = classDeclaration.getAnnotationsByType(RssTag::class).firstOrNull()
+        val rssRawData = classDeclaration.getAnnotationsByType(RssRawData::class).firstOrNull()
         if (rssTag != null && rssRawData != null) {
-            logger.error("@RssTag and @RssRawData should not be used on the same class!", rootElement)
+            logger.error("@RssTag and @RssRawData should not be used on the same class!", classDeclaration)
         }
 
-        val tagName = rssTag?.name?.takeIfNotEmpty() ?: rootElement.simpleName.toString()
+        val tagName = rssTag?.name?.takeIfNotEmpty() ?: classDeclaration.simpleName.asString()
         rootTagName = tagName
-        logger.log("[KotlinParserGenerator][getActionFunSpec] $rootTagName")
+        logger.info("[KotlinParserGenerator][getActionFunSpec] $rootTagName")
         val funSpec = FunSpec.builder(tagName.getFuncName())
             .receiver(elementClassName)
             .returns(outputClass)
@@ -107,9 +113,9 @@ class KotlinParserGenerator(
         topLevelCandidateOrder =
             rssTag?.order ?: arrayOf(OrderType.RSS_STANDARD, OrderType.ITUNES, OrderType.GOOGLE)
 
-        val annotations = preProcessAnnotations(rootElement)
+        val annotations = preProcessAnnotations(classDeclaration)
 
-        rootElement.enclosedElements.forEach { preProcessParseData(it, propertyToParseData, annotations) }
+        classDeclaration.getDeclaredProperties().forEach { preProcessParseData(it, propertyToParseData, annotations) }
 
         propertyToParseData.forEach { generateValueStatementForConstructor(it, funSpec, objectBuilder) }
 
@@ -244,7 +250,7 @@ class KotlinParserGenerator(
         val funSpec = FunSpec.builder(tag.getListFuncName())
             .receiver(elementClassName)
             .addModifiers(KModifier.PRIVATE)
-        logger.log("[KotlinParserGenerator][generateListFunction] $rootTagName, $tag, $itemType, $packageName")
+        logger.info("[KotlinParserGenerator][generateListFunction] $rootTagName, $tag, $itemType, $packageName")
         val codeBlock =
             """
             |val result: ArrayList<%T> = arrayListOf()
@@ -275,8 +281,12 @@ class KotlinParserGenerator(
             funSpec.returns(listClassName.parameterizedBy(itemClassName))
             funSpec.addCode(codeBlock, itemClassName)
             funSpec.addStatement("\n")
-            val memberName = MemberName(itemType.getGeneratedClassPath(), tag.getFuncName())
-            funSpec.addStatement("${TAB}element.%M()?.let { result.add(it) }", memberName)
+            if (itemType == outputClassName.simpleName) {
+                funSpec.addStatement("${TAB}element.${tag.getFuncName()}()?.let { result.add(it) }")
+            } else {
+                val memberName = MemberName(itemType.getGeneratedClassPath(), tag.getFuncName())
+                funSpec.addStatement("${TAB}element.%M()?.let { result.add(it) }", memberName)
+            }
         }
         funSpec.addCode("""
             |${TAB}}

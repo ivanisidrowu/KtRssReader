@@ -16,19 +16,27 @@
 
 package tw.ktrssreader.processor.generator
 
+import com.google.devtools.ksp.KspExperimental
+import com.google.devtools.ksp.getAnnotationsByType
+import com.google.devtools.ksp.getDeclaredProperties
+import com.google.devtools.ksp.processing.KSPLogger
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.MemberName
+import com.squareup.kotlinpoet.ksp.KotlinPoetKspPreview
+import com.squareup.kotlinpoet.ksp.toTypeName
 import tw.ktrssreader.annotation.*
 import tw.ktrssreader.processor.DataType
 import tw.ktrssreader.processor.ParseData
 import tw.ktrssreader.processor.const.*
 import tw.ktrssreader.processor.util.*
-import javax.lang.model.element.Element
-import javax.lang.model.element.ElementKind
-import javax.lang.model.element.ExecutableElement
 
-abstract class ParserGenerator(protected val logger: Logger) : Generator {
+abstract class ParserGenerator(protected val logger: KSPLogger) : Generator {
+
+    abstract val outputClassName: ClassName
+
     protected val extensionFullPath = "$GENERATOR_PACKAGE.$EXTENSION_NAME"
     protected val booleanConversionMemberName = MemberName(extensionFullPath, METHOD_TO_BOOLEAN)
 
@@ -38,20 +46,16 @@ abstract class ParserGenerator(protected val logger: Logger) : Generator {
 
     private val readStringMemberName = MemberName(extensionFullPath, METHOD_READ_STRING)
 
-    protected fun preProcessAnnotations(rootElement: Element): Map<String, Any?> {
+    @OptIn(KspExperimental::class)
+    protected fun preProcessAnnotations(ksClassDeclaration: KSClassDeclaration): Map<String, Any?> {
         val result = mutableMapOf<String, Any?>()
-        rootElement.enclosedElements.forEach { child ->
-            if (child.kind != ElementKind.METHOD
-                || !child.simpleName.isGetterMethod()
-                || !child.simpleName.contains(ANNOTATION_SIGN)
-            ) return@forEach
+        ksClassDeclaration.getDeclaredProperties().forEach { child ->
+            val nameFromMethod = child.simpleName.asString().filterQuestionMark()
 
-            val nameFromMethod = child.simpleName.extractNameFromMethod()
-
-            val rssValue: RssValue? = child.getAnnotation(RssValue::class.java)
-            val rssTag: RssTag? = child.getAnnotation(RssTag::class.java)
-            val rssAttribute: RssAttribute? = child.getAnnotation(RssAttribute::class.java)
-            val rssRawData: RssRawData? = child.getAnnotation(RssRawData::class.java)
+            val rssValue: RssValue? = child.getAnnotationsByType(RssValue::class).firstOrNull()
+            val rssTag: RssTag? = child.getAnnotationsByType(RssTag::class).firstOrNull()
+            val rssAttribute: RssAttribute? = child.getAnnotationsByType(RssAttribute::class).firstOrNull()
+            val rssRawData: RssRawData? = child.getAnnotationsByType(RssRawData::class).firstOrNull()
             val nonNullCount = listOf<Any?>(rssTag, rssAttribute, rssRawData).count { it != null }
             val attributeValueCount = listOf<Any?>(rssAttribute, rssValue).count { it != null }
             if (nonNullCount > 1 || attributeValueCount > 1) {
@@ -70,19 +74,14 @@ abstract class ParserGenerator(protected val logger: Logger) : Generator {
         return result
     }
 
+    @OptIn(KotlinPoetKspPreview::class)
     protected fun preProcessParseData(
-        child: Element,
+        child: KSPropertyDeclaration,
         parseDataMap: MutableMap<String, ParseData>,
         nameToAnnotation: Map<String, Any?>
     ) {
-        if (child.kind != ElementKind.METHOD
-            || !child.simpleName.isGetterMethod()
-            || child.simpleName.contains(ANNOTATION_SIGN)
-        ) return
-
-        val nameFromMethod = child.simpleName.extractNameFromMethod()
-        val exeElement = child as? ExecutableElement ?: return
-        val rawType = exeElement.returnType.toString()
+        val nameFromMethod = child.simpleName.asString()
+        val rawType = child.getter?.returnType?.toTypeName()?.toString()?.filterQuestionMark() ?: return
         val type: String?
         val packageName: String?
         val dataType: DataType
@@ -115,7 +114,7 @@ abstract class ParserGenerator(protected val logger: Logger) : Generator {
             dataType = dataType,
             listItemType = listItemType,
             packageName = packageName,
-            processorElement = child,
+            declaration = child,
             tagCandidates = getTagCandidates(nameToAnnotation, nameFromMethod, child)
         )
     }
@@ -203,9 +202,14 @@ abstract class ParserGenerator(protected val logger: Logger) : Generator {
                     }
                 } else {
                     data.tagCandidates.forEach { tag ->
-                        val memberName =
-                            MemberName(listItemType.getGeneratedClassPath(), tag.getFuncName())
-                        funSpec.addStatement("$TAB$TAB\"$tag\" -> ${name.getVariableName(tag)}.add(%M())", memberName)
+                        val functionName = tag.getFuncName()
+                        if (listItemType == outputClassName.simpleName) {
+                            funSpec.addStatement("$TAB$TAB\"$tag\" -> ${name.getVariableName(tag)}.add($functionName())")
+                        } else {
+                            val memberName =
+                                MemberName(listItemType.getGeneratedClassPath(), functionName)
+                            funSpec.addStatement("$TAB$TAB\"$tag\" -> ${name.getVariableName(tag)}.add(%M())", memberName)
+                        }
                     }
                 }
             }
@@ -285,7 +289,7 @@ abstract class ParserGenerator(protected val logger: Logger) : Generator {
     private fun getTagCandidates(
         nameToAnnotation: Map<String, Any?>,
         nameFromMethod: String,
-        element: Element
+        declaration: KSPropertyDeclaration
     ): List<String> {
 
         fun getTags(order: Array<OrderType>, tag: String): List<String> {
@@ -312,7 +316,7 @@ abstract class ParserGenerator(protected val logger: Logger) : Generator {
             }
             is RssRawData -> {
                 if (annotation.rawTags.isEmpty()) {
-                    logger.error("You have to put raw tags into @RssRawData!", element)
+                    logger.error("You have to put raw tags into @RssRawData!", declaration)
                 }
                 annotation.rawTags.toList()
             }

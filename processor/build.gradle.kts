@@ -18,7 +18,6 @@ plugins {
     kotlin("jvm")
     id("java-library")
     id("kotlin")
-    id("kotlin-kapt")
 }
 
 dependencies {
@@ -26,5 +25,6 @@ dependencies {
     implementation("com.google.devtools.ksp:symbol-processing-api:${Versions.KSP}")
     implementation(Libs.kotlinStdLibJdk7)
     implementation(Libs.kotlinPoet)
+    implementation(Libs.kotlinPoetKspInterOp)
     implementation(Libs.autoService)
 }

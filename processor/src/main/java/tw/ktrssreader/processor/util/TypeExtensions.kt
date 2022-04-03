@@ -18,29 +18,25 @@ package tw.ktrssreader.processor.util
 
 import tw.ktrssreader.processor.const.*
 import java.util.*
-import javax.lang.model.element.Element
-import javax.lang.model.element.ElementKind
-import javax.lang.model.element.Name
-import javax.lang.model.element.PackageElement
 import kotlin.reflect.KClass
 
-private val stringJavaPath = String::class.java.canonicalName.substringAfterLast('.')
+private val stringName = String::class.simpleName!!
 
-private val primitiveJavaPaths = listOf(
-    stringJavaPath,
-    Int::class.java.canonicalName,
-    Boolean::class.java.canonicalName,
-    Long::class.java.canonicalName,
-    Short::class.java.canonicalName
+private val primitiveNames = listOf(
+    stringName,
+    Int::class.simpleName!!,
+    Boolean::class.simpleName!!,
+    Long::class.simpleName!!,
+    Short::class.simpleName!!
 )
 
 fun String.isListType(): Boolean {
-    return contains(List::class.java.canonicalName)
+    return contains(List::class.qualifiedName!!)
 }
 
-fun String.isTypeString(): Boolean = this == stringJavaPath
+fun String.isTypeString(): Boolean = this.filterQuestionMark() == stringName
 
-fun String.isPrimitive(): Boolean = primitiveJavaPaths.any { this.contains(other = it, ignoreCase = true) }
+fun String.isPrimitive(): Boolean = primitiveNames.any { this.contains(other = it, ignoreCase = true) }
 
 fun String.getFuncName(): String {
     return when {
@@ -68,7 +64,7 @@ internal fun String.capitalize(): String = replaceFirstChar {
 }
 
 fun String.getGeneratedClassPath() =
-    "${GENERATOR_PACKAGE}.${this.capitalize()}${PARSER_SUFFIX}"
+    "${GENERATOR_PACKAGE}.${this.capitalize().filterQuestionMark()}${PARSER_SUFFIX}"
 
 fun String.extractListType() =
     this.substringAfter('<')
@@ -80,26 +76,17 @@ fun String.extractType() =
 
 fun String.getKPrimitiveClass(): KClass<*>? {
     return when {
-        this.contains(String::class.java.simpleName, ignoreCase = true) -> String::class
-        this.contains(Integer::class.java.simpleName, ignoreCase = true) -> Int::class
-        this.contains(Boolean::class.java.simpleName, ignoreCase = true) -> Boolean::class
-        this.contains(Long::class.java.simpleName, ignoreCase = true) -> Long::class
-        this.contains(Short::class.java.simpleName, ignoreCase = true) -> Short::class
+        this.contains(String::class.simpleName!!, ignoreCase = true) -> String::class
+        this.contains(Int::class.simpleName!!, ignoreCase = true) -> Int::class
+        this.contains(Boolean::class.simpleName!!, ignoreCase = true) -> Boolean::class
+        this.contains(Long::class.simpleName!!, ignoreCase = true) -> Long::class
+        this.contains(Short::class.simpleName!!, ignoreCase = true) -> Short::class
         else -> null
     }
 }
 
 fun String.takeIfNotEmpty(): String? {
     return takeIf { it.isNotEmpty() }
-}
-
-fun Element.getPackage(): String {
-    var thisElement = this
-    while (thisElement.kind != ElementKind.PACKAGE) {
-        thisElement = thisElement.enclosingElement
-    }
-
-    return (thisElement as PackageElement).qualifiedName.toString()
 }
 
 fun String.getVariableName(tag: String): String {
@@ -113,33 +100,16 @@ fun String.getVariableName(tag: String): String {
 
 fun String.appendTypeConversion(typeString: String): String {
     return when {
-        typeString.contains(String::class.java.simpleName, ignoreCase = true) -> this
-        typeString.contains(Integer::class.java.simpleName, ignoreCase = true) -> "$this?.toIntOrNull()"
-        typeString.contains(Boolean::class.java.simpleName, ignoreCase = true) -> "$this?.%M()"
-        typeString.contains(Long::class.java.simpleName, ignoreCase = true) -> "$this?.toLongOrNull()"
-        typeString.contains(Short::class.java.simpleName, ignoreCase = true) -> "$this?.toShortOrNull()"
+        typeString.contains(String::class.simpleName!!, ignoreCase = true) -> this
+        typeString.contains(Integer::class.simpleName!!, ignoreCase = true) -> "$this?.toIntOrNull()"
+        typeString.contains(Boolean::class.simpleName!!, ignoreCase = true) -> "$this?.%M()"
+        typeString.contains(Long::class.simpleName!!, ignoreCase = true) -> "$this?.toLongOrNull()"
+        typeString.contains(Short::class.simpleName!!, ignoreCase = true) -> "$this?.toShortOrNull()"
         else -> this
     }
 }
 
-fun Name.extractNameFromMethod(): String {
-    val withoutPrefix = if (startsWith(GET_PREFIX)) {
-        // Extract name which is started with 'get' (length = 3).
-        // The example: getList$annotations
-        substring(GET_PREFIX.length)
-    } else {
-        // If the name is started with 'is', we preserve it.
-        // The example: isList$annotations
-        this.toString()
-    }
+fun String.isBooleanType() = filterQuestionMark()
+    .equals(Boolean::class.simpleName!!, ignoreCase = true)
 
-    return withoutPrefix
-        .replaceFirstChar { it.lowercase(Locale.ROOT) }
-        .substringBeforeLast('$')
-}
-
-fun Name.isGetterMethod(): Boolean {
-    return startsWith(GET_PREFIX) || startsWith(IS_PREFIX)
-}
-
-fun String.isBooleanType() = equals(Boolean::class.java.simpleName, ignoreCase = true)
+fun String.filterQuestionMark() = replace("?", "")
