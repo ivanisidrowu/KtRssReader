@@ -101,7 +101,7 @@ fun String.getVariableName(tag: String): String {
 fun String.appendTypeConversion(typeString: String): String {
     return when {
         typeString.contains(String::class.simpleName!!, ignoreCase = true) -> this
-        typeString.contains(Integer::class.simpleName!!, ignoreCase = true) -> "$this?.toIntOrNull()"
+        typeString.contains(Int::class.simpleName!!, ignoreCase = true) -> "$this?.toIntOrNull()"
         typeString.contains(Boolean::class.simpleName!!, ignoreCase = true) -> "$this?.%M()"
         typeString.contains(Long::class.simpleName!!, ignoreCase = true) -> "$this?.toLongOrNull()"
         typeString.contains(Short::class.simpleName!!, ignoreCase = true) -> "$this?.toShortOrNull()"
