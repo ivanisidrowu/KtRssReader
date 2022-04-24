@@ -16,15 +16,12 @@
 
 package tw.ktrssreader.processor.const
 
-const val KAPT_OPTION_KEY = "pureKotlinParser"
+const val KSP_OPTION_KEY = "pureKotlinParser"
 
 const val CHANNEL = "channel"
 const val PARSER_SUFFIX = "Parser"
 const val PARSER_FUNC_NAME = "parse"
 const val GENERATOR_PACKAGE = "tw.ktrssreader.generated"
-const val GET_PREFIX = "get"
-const val IS_PREFIX = "is"
-const val ANNOTATION_SIGN = "\$annotations"
 const val EXTENSION_NAME = "ParserExtensions"
 const val READER_NAME = "Reader"
 const val XML_PULL_PACKAGE = "org.xmlpull.v1"

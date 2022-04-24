@@ -19,7 +19,6 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-android-extensions")
-    id("kotlin-kapt")
 }
 
 android {
@@ -44,13 +43,6 @@ android {
     }
 }
 
-// This option argument is for testing pure Kotlin parsers, if you want to test Android parsers, you can comment out this kapt arguments.
-kapt {
-    arguments {
-        arg("pureKotlinParser", "true")
-    }
-}
-
 ksp {
     arg("pureKotlinParser", "true")
 }
@@ -66,8 +58,6 @@ dependencies {
     implementation(project(":android"))
     implementation(project(":testCommon"))
     implementation(project(":annotation"))
-    // TODO: Remove KAPT once the KSP is ready.
-    kapt(project(":processor"))
     ksp(project(":processor"))
 
     implementation(Libs.coroutinesCore)

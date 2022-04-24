@@ -4,7 +4,6 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
-    id("kotlin-kapt")
 }
 
 android {
@@ -45,7 +44,6 @@ dependencies {
 
     implementation(project(":android"))
     implementation(project(":annotation"))
-    kapt(project(":processor"))
     ksp(project(":processor"))
 
     implementation(Libs.coroutinesCore)

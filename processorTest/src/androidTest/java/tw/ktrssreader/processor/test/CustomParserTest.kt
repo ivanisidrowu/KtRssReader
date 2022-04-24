@@ -17,6 +17,7 @@
 package tw.ktrssreader.processor.test
 
 import org.junit.Test
+import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import tw.ktrssreader.generated.TestRssDataParser
@@ -24,6 +25,7 @@ import tw.ktrssreader.processor.test.data.TestData
 import tw.ktrssreader.test.common.XmlFileReader
 import tw.ktrssreader.test.common.shouldBe
 
+@RunWith(Enclosed::class)
 class CustomParserTest {
 
     @RunWith(Parameterized::class)

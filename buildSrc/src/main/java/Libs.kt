@@ -29,6 +29,7 @@ object Libs {
     val constraintLayout by lazy { "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}" }
     val lifecycleKtx by lazy { "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE_KTX}" }
     val kotlinPoet by lazy { "com.squareup:kotlinpoet:${Versions.KOTLIN_POET}" }
+    val kotlinPoetKspInterOp by lazy { "com.squareup:kotlinpoet-ksp:${Versions.KOTLIN_POET}" }
     val autoService by lazy { "com.google.auto.service:auto-service:${Versions.AUTO_SERVICE}" }
     val okio by lazy { "com.squareup.okio:okio:${Versions.OKIO}" }
 

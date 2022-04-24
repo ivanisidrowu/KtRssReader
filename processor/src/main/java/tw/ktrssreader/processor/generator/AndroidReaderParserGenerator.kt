@@ -16,15 +16,15 @@
 
 package tw.ktrssreader.processor.generator
 
+import com.google.devtools.ksp.processing.KSPLogger
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import tw.ktrssreader.processor.const.*
-import tw.ktrssreader.processor.util.Logger
 
 class AndroidReaderParserGenerator(
     private val rootClassName: String,
     rootClassPackage: String,
-    logger: Logger
+    logger: KSPLogger
 ) : ParserGenerator(logger) {
 
     companion object {
@@ -43,7 +43,9 @@ class AndroidReaderParserGenerator(
     private val configParameter =
         ParameterSpec.builder(CONFIG, configTypeName)
             .defaultValue("{}")
-    private val outputClassName = ClassName(rootClassPackage, rootClassName)
+
+    override val outputClassName = ClassName(rootClassPackage, rootClassName)
+
     private val parserName = "$rootClassName$PARSER_SUFFIX"
     private val parserClassName = ClassName(GENERATOR_PACKAGE, parserName)
 

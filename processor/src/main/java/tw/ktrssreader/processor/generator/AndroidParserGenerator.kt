@@ -16,27 +16,35 @@
 
 package tw.ktrssreader.processor.generator
 
+import com.google.devtools.ksp.KspExperimental
+import com.google.devtools.ksp.getAnnotationsByType
+import com.google.devtools.ksp.getDeclaredProperties
+import com.google.devtools.ksp.processing.KSPLogger
+import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.squareup.kotlinpoet.*
-import tw.ktrssreader.annotation.*
+import tw.ktrssreader.annotation.OrderType
+import tw.ktrssreader.annotation.RssRawData
+import tw.ktrssreader.annotation.RssTag
 import tw.ktrssreader.processor.ParseData
 import tw.ktrssreader.processor.const.*
-import tw.ktrssreader.processor.util.*
-import javax.lang.model.element.Element
+import tw.ktrssreader.processor.util.getFuncName
+import tw.ktrssreader.processor.util.takeIfNotEmpty
 
 class AndroidParserGenerator(
-    private val element: Element,
+    private val classDeclaration: KSClassDeclaration,
     private val isRoot: Boolean,
-    logger: Logger
+    logger: KSPLogger
 ) : ParserGenerator(logger) {
 
-    private val outputClass = ClassName(element.getPackage(), element.simpleName.toString())
+    override val outputClassName = ClassName(classDeclaration.packageName.asString(), classDeclaration.simpleName.asString())
+
     private val xmlParserClass = ClassName(XML_PULL_PACKAGE, XML_PULL_NAME)
     private val xmlParserExceptionClass = ClassName(XML_PULL_PACKAGE, XML_PULL_EXCEPTION_NAME)
     private val skipMemberName = MemberName(extensionFullPath, METHOD_SKIP)
     private val getParserMemberName = MemberName(extensionFullPath, METHOD_GET_PARSER)
 
     override fun generate(): FileSpec {
-        val generatedClassName = "${element.simpleName}$PARSER_SUFFIX"
+        val generatedClassName = "${classDeclaration.simpleName.asString()}$PARSER_SUFFIX"
         return FileSpec.builder(GENERATOR_PACKAGE, generatedClassName)
             .addType(getObjectTypeSpec(generatedClassName))
             .build()
@@ -44,13 +52,13 @@ class AndroidParserGenerator(
 
     private fun getObjectTypeSpec(className: String): TypeSpec {
         val builder = TypeSpec.objectBuilder(className)
-        val outputClassName = element.simpleName.toString()
+        val outputClassName = classDeclaration.simpleName.asString()
 
         if (isRoot) {
             builder.addFunction(getParseFuncSpec())
         }
         return builder
-            .addFunction(getClassFunSpec(element, outputClassName))
+            .addFunction(getClassFunSpec(classDeclaration, outputClassName))
             .build()
     }
 
@@ -74,23 +82,24 @@ class AndroidParserGenerator(
                 |}
                 |return result ?: throw %3T("No valid channel tag in the RSS feed.")
                 """.trimMargin(),
-                outputClass, CHANNEL, xmlParserExceptionClass, skipMemberName, getParserMemberName
+                outputClassName, CHANNEL, xmlParserExceptionClass, skipMemberName, getParserMemberName
             )
-            .returns(outputClass)
+            .returns(outputClassName)
             .build()
     }
 
-    private fun getClassFunSpec(rootElement: Element, outputClassName: String): FunSpec {
-        val outputClass = ClassName(rootElement.getPackage(), outputClassName)
-        val rssTag = rootElement.getAnnotation(RssTag::class.java)
-        val rssRawData = rootElement.getAnnotation(RssRawData::class.java)
+    @OptIn(KspExperimental::class)
+    private fun getClassFunSpec(classDeclaration: KSClassDeclaration, outputClassName: String): FunSpec {
+        val outputClass = ClassName(classDeclaration.packageName.asString(), outputClassName)
+        val rssTag = classDeclaration.getAnnotationsByType(RssTag::class).firstOrNull()
+        val rssRawData = classDeclaration.getAnnotationsByType(RssRawData::class).firstOrNull()
         if (rssTag != null && rssRawData != null) {
             logger.error(
                 "@RssTag and @RssRawData should not be used on the same class!",
-                rootElement
+                classDeclaration
             )
         }
-        val tagName = rssTag?.name?.takeIfNotEmpty() ?: rootElement.simpleName.toString()
+        val tagName = rssTag?.name?.takeIfNotEmpty() ?: classDeclaration.simpleName.asString()
         rootTagName = tagName
         val funSpec = FunSpec.builder(tagName.getFuncName())
             .receiver(xmlParserClass)
@@ -99,8 +108,8 @@ class AndroidParserGenerator(
         topLevelCandidateOrder =
             rssTag?.order ?: arrayOf(OrderType.RSS_STANDARD, OrderType.ITUNES, OrderType.GOOGLE)
 
-        val annotations = preProcessAnnotations(rootElement)
-        rootElement.enclosedElements.forEach { preProcessParseData(it, propertyToParseData, annotations) }
+        val annotations = preProcessAnnotations(classDeclaration)
+        classDeclaration.getDeclaredProperties().forEach { preProcessParseData(it, propertyToParseData, annotations) }
         propertyToParseData.forEach { generateVariableStatement(it, funSpec) }
 
         if (!hasRssValueAnnotation) {
