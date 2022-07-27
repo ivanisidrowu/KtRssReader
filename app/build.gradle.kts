@@ -1,21 +1,26 @@
-
+// Without these suppressions version catalog usage here and in other build
+// files is marked red by IntelliJ:
+// https://youtrack.jetbrains.com/issue/KTIJ-19369.
+@Suppress(
+    "DSL_SCOPE_VIOLATION",
+)
 plugins {
-    id("com.google.devtools.ksp") version Versions.KSP
+    alias(libs.plugins.ksp)
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
 }
 
 android {
-    compileSdkVersion(30)
-    buildToolsVersion("30.0.3")
+    compileSdk = Version.compileSdk
+    buildToolsVersion = Version.buildTool
 
     defaultConfig {
-        applicationId = "tw.ktrssreader"
-        minSdkVersion(23)
-        targetSdkVersion(30)
-        versionCode = AndroidVersions.versionCode
-        versionName = AndroidVersions.versionName
+        applicationId = Version.applicationId
+        minSdk = Version.minSdk
+        targetSdk = Version.targetSdk
+        versionCode = Version.versionCode
+        versionName = Version.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,7 +31,7 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -34,22 +39,18 @@ android {
 }
 
 dependencies {
-    implementation(Libs.kotlinStdLib)
-    implementation(Libs.ktx)
-    implementation(Libs.appCompat)
-    implementation(Libs.constraintLayout)
-    testImplementation(Libs.junit)
-    androidTestImplementation(Libs.junitExt)
-    androidTestImplementation(Libs.espressoCore)
-
     implementation(project(":android"))
     implementation(project(":annotation"))
     ksp(project(":processor"))
+    implementation(libs.kotlinStdlib)
+    implementation(libs.coreKtx)
+    implementation(libs.appCompat)
+    implementation(libs.bundles.coroutines)
+    implementation(libs.constraintLayout)
+    implementation(libs.lifecycleRuntimeKtx)
 
-    implementation(Libs.coroutinesCore)
-    implementation(Libs.coroutinesAndroid)
-
-    implementation(Libs.coroutinesCore)
-    implementation(Libs.coroutinesAndroid)
-    implementation(Libs.lifecycleKtx)
+    // testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junitAndroid)
+    androidTestImplementation(libs.espressoCore)
 }

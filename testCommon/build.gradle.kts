@@ -15,18 +15,16 @@
  */
 
 plugins {
-    id ("java-library")
-    id ("kotlin")
+    id("java-library")
+    id("kotlin")
 }
 
 dependencies {
-    implementation(Libs.kotlinStdLibJdk7)
-    implementation(Libs.junit)
-
-    implementation(Libs.coroutinesCore)
-    implementation(Libs.okio)
-
-    implementation(Libs.mockk)
-    implementation(Libs.turbine)
     implementation(project(":kotlin"))
+    implementation(libs.kotlinStdlib)
+    implementation(libs.junit)
+    implementation(libs.coroutinesCore)
+    implementation(libs.okio)
+    implementation(libs.mockk)
+    implementation(libs.turbine)
 }

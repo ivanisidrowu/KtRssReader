@@ -21,5 +21,5 @@ plugins {
 }
 
 dependencies {
-    implementation(Libs.kotlinStdLibJdk7)
+    implementation(libs.kotlinStdlib)
 }

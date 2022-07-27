@@ -22,9 +22,8 @@ plugins {
 
 dependencies {
     implementation(project(":annotation"))
-    implementation("com.google.devtools.ksp:symbol-processing-api:${Versions.KSP}")
-    implementation(Libs.kotlinStdLibJdk7)
-    implementation(Libs.kotlinPoet)
-    implementation(Libs.kotlinPoetKspInterOp)
-    implementation(Libs.autoService)
+    implementation(libs.symbolProcessingApi)
+    implementation(libs.kotlinStdlib)
+    implementation(libs.bundles.kotlinPoet)
+    implementation(libs.autoService)
 }
