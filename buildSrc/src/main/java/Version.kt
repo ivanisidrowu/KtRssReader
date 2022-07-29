@@ -18,8 +18,8 @@ object Version {
     const val applicationId = "tw.ktrssreader"
     const val compileSdk = 31
     const val minSdk = 23
-    const val targetSdk = 30
-    const val buildTool = "30.0.2"
+    const val targetSdk = 31
+    const val buildTool = "31.0.0"
     const val versionCode = 1
     const val versionName = "1.0"
 }
