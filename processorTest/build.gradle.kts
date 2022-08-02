@@ -14,29 +14,33 @@
  *    limitations under the License.
  */
 
+// Without these suppressions version catalog usage here and in other build
+// files is marked red by IntelliJ:
+// https://youtrack.jetbrains.com/issue/KTIJ-19369.
+@Suppress(
+    "DSL_SCOPE_VIOLATION",
+)
 plugins {
-    id("com.google.devtools.ksp") version Versions.KSP
+    alias(libs.plugins.ksp)
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-android-extensions")
 }
 
 android {
-    compileSdkVersion(30)
-    buildToolsVersion("30.0.0")
+    compileSdk = Version.compileSdk
+    buildToolsVersion = Version.buildTool
 
     defaultConfig {
-        minSdkVersion(23)
-        targetSdkVersion(30)
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = Version.minSdk
+        targetSdk = Version.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -48,24 +52,20 @@ ksp {
 }
 
 dependencies {
-    implementation(Libs.kotlinStdLib)
-    implementation(Libs.ktx)
-    implementation(Libs.appCompat)
-    testImplementation(Libs.junit)
-    androidTestImplementation(Libs.junitExt)
-    androidTestImplementation(Libs.espressoCore)
-
     implementation(project(":android"))
     implementation(project(":testCommon"))
     implementation(project(":annotation"))
     ksp(project(":processor"))
+    implementation(libs.kotlinStdlib)
+    implementation(libs.coreKtx)
+    implementation(libs.appCompat)
+    implementation(libs.bundles.coroutines)
+    implementation(libs.okhttp)
 
-    implementation(Libs.coroutinesCore)
-    implementation(Libs.coroutinesAndroid)
-    implementation(Libs.okhttp)
-
-    testImplementation(Libs.mockk)
-    testImplementation(Libs.turbine)
-
-    androidTestImplementation(Libs.mockk)
+    // testing
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.junitAndroid)
 }

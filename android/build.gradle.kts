@@ -3,19 +3,16 @@ plugins {
     id("kotlin-android")
     id("kotlin-android-extensions")
     id("kotlin-kapt")
+    id("maven-publish")
 }
 
-group = "com.github.ivanisidrowu"
-
 android {
-    compileSdkVersion(30)
-    buildToolsVersion("30.0.3")
+    compileSdk = Version.compileSdk
+    buildToolsVersion = Version.buildTool
 
     defaultConfig {
-        minSdkVersion(23)
-        targetSdkVersion(30)
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = Version.minSdk
+        targetSdk = Version.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -27,46 +24,56 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
     kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.time.ExperimentalTime" + "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+        freeCompilerArgs =
+            freeCompilerArgs + "-Xopt-in=kotlin.time.ExperimentalTime" + "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
 
-    lintOptions {
-        isAbortOnError = false
+
+    lint {
+        abortOnError = false
     }
 }
 
 dependencies {
     api(project(":kotlin"))
-    implementation(Libs.kotlinStdLib)
-    implementation(Libs.ktx)
-    implementation(Libs.appCompat)
-    testImplementation(Libs.junit)
-    androidTestImplementation(Libs.junitExt)
-    androidTestImplementation(Libs.espressoCore)
 
-    implementation(Libs.coroutinesCore)
-    implementation(Libs.coroutinesAndroid)
+    implementation(libs.kotlinStdlib)
+    implementation(libs.coreKtx)
+    implementation(libs.appCompat)
+    implementation(libs.bundles.coroutines)
+    implementation(libs.okhttp)
+    implementation(libs.bundles.room)
+    kapt(libs.roomCompiler)
+    implementation(libs.startup)
 
-    implementation(Libs.okhttp)
-
-    implementation(Libs.roomRuntime)
-    implementation(Libs.roomKtx)
-    kapt(Libs.roomCompiler)
-
-    implementation(Libs.startup)
-
-    testImplementation(Libs.mockk)
-    testImplementation(Libs.turbine)
-
-    androidTestImplementation(Libs.mockk)
-
+    // testing
     testImplementation(project(":testCommon"))
     androidTestImplementation(project(":testCommon"))
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.junitAndroid)
+    androidTestImplementation(libs.espressoCore)
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.github.ivanisidrowu"
+            artifactId = "KtRssReader"
+            version = "v2.1.2"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }

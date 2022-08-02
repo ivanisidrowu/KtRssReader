@@ -14,24 +14,12 @@
  *    limitations under the License.
  */
 
-object Versions {
-    const val KOTLIN = "1.6.10"
-    const val COROUTINES = "1.5.0"
-    const val ROOM = "2.2.6"
-    const val OKHTTP = "4.9.0"
-    const val STARTUP = "1.0.0"
-    const val KTX = "1.3.2"
-    const val APP_COMPAT = "1.2.0"
-    const val CONSTRAINT_LAYOUT = "2.0.1"
-    const val LIFECYCLE_KTX = "2.2.0"
-    const val KOTLIN_POET = "1.10.2"
-    const val AUTO_SERVICE = "1.0-rc6"
-    const val OKIO = "2.9.0"
-    const val KSP = "1.6.10-1.0.2"
-
-    const val JUNIT = "4.12"
-    const val MOCKK = "1.10.0"
-    const val TURBINE = "0.5.0"
-    const val JUNIT_EXT = "1.1.2"
-    const val ESPRESSO = "3.3.0"
+object Version {
+    const val applicationId = "tw.ktrssreader"
+    const val compileSdk = 31
+    const val minSdk = 23
+    const val targetSdk = 31
+    const val buildTool = "31.0.0"
+    const val versionCode = 1
+    const val versionName = "1.0"
 }

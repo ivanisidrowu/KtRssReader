@@ -20,7 +20,9 @@ plugins {
 }
 
 dependencies {
-    implementation(Libs.kotlinStdLib)
-    testImplementation(Libs.junit)
+    implementation(libs.kotlinStdlib)
+
+    // testing
     testImplementation(project(":testCommon"))
+    testImplementation(libs.junit)
 }

@@ -6,6 +6,7 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
+        mavenCentral()
     }
 }
 
@@ -17,5 +18,13 @@ dependencyResolutionManagement {
     }
 }
 
-include(":kotlin", ":testCommon", ":processorTest", ":processor", ":annotation", ":android", ":app")
+include(
+    ":kotlin",
+    ":testCommon",
+    ":processorTest",
+    ":processor",
+    ":annotation",
+    ":android",
+    ":app"
+)
 rootProject.name = "KtRssReader"
