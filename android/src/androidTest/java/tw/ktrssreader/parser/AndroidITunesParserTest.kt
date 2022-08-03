@@ -26,9 +26,9 @@ class AndroidITunesParserTest {
             @JvmStatic
             @Parameterized.Parameters
             fun getTestingData() = listOf(
-                arrayOf("${ITUNES_FOLDER}/itunes_rss_v2_full.xml", FULL_ITUNES_CHANNEL),
-                arrayOf("${ITUNES_FOLDER}/itunes_rss_v2_some_channel_attrs_missing.xml", PARTIAL_ITUNES_CHANNEL),
-                arrayOf("${ITUNES_FOLDER}/itunes_rss_v2_without_itunes_attributes.xml", PARTIAL_ITUNES_CHANNEL_2),
+                arrayOf("$ITUNES_FOLDER/itunes_rss_v2_full.xml", FULL_ITUNES_CHANNEL),
+                arrayOf("$ITUNES_FOLDER/itunes_rss_v2_some_channel_attrs_missing.xml", PARTIAL_ITUNES_CHANNEL),
+                arrayOf("$ITUNES_FOLDER/itunes_rss_v2_without_itunes_attributes.xml", PARTIAL_ITUNES_CHANNEL_2),
             )
         }
 
@@ -44,7 +44,7 @@ class AndroidITunesParserTest {
     }
 
     @RunWith(Parameterized::class)
-    class ITunesErrorTagParserErrorTagTest(private val rssFilePath: String): ErrorTagParserBaseTest() {
+    class ITunesErrorTagParserErrorTagTest(private val rssFilePath: String) : ErrorTagParserBaseTest() {
 
         @Test(expected = XmlPullParserException::class)
         fun parse() {

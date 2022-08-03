@@ -37,11 +37,11 @@ class CustomParserTest {
             @JvmStatic
             @Parameterized.Parameters
             fun getTestingData() = listOf(
-                arrayOf("${RSS_FOLDER}/rss_v2_full.xml", TestData.RSS_DATA),
-                arrayOf("${RSS_FOLDER}/rss_v2_has_non_channel_attrs.xml", TestData.RSS_DATA),
-                arrayOf("${RSS_FOLDER}/rss_v2_has_non_channel_attrs_follow_behind.xml", TestData.RSS_DATA),
-                arrayOf("${RSS_FOLDER}/rss_v2_has_non_item_attrs.xml", TestData.RSS_DATA),
-                arrayOf("${RSS_FOLDER}/rss_v2_has_non_item_attrs_follow_behind.xml", TestData.RSS_DATA),
+                arrayOf("$RSS_FOLDER/rss_v2_full.xml", TestData.RSS_DATA),
+                arrayOf("$RSS_FOLDER/rss_v2_has_non_channel_attrs.xml", TestData.RSS_DATA),
+                arrayOf("$RSS_FOLDER/rss_v2_has_non_channel_attrs_follow_behind.xml", TestData.RSS_DATA),
+                arrayOf("$RSS_FOLDER/rss_v2_has_non_item_attrs.xml", TestData.RSS_DATA),
+                arrayOf("$RSS_FOLDER/rss_v2_has_non_item_attrs_follow_behind.xml", TestData.RSS_DATA),
             )
         }
 

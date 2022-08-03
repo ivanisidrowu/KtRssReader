@@ -44,7 +44,7 @@ data class RssStandardItemData(
     override val source: Source?,
 ) : RssStandardItem
 
-interface ITunesItem: RssStandardItem {
+interface ITunesItem : RssStandardItem {
     val simpleTitle: String?
     val duration: String?
     val image: String?

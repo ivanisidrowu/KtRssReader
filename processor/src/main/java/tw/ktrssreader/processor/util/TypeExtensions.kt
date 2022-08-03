@@ -64,7 +64,7 @@ internal fun String.capitalize(): String = replaceFirstChar {
 }
 
 fun String.getGeneratedClassPath() =
-    "${GENERATOR_PACKAGE}.${this.capitalize().filterQuestionMark()}${PARSER_SUFFIX}"
+    "$GENERATOR_PACKAGE.${this.capitalize().filterQuestionMark()}$PARSER_SUFFIX"
 
 fun String.extractListType() =
     this.substringAfter('<')

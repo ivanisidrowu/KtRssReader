@@ -76,7 +76,7 @@ class KtRssReaderLocalTest {
             block()
         }
 
-        protected fun mockGetCacheChannelSuccessfully(block: (RssStandardChannel) -> Unit, ) {
+        protected fun mockGetCacheChannelSuccessfully(block: (RssStandardChannel) -> Unit,) {
             val expected = mockkRelaxed<RssStandardChannelData>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache

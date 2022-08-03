@@ -60,9 +60,9 @@ class KotlinExtensionGenerator(
             |${TAB}${TAB}val e = nodeList.item(i) as? Element ?: continue
             |${TAB}${TAB}val parent = e.parentNode as? Element
             |${TAB}${TAB}if (parent?.tagName != parentTag) continue
-            |${TAB}
+            |$TAB
             |${TAB}${TAB}return e.textContent
-            |${TAB}}
+            |$TAB}
             |${TAB}return null
             |}
             """.trimMargin()

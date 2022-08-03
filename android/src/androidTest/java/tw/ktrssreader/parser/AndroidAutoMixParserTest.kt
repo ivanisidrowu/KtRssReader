@@ -29,7 +29,7 @@ class AndroidAutoMixParserTest {
             @Parameterized.Parameters
             fun getTestingData() = listOf(
                 arrayOf(
-                    "${AUTOMIX_FOLDER}/rss_v2_itunes_google_full.xml",
+                    "$AUTOMIX_FOLDER/rss_v2_itunes_google_full.xml",
                     FULL_AUTOMIX_CHANNEL
                 ),
                 arrayOf(
@@ -37,15 +37,15 @@ class AndroidAutoMixParserTest {
                     CATEGORY_NO_ORDERING_AUTOMIX_CHANNEL
                 ),
                 arrayOf(
-                    "${AUTOMIX_FOLDER}/rss_v2_itunes_google_nested_itunes_category.xml",
+                    "$AUTOMIX_FOLDER/rss_v2_itunes_google_nested_itunes_category.xml",
                     NESTED_ITUNES_CATEGORY_AUTOMIX_CHANNEL
                 ),
                 arrayOf(
-                    "${AUTOMIX_FOLDER}/rss_v2_itunes_google_without_items.xml",
+                    "$AUTOMIX_FOLDER/rss_v2_itunes_google_without_items.xml",
                     PARTIAL_AUTOMIX_CHANNEL
                 ),
                 arrayOf(
-                    "${AUTOMIX_FOLDER}/rss_v2_itunes_google_without_itunes_attrs.xml",
+                    "$AUTOMIX_FOLDER/rss_v2_itunes_google_without_itunes_attrs.xml",
                     PARTIAL_AUTOMIX_CHANNEL_2
                 ),
             )

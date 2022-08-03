@@ -99,9 +99,11 @@ class DatabaseRssCacheLocalTest {
         subject.saveCache(fakeUrl, mockChannel)
 
         verify {
-            mockDao.insert(match {
-                it.url == fakeUrl && it.channel.contentEquals(fakeByteArray)
-            })
+            mockDao.insert(
+                match {
+                    it.url == fakeUrl && it.channel.contentEquals(fakeByteArray)
+                }
+            )
         }
     }
 

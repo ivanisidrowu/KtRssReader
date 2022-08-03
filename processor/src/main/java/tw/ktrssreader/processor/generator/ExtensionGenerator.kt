@@ -27,8 +27,8 @@ abstract class ExtensionGenerator : Generator {
         .addCode(
             """
             |return when (toLowerCase()) {
-            |${TAB}"true", "yes" -> true
-            |${TAB}"no", "false" -> false
+            |$TAB"true", "yes" -> true
+            |$TAB"no", "false" -> false
             |${TAB}else -> null
             |}
         """.trimMargin()

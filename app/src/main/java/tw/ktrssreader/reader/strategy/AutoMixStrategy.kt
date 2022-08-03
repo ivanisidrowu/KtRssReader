@@ -32,5 +32,4 @@ class AutoMixStrategy : RssStrategy {
             this.useCache = useCache
             this.charset = charset
         }
-
 }
