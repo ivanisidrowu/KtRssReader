@@ -76,9 +76,9 @@ class AndroidParserGenerator(
                 |${TAB}if (parser.name == "%2L") {
                 |${TAB}${TAB}result = parser.getChannel()
                 |${TAB}${TAB}break
-                |${TAB}} else {
+                |$TAB} else {
                 |${TAB}${TAB}parser.%4M()
-                |${TAB}}
+                |$TAB}
                 |}
                 |return result ?: throw %3T("No valid channel tag in the RSS feed.")
                 """.trimMargin(),
@@ -126,7 +126,7 @@ class AndroidParserGenerator(
             funSpec.addCode(
                 """
             |${TAB}${TAB}else -> %M()
-            |${TAB}}
+            |$TAB}
             |}
         """.trimMargin(),
                 skipMemberName

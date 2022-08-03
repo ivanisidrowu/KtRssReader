@@ -80,7 +80,7 @@ class KotlinParserGenerator(
                 |${TAB}${TAB}val element = nodeList.item(0) as? Element
                 |${TAB}${TAB}element?.let {
                 |${TAB}${TAB}${TAB}result = it.getChannel()
-                |${TAB}${TAB}}
+                |${TAB}$TAB}
                 | }
                 | return result ?: throw %3T("No valid channel tag in the RSS feed.")
                 | """.trimMargin(),
@@ -127,7 +127,7 @@ class KotlinParserGenerator(
             generateConstructor(it, funSpec, index == lastIndex)
             index ++
         }
-        funSpec.addStatement("${TAB})")
+        funSpec.addStatement("$TAB)")
         return funSpec.build()
     }
 
@@ -163,8 +163,10 @@ class KotlinParserGenerator(
                 val className = ClassName(packageName, type)
                 data.tagCandidates.forEach { tag ->
                     val memberName = MemberName(type.getGeneratedClassPath(), tag.getFuncName())
-                    funSpec.addStatement("val ${name.getVariableName(tag)}: %T? = %M(\"$tag\")?.%M()",
-                        className, getElementByTagMemberName, memberName)
+                    funSpec.addStatement(
+                        "val ${name.getVariableName(tag)}: %T? = %M(\"$tag\")?.%M()",
+                        className, getElementByTagMemberName, memberName
+                    )
                 }
             }
         }
@@ -274,7 +276,7 @@ class KotlinParserGenerator(
                     val statement = "${TAB}${TAB}element.%M(\"$tag\", \"$rootTagName\")"
                     funSpec.addPrimitiveStatement(statement, itemType)
                 }
-                funSpec.addStatement("${TAB}${TAB}${TAB}?.let { result.add(it) }")
+                funSpec.addStatement("${TAB}${TAB}$TAB?.let { result.add(it) }")
             }
         } else {
             val itemClassName = ClassName(packageName, itemType)
@@ -288,11 +290,13 @@ class KotlinParserGenerator(
                 funSpec.addStatement("${TAB}element.%M()?.let { result.add(it) }", memberName)
             }
         }
-        funSpec.addCode("""
-            |${TAB}}
+        funSpec.addCode(
+            """
+            |$TAB}
             |}
             |return result
-        """.trimMargin())
+        """.trimMargin()
+        )
         return funSpec.build()
     }
 }

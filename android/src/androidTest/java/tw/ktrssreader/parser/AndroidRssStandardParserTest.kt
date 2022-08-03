@@ -51,9 +51,8 @@ class AndroidRssStandardParserTest {
         }
     }
 
-
     @RunWith(Parameterized::class)
-    class RssStandardErrorTagParserErrorTagTest(private val rssFilePath: String): ErrorTagParserBaseTest() {
+    class RssStandardErrorTagParserErrorTagTest(private val rssFilePath: String) : ErrorTagParserBaseTest() {
 
         @Test(expected = XmlPullParserException::class)
         fun parse() {

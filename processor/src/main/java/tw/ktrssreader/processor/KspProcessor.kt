@@ -35,7 +35,7 @@ class KspProcessor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
     private val options: Map<String, String>
-): SymbolProcessor {
+) : SymbolProcessor {
 
     private var isExtensionGenerated = false
 

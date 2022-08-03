@@ -29,7 +29,7 @@ data class RawRssData(
     val owner: RawOwner?,
     @RssTag(name = "item")
     val list: List<RawRssItem>,
-): Serializable
+) : Serializable
 
 @RssTag(name = "item")
 data class RawRssItem(
@@ -53,4 +53,4 @@ data class RawEnclosure(
 data class RawOwner(
     val name: String?,
     val email: String?,
-): Serializable
+) : Serializable

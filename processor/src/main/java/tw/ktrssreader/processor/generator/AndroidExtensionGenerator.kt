@@ -22,7 +22,7 @@ import tw.ktrssreader.processor.const.*
 
 class AndroidExtensionGenerator(
     private val logger: KSPLogger
-): ExtensionGenerator() {
+) : ExtensionGenerator() {
 
     private val xmlParserClass = ClassName(XML_PULL_PACKAGE, XML_PULL_NAME)
 
@@ -54,7 +54,7 @@ class AndroidExtensionGenerator(
                 |${TAB}${TAB}setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
                 |${TAB}${TAB}setInput(inputStream, null)
                 |${TAB}${TAB}nextTag()
-                |${TAB}}
+                |$TAB}
                 |}
                 |
                 """.trimMargin(),
@@ -78,7 +78,7 @@ class AndroidExtensionGenerator(
             |${TAB}${TAB}skip()
             |${TAB}${TAB}nextTag()
             |${TAB}${TAB}content = null
-            |${TAB}}
+            |$TAB}
             |}
             |require(XmlPullParser.END_TAG, null, tagName)
             |return content
@@ -99,7 +99,7 @@ class AndroidExtensionGenerator(
             |${TAB}when (next()) {
             |${TAB}${TAB}XmlPullParser.END_TAG -> depth--
             |${TAB}${TAB}XmlPullParser.START_TAG -> depth++
-            |${TAB}}
+            |$TAB}
             |}
             """.trimMargin()
         )

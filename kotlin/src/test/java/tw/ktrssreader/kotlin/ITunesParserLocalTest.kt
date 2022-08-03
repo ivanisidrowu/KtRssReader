@@ -40,13 +40,16 @@ class ITunesParserLocalTest {
             @JvmStatic
             @Parameterized.Parameters
             fun getTestingData() = listOf(
-                arrayOf("${ChannelItemTestData.ITUNES_FOLDER}/itunes_rss_v2_full.xml",
+                arrayOf(
+                    "${ChannelItemTestData.ITUNES_FOLDER}/itunes_rss_v2_full.xml",
                     ChannelItemTestData.FULL_ITUNES_CHANNEL
                 ),
-                arrayOf("${ChannelItemTestData.ITUNES_FOLDER}/itunes_rss_v2_some_channel_attrs_missing.xml",
+                arrayOf(
+                    "${ChannelItemTestData.ITUNES_FOLDER}/itunes_rss_v2_some_channel_attrs_missing.xml",
                     ChannelItemTestData.PARTIAL_ITUNES_CHANNEL
                 ),
-                arrayOf("${ChannelItemTestData.ITUNES_FOLDER}/itunes_rss_v2_without_itunes_attributes.xml",
+                arrayOf(
+                    "${ChannelItemTestData.ITUNES_FOLDER}/itunes_rss_v2_without_itunes_attributes.xml",
                     ChannelItemTestData.PARTIAL_ITUNES_CHANNEL_2
                 ),
             )
@@ -64,7 +67,7 @@ class ITunesParserLocalTest {
     }
 
     @RunWith(Parameterized::class)
-    class ITunesErrorTagParserErrorTagTest(private val rssFilePath: String): ErrorTagParserBaseTest() {
+    class ITunesErrorTagParserErrorTagTest(private val rssFilePath: String) : ErrorTagParserBaseTest() {
 
         @Test(expected = SAXParseException::class)
         fun parse() {

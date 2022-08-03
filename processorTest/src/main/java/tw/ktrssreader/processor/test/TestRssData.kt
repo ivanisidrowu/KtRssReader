@@ -35,20 +35,20 @@ data class TestRssData(
     val ttl: Long?,
     val image: TestImage?,
     val cloud: TestCloud?,
-): Serializable
+) : Serializable
 
 @RssTag(name = "textInput")
 data class MyTextInput(
     val title: String?,
     val name: String?
-): Serializable
+) : Serializable
 
 @RssTag(name = "item")
 data class RssItem(
     val title: String?,
     val author: String?,
     val guid: TestGuid?
-): Serializable
+) : Serializable
 
 @RssTag(name = "image")
 data class TestImage(
@@ -56,13 +56,13 @@ data class TestImage(
     val title: String?,
     val height: Int?,
     val width: Int?
-): Serializable
+) : Serializable
 
 @RssTag(name = "skipDays")
 data class SkipDays(
     @RssTag(name = "day")
     val days: List<String>,
-): Serializable
+) : Serializable
 
 @RssTag(name = "cloud")
 data class TestCloud(
@@ -72,13 +72,13 @@ data class TestCloud(
     val testPort: Int?,
     @RssAttribute(name = "path")
     val path: String?
-): Serializable
+) : Serializable
 
 @RssTag(name = "guid")
 data class TestGuid(
     @RssAttribute
     val isPermaLink: Boolean?
-): Serializable
+) : Serializable
 
 @RssTag(name = "category")
 data class TestCategory(
@@ -86,4 +86,4 @@ data class TestCategory(
     val domain: String?,
     @RssValue
     val categoryValue: String?
-): Serializable
+) : Serializable

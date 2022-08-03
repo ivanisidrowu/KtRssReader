@@ -322,8 +322,8 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
             height = height,
             width = width
         ).takeIf {
-            it.link != null || it.title != null || it.url != null
-                    || it.description != null || it.height != null || it.width != null
+            it.link != null || it.title != null || it.url != null ||
+                it.description != null || it.height != null || it.width != null
         }
     }
 

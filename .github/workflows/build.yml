@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  unit-tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+      - name: Unit tests
+        run: ./gradlew testDebugUnitTest
+
+  check-ktlint:
+    name: Check Ktlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Check Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Check style
+        run: ./gradlew ktlintCheck

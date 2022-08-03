@@ -184,7 +184,6 @@ class TestData {
             )
         )
 
-
         val MIX_RSS_DATA_3: MixRssData = MixRssData(
             title = "channel title",
             link = "http://channel.link",

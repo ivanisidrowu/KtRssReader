@@ -34,7 +34,7 @@ data class MixRssData(
     val description: String?,
     @RssTag(order = [OrderType.ITUNES, OrderType.RSS_STANDARD])
     val image: MixImage?,
-): Serializable
+) : Serializable
 
 @RssTag(name = "item")
 data class MixRssItem(
@@ -50,7 +50,7 @@ data class MixRssItem(
     val description: String?,
     @RssTag(order = [OrderType.ITUNES])
     val image: MixImage?,
-): Serializable
+) : Serializable
 
 @RssTag(name = "image")
 data class MixImage(
@@ -60,7 +60,7 @@ data class MixImage(
     val width: Int?,
     @RssAttribute
     val href: String?,
-): Serializable
+) : Serializable
 
 @RssTag(name = "category")
 data class MixCategory(
@@ -68,4 +68,4 @@ data class MixCategory(
     val categories: List<MixCategory>,
     @RssAttribute
     val text: String?,
-): Serializable
+) : Serializable

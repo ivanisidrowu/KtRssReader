@@ -40,13 +40,16 @@ class GoogleParserLocalTest {
             @JvmStatic
             @Parameterized.Parameters
             fun getTestingData() = listOf(
-                arrayOf("${ChannelItemTestData.GOOGLE_PLAY_FOLDER}/google_play_rss_v2_full.xml",
+                arrayOf(
+                    "${ChannelItemTestData.GOOGLE_PLAY_FOLDER}/google_play_rss_v2_full.xml",
                     ChannelItemTestData.FULL_GOOGLE_CHANNEL
                 ),
-                arrayOf("${ChannelItemTestData.GOOGLE_PLAY_FOLDER}/google_play_rss_v2_without_google_attrs.xml",
+                arrayOf(
+                    "${ChannelItemTestData.GOOGLE_PLAY_FOLDER}/google_play_rss_v2_without_google_attrs.xml",
                     ChannelItemTestData.PARTIAL_GOOGLE_CHANNEL
                 ),
-                arrayOf("${ChannelItemTestData.GOOGLE_PLAY_FOLDER}/google_play_rss_v2_some_channel_attrs_missing.xml",
+                arrayOf(
+                    "${ChannelItemTestData.GOOGLE_PLAY_FOLDER}/google_play_rss_v2_some_channel_attrs_missing.xml",
                     ChannelItemTestData.PARTIAL_GOOGLE_CHANNEL_2
                 ),
             )
@@ -63,9 +66,8 @@ class GoogleParserLocalTest {
         }
     }
 
-
     @RunWith(Parameterized::class)
-    class GoogleErrorTagParserErrorTagTest(private val rssFilePath: String): ErrorTagParserBaseTest() {
+    class GoogleErrorTagParserErrorTagTest(private val rssFilePath: String) : ErrorTagParserBaseTest() {
 
         @Test(expected = SAXParseException::class)
         fun parse() {

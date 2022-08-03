@@ -29,7 +29,7 @@ class AndroidGoogleParserTest {
                 arrayOf("$GOOGLE_PLAY_FOLDER/google_play_rss_v2_full.xml", FULL_GOOGLE_CHANNEL),
                 arrayOf("$GOOGLE_PLAY_FOLDER/google_play_rss_v2_without_google_attrs.xml", PARTIAL_GOOGLE_CHANNEL),
                 arrayOf("$GOOGLE_PLAY_FOLDER/google_play_rss_v2_some_channel_attrs_missing.xml", PARTIAL_GOOGLE_CHANNEL_2),
-                )
+            )
         }
 
         private val parser: AndroidGoogleParser = AndroidGoogleParser()
@@ -43,9 +43,8 @@ class AndroidGoogleParserTest {
         }
     }
 
-
     @RunWith(Parameterized::class)
-    class GoogleErrorTagParserErrorTagTest(private val rssFilePath: String): ErrorTagParserBaseTest() {
+    class GoogleErrorTagParserErrorTagTest(private val rssFilePath: String) : ErrorTagParserBaseTest() {
 
         @Test(expected = XmlPullParserException::class)
         fun parse() {
