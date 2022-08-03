@@ -35,6 +35,7 @@ android {
             freeCompilerArgs + "-Xopt-in=kotlin.time.ExperimentalTime" + "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
 
+
     lint {
         abortOnError = false
     }

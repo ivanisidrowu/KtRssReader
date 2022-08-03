@@ -5,26 +5,16 @@ buildscript {
         google()
         mavenCentral()
         maven("https://jitpack.io")
-        maven("https://plugins.gradle.org/m2/")
     }
 
     dependencies {
         classpath(libs.plugin.androidGradle)
         classpath(libs.plugin.kotlinGradle)
         classpath(libs.plugin.androidMavenGradle)
-        classpath(libs.plugin.ktlint)
     }
 }
 
 subprojects {
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-        disabledRules.set(kotlin.collections.setOf("import-ordering", "no-wildcard-imports"))
-    }
-    tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.BaseKtLintCheckTask> {
-        workerMaxHeapSize.set("2G")
-    }
-
     if (name == "annotation" || name == "processor" || name == "kotlin") {
         apply(plugin = "java")
         apply(plugin = "maven-publish")
