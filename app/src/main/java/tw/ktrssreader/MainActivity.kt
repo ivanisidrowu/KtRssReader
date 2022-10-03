@@ -23,13 +23,9 @@ class MainActivity : AppCompatActivity() {
         private const val DEFAULT_RSS_URL = "https://feeds.fireside.fm/wzd/rss"
         private const val DEFAULT_CHARSET = "UTF-8"
         private val RSS_URL_LIST = listOf(
-            "https://feeds.fireside.fm/wzd/rss",
-            "https://feeds.soundcloud.com/users/soundcloud:users:221361980/sounds.rss",
-            "https://feeds.soundcloud.com/users/soundcloud:users:322164009/sounds.rss",
             "https://www.mirrormedia.mg/rss/category_readforyou.xml?utm_source=feed_related&utm_medium=itunes",
             "https://feeds.fireside.fm/lushu/rss",
             "https://sw7x7.libsyn.com/rss",
-            "https://feeds.fireside.fm/starrocket/rss",
             "https://rss.art19.com/real-estate-rookie",
             "https://rss.art19.com/so-you-want-to-work-abroad",
             "https://feeds.megaphone.fm/mad-money",
