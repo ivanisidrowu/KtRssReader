@@ -17,7 +17,7 @@
 object Version {
     const val applicationId = "tw.ktrssreader"
     const val compileSdk = 31
-    const val minSdk = 23
+    const val minSdk = 21
     const val targetSdk = 31
     const val buildTool = "31.0.0"
     const val versionCode = 1
