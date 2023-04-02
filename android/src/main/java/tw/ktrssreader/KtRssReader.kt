@@ -125,7 +125,7 @@ object Reader {
                 customFetcher = customFetcher,
                 config = config
             )
-        ) 
+        )
     }
 
     fun clearCache() {
