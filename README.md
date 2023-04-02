@@ -33,12 +33,6 @@ Please check out documentation for more information.
 
 Contributions are always welcome. If you have any ideas or suggestions, you can contact us or create a Github issue. We will get to you as soon as possible.
 
-## Roadmap
-
-- [X] Add pure Kotlin parsers.
-- [X] Implement an annotation processor to generate custom Kotlin parsers.
-- [X] Use KSP to speed up the annotation processor.
-
 ## License
 
 ```
