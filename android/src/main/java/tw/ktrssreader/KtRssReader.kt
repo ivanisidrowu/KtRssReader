@@ -101,12 +101,15 @@ object Reader {
         customFetcher: Fetcher? = null,
         crossinline config: Config = {}
     ) = suspendCoroutine<T> {
-        it.resume(read(
-            url = url,
-            customParser = customParser,
-            customFetcher = customFetcher,
-            config = config
-        ))
+        it.resume(
+            read(
+                url = url,
+                customParser = customParser,
+                customFetcher = customFetcher,
+                config = config
+
+            )
+        )
     }
 
     inline fun <reified T> flowRead(
@@ -114,12 +117,16 @@ object Reader {
         crossinline customParser: ((String) -> T?) = { null },
         customFetcher: Fetcher? = null,
         crossinline config: Config = {}
-    ) = flow<T> { emit(read(
-        url = url,
-        customParser = customParser,
-        customFetcher = customFetcher,
-        config = config
-    )) }
+    ) = flow<T> {
+        emit(
+            read(
+                url = url,
+                customParser = customParser,
+                customFetcher = customFetcher,
+                config = config
+            )
+        ) 
+    }
 
     fun clearCache() {
         ThreadUtils.runOnNewThread("[clear cache]") {
