@@ -23,7 +23,11 @@ import androidx.room.RoomDatabase
 import tw.ktrssreader.persistence.db.dao.ChannelDao
 import tw.ktrssreader.persistence.db.entity.ChannelEntity
 
-@Database(entities = [ChannelEntity::class], version = KtRssReaderDatabase.DB_VERSION)
+@Database(
+    entities = [ChannelEntity::class],
+    version = KtRssReaderDatabase.DB_VERSION,
+    exportSchema = false
+)
 abstract class KtRssReaderDatabase : RoomDatabase() {
 
     companion object {
