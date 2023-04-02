@@ -19,6 +19,7 @@ package tw.ktrssreader
 import kotlinx.coroutines.flow.flow
 import tw.ktrssreader.config.KtRssReaderConfig
 import tw.ktrssreader.constant.Const
+import tw.ktrssreader.fetcher.Fetcher
 import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.ThreadUtils
 import tw.ktrssreader.utils.logD
@@ -36,6 +37,7 @@ object Reader {
     inline fun <reified T> read(
         url: String,
         customParser: ((String) -> T?) = { null },
+        customFetcher: Fetcher? = null,
         config: Config = {},
     ): T {
         check(!ThreadUtils.isMainThread()) { "Should not be called on main thread." }
@@ -75,7 +77,7 @@ object Reader {
 
         return if (cacheChannel == null) {
             logD(logTag, "[read] fetch remote data")
-            val fetcher = KtRssProvider.provideXmlFetcher()
+            val fetcher = customFetcher ?: KtRssProvider.provideXmlFetcher()
             val xml = fetcher.fetch(url = url, charset = charset)
             val parser = KtRssProvider.provideParser<T>()
             val channel = parser?.parse(xml)
@@ -96,16 +98,28 @@ object Reader {
     suspend inline fun <reified T> coRead(
         url: String,
         crossinline customParser: ((String) -> T?) = { null },
+        customFetcher: Fetcher? = null,
         crossinline config: Config = {}
     ) = suspendCoroutine<T> {
-        it.resume(read(url = url, customParser = customParser, config = config))
+        it.resume(read(
+            url = url,
+            customParser = customParser,
+            customFetcher = customFetcher,
+            config = config
+        ))
     }
 
     inline fun <reified T> flowRead(
         url: String,
         crossinline customParser: ((String) -> T?) = { null },
+        customFetcher: Fetcher? = null,
         crossinline config: Config = {}
-    ) = flow<T> { emit(read(url = url, customParser = customParser, config = config)) }
+    ) = flow<T> { emit(read(
+        url = url,
+        customParser = customParser,
+        customFetcher = customFetcher,
+        config = config
+    )) }
 
     fun clearCache() {
         ThreadUtils.runOnNewThread("[clear cache]") {
