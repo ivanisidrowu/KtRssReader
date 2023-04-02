@@ -17,7 +17,6 @@
 
 package tw.ktrssreader.kotlin.parser
 
-import com.sun.org.apache.xerces.internal.dom.DeferredElementImpl
 import org.w3c.dom.Element
 import tw.ktrssreader.kotlin.constant.ParserConst.CATEGORY
 import tw.ktrssreader.kotlin.constant.ParserConst.CHANNEL
@@ -102,7 +101,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 
         for (i in 0 until nodeList.length) {
             val e = nodeList.item(i) as? Element ?: continue
-            val parent = e.parentNode as? DeferredElementImpl
+            val parent = e.parentNode as? Element
             if (parent?.tagName != parentTag) continue
 
             val domain: String? = e.getAttributeOrNull(DOMAIN)
@@ -118,7 +117,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 
         for (i in 0 until nodeList.length) {
             val e = nodeList.item(i) as? Element ?: continue
-            val parent = e.parentNode as? DeferredElementImpl
+            val parent = e.parentNode as? Element
             if (parent?.tagName == parentTag || parent?.tagName == tagName) {
                 result.add(Category(name = e.getAttributeOrNull(TEXT), domain = null))
             }
@@ -227,7 +226,7 @@ abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
         } else {
             for (i in 0 until nodeList.length) {
                 val e = nodeList.item(i) as? Element ?: continue
-                val parent = e.parentNode as? DeferredElementImpl
+                val parent = e.parentNode as? Element
                 if (parent?.tagName != parentTag) continue
 
                 return e.textContent
