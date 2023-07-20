@@ -1,4 +1,4 @@
-package tw.ktrssreader
+package tw.ktrssreader.reader.sample
 
 import android.os.Bundle
 import android.view.Menu
@@ -7,13 +7,23 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.btnCoroutine
+import kotlinx.android.synthetic.main.activity_main.btnFlow
+import kotlinx.android.synthetic.main.activity_main.btnRead
+import kotlinx.android.synthetic.main.activity_main.etCharset
+import kotlinx.android.synthetic.main.activity_main.etRss
+import kotlinx.android.synthetic.main.activity_main.progressBar
+import kotlinx.android.synthetic.main.activity_main.rbCacheYes
+import kotlinx.android.synthetic.main.activity_main.spinner
+import kotlinx.android.synthetic.main.activity_main.textView
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tw.ktrssreader.reader.RssReader
-import tw.ktrssreader.reader.RssType
+import tw.ktrssreader.sample.R
 import java.nio.charset.Charset
 import kotlin.concurrent.thread
 

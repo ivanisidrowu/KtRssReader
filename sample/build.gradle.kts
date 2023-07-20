@@ -16,7 +16,7 @@ android {
     buildToolsVersion = Version.buildTool
 
     defaultConfig {
-        applicationId = Version.applicationId
+        applicationId = "tw.ktrssreader.sample"
         minSdk = Version.minSdk
         targetSdk = Version.targetSdk
         versionCode = Version.versionCode
@@ -33,7 +33,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }

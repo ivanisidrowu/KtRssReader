@@ -1,4 +1,4 @@
-package tw.ktrssreader.reader.strategy
+package tw.ktrssreader.reader.sample.strategy
 
 import kotlinx.coroutines.flow.Flow
 import java.io.Serializable

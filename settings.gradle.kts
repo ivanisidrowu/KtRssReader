@@ -25,6 +25,6 @@ include(
     ":processor",
     ":annotation",
     ":android",
-    ":app"
+    ":sample"
 )
 rootProject.name = "KtRssReader"

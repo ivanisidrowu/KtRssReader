@@ -1,7 +1,14 @@
-package tw.ktrssreader.reader
+package tw.ktrssreader.reader.sample
 
 import kotlinx.coroutines.flow.Flow
-import tw.ktrssreader.reader.strategy.*
+import tw.ktrssreader.reader.sample.strategy.AutoMixStrategy
+import tw.ktrssreader.reader.sample.strategy.CustomStrategy
+import tw.ktrssreader.reader.sample.strategy.CustomWithOrderStrategy
+import tw.ktrssreader.reader.sample.strategy.CustomWithRawDataStrategy
+import tw.ktrssreader.reader.sample.strategy.GooglePlayRssStrategy
+import tw.ktrssreader.reader.sample.strategy.ITunesRssStrategy
+import tw.ktrssreader.reader.sample.strategy.RssStrategy
+import tw.ktrssreader.reader.sample.strategy.StandardRssStrategy
 import java.io.Serializable
 import java.nio.charset.Charset
 

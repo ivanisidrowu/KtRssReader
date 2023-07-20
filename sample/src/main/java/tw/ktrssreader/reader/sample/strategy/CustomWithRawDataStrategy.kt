@@ -1,15 +1,15 @@
-package tw.ktrssreader.reader.strategy
+package tw.ktrssreader.reader.sample.strategy
 
 import kotlinx.coroutines.flow.Flow
-import tw.ktrssreader.generated.RssOrderDataReader
+import tw.ktrssreader.generated.RssRawDataReader
 import java.io.Serializable
 import java.nio.charset.Charset
 
-class CustomWithOrderStrategy : RssStrategy {
+class CustomWithRawDataStrategy : RssStrategy {
     override fun read(rssText: String, useCache: Boolean, charset: Charset): Serializable =
-        RssOrderDataReader.read(rssText) {
-            this.useCache
-            this.charset
+        RssRawDataReader.read(rssText) {
+            this.useCache = useCache
+            this.charset = charset
         }
 
     override suspend fun coRead(
@@ -17,9 +17,9 @@ class CustomWithOrderStrategy : RssStrategy {
         useCache: Boolean,
         charset: Charset
     ): Serializable =
-        RssOrderDataReader.coRead(rssText) {
-            this.useCache
-            this.charset
+        RssRawDataReader.coRead(rssText) {
+            this.useCache = useCache
+            this.charset = charset
         }
 
     override suspend fun flowRead(
@@ -27,8 +27,8 @@ class CustomWithOrderStrategy : RssStrategy {
         useCache: Boolean,
         charset: Charset
     ): Flow<Serializable> =
-        RssOrderDataReader.flowRead(rssText) {
-            this.useCache
-            this.charset
+        RssRawDataReader.flowRead(rssText) {
+            this.useCache = useCache
+            this.charset = charset
         }
 }
