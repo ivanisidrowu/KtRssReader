@@ -24,7 +24,6 @@ plugins {
     alias(libs.plugins.ksp)
     id("com.android.library")
     id("kotlin-android")
-    id("kotlin-android-extensions")
 }
 
 android {
