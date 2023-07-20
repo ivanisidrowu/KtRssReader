@@ -1,4 +1,4 @@
-package tw.ktrssreader.reader.sample
+package tw.ktrssreader.reader
 
 enum class RssType {
     Standard,

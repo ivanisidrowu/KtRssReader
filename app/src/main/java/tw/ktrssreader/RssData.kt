@@ -1,4 +1,4 @@
-package tw.ktrssreader.reader.sample
+package tw.ktrssreader
 
 import tw.ktrssreader.annotation.RssAttribute
 import tw.ktrssreader.annotation.RssTag

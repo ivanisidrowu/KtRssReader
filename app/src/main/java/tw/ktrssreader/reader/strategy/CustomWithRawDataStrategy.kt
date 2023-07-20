@@ -1,13 +1,13 @@
-package tw.ktrssreader.reader.sample.strategy
+package tw.ktrssreader.reader.strategy
 
 import kotlinx.coroutines.flow.Flow
-import tw.ktrssreader.generated.RssDataReader
+import tw.ktrssreader.generated.RssRawDataReader
 import java.io.Serializable
 import java.nio.charset.Charset
 
-class CustomStrategy : RssStrategy {
+class CustomWithRawDataStrategy : RssStrategy {
     override fun read(rssText: String, useCache: Boolean, charset: Charset): Serializable =
-        RssDataReader.read(rssText) {
+        RssRawDataReader.read(rssText) {
             this.useCache = useCache
             this.charset = charset
         }
@@ -17,7 +17,7 @@ class CustomStrategy : RssStrategy {
         useCache: Boolean,
         charset: Charset
     ): Serializable =
-        RssDataReader.coRead(rssText) {
+        RssRawDataReader.coRead(rssText) {
             this.useCache = useCache
             this.charset = charset
         }
@@ -27,7 +27,7 @@ class CustomStrategy : RssStrategy {
         useCache: Boolean,
         charset: Charset
     ): Flow<Serializable> =
-        RssDataReader.flowRead(rssText) {
+        RssRawDataReader.flowRead(rssText) {
             this.useCache = useCache
             this.charset = charset
         }
