@@ -1,14 +1,14 @@
-package tw.ktrssreader.reader.strategy
+package tw.ktrssreader.reader.sample.strategy
 
 import kotlinx.coroutines.flow.Flow
 import tw.ktrssreader.Reader
-import tw.ktrssreader.kotlin.model.channel.AutoMixChannelData
+import tw.ktrssreader.kotlin.model.channel.GoogleChannelData
 import java.io.Serializable
 import java.nio.charset.Charset
 
-class AutoMixStrategy : RssStrategy {
+class GooglePlayRssStrategy : RssStrategy {
     override fun read(rssText: String, useCache: Boolean, charset: Charset): Serializable =
-        Reader.read<AutoMixChannelData>(rssText) {
+        Reader.read<GoogleChannelData>(rssText) {
             this.useCache = useCache
             this.charset = charset
         }
@@ -18,7 +18,7 @@ class AutoMixStrategy : RssStrategy {
         useCache: Boolean,
         charset: Charset
     ): Serializable =
-        Reader.coRead<AutoMixChannelData>(rssText) {
+        Reader.coRead<GoogleChannelData>(rssText) {
             this.useCache = useCache
             this.charset = charset
         }
@@ -28,7 +28,7 @@ class AutoMixStrategy : RssStrategy {
         useCache: Boolean,
         charset: Charset
     ): Flow<Serializable> =
-        Reader.flowRead<AutoMixChannelData>(rssText) {
+        Reader.flowRead<GoogleChannelData>(rssText) {
             this.useCache = useCache
             this.charset = charset
         }

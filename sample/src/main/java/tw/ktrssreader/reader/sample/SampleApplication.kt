@@ -1,4 +1,4 @@
-package tw.ktrssreader
+package tw.ktrssreader.reader.sample
 
 import android.app.Application
 import tw.ktrssreader.config.readerGlobalConfig

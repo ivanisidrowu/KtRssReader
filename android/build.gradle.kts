@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("kotlin-android-extensions")
     id("kotlin-kapt")
     id("maven-publish")
 }
@@ -26,7 +25,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -67,7 +69,7 @@ publishing {
     publications {
         register<MavenPublication>("release") {
             groupId = "com.github.ivanisidrowu"
-            artifactId = "KtRssReader"
+            artifactId = "android"
             version = "v2.1.2"
 
             afterEvaluate {

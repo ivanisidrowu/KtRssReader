@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context=".MainActivity">
+    tools:context="tw.ktrssreader.reader.sample.MainActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

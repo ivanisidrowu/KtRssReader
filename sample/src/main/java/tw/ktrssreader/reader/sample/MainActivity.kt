@@ -1,4 +1,4 @@
-package tw.ktrssreader
+package tw.ktrssreader.reader.sample
 
 import android.os.Bundle
 import android.view.Menu
@@ -7,13 +7,14 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tw.ktrssreader.reader.RssReader
-import tw.ktrssreader.reader.RssType
+import tw.ktrssreader.sample.databinding.ActivityMainBinding
 import java.nio.charset.Charset
 import kotlin.concurrent.thread
 
@@ -42,36 +43,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val rssType
-        get() = spinner.selectedItem as? RssType ?: error("Invalid item was clicked!")
+        get() = binding.spinner.selectedItem as? RssType ?: error("Invalid item was clicked!")
 
     private val rssText
-        get() = etRss.text.toString()
+        get() = binding.etRss.text.toString()
 
     private val useCache
-        get() = rbCacheYes.isChecked
+        get() = binding.rbCacheYes.isChecked
 
     private val charsets = hashMapOf<String, Charset>()
     private val charset: Charset
         get() {
-            val charsetText = etCharset.text.toString()
+            val charsetText = binding.etCharset.text.toString()
             return charsets.getOrPut(charsetText) {
                 Charset.forName(charsetText)
             }
         }
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
-        spinner.adapter =
+        binding.spinner.adapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, RssType.values())
 
-        etRss.setText(DEFAULT_RSS_URL)
-        etCharset.setText(DEFAULT_CHARSET)
+        binding.etRss.setText(DEFAULT_RSS_URL)
+        binding.etCharset.setText(DEFAULT_CHARSET)
 
-        btnRead.setOnClickListener { read() }
-        btnCoroutine.setOnClickListener { coRead() }
-        btnFlow.setOnClickListener { flowRead() }
+        binding.btnRead.setOnClickListener { read() }
+        binding.btnCoroutine.setOnClickListener { coRead() }
+        binding.btnFlow.setOnClickListener { flowRead() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -80,27 +83,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        etRss.setText(item.title)
+        binding.etRss.setText(item.title)
         return true
     }
 
     private fun read() {
-        progressBar.visibility = View.VISIBLE
-        textView.text = null
+        binding.progressBar.visibility = View.VISIBLE
+        binding.textView.text = null
 
         thread {
             try {
                 val channel = RssReader.read(rssType, rssText, useCache, charset)
 
                 runOnUiThread {
-                    textView.text = channel.toString()
-                    progressBar.visibility = View.INVISIBLE
+                    binding.textView.text = channel.toString()
+                    binding.progressBar.visibility = View.INVISIBLE
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
-                    textView.text = e.toString()
-                    progressBar.visibility = View.INVISIBLE
+                    binding.textView.text = e.toString()
+                    binding.progressBar.visibility = View.INVISIBLE
                 }
             }
         }
@@ -108,20 +111,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun coRead() {
         lifecycleScope.launch {
-            textView.text = null
-            progressBar.visibility = View.VISIBLE
+            binding.textView.text = null
+            binding.progressBar.visibility = View.VISIBLE
 
             try {
                 val channel = withContext(Dispatchers.IO) {
                     RssReader.coRead(rssType, rssText, useCache, charset)
                 }
 
-                textView.text = channel.toString()
-                progressBar.visibility = View.INVISIBLE
+                binding.textView.text = channel.toString()
+                binding.progressBar.visibility = View.INVISIBLE
             } catch (e: Exception) {
                 e.printStackTrace()
-                textView.text = e.toString()
-                progressBar.visibility = View.INVISIBLE
+                binding.textView.text = e.toString()
+                binding.progressBar.visibility = View.INVISIBLE
             }
         }
     }
@@ -132,16 +135,16 @@ class MainActivity : AppCompatActivity() {
 
             flowChannel.flowOn(Dispatchers.IO)
                 .onStart {
-                    textView.text = null
-                    progressBar.visibility = View.VISIBLE
+                    binding.textView.text = null
+                    binding.progressBar.visibility = View.VISIBLE
                 }.onEach {
-                    progressBar.visibility = View.INVISIBLE
+                    binding.progressBar.visibility = View.INVISIBLE
                 }.catch { e ->
                     e.printStackTrace()
-                    textView.text = e.toString()
-                    progressBar.visibility = View.INVISIBLE
+                    binding.textView.text = e.toString()
+                    binding.progressBar.visibility = View.INVISIBLE
                 }.collect { channel ->
-                    textView.text = channel.toString()
+                    binding.textView.text = channel.toString()
                 }
         }
     }

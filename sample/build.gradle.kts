@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.ksp)
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-android-extensions")
 }
 
 android {
@@ -16,13 +15,17 @@ android {
     buildToolsVersion = Version.buildTool
 
     defaultConfig {
-        applicationId = Version.applicationId
+        applicationId = "tw.ktrssreader.sample"
         minSdk = Version.minSdk
         targetSdk = Version.targetSdk
         versionCode = Version.versionCode
         versionName = Version.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     compileOptions {
@@ -33,7 +36,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }
