@@ -16,6 +16,7 @@ KtRssReader is a Kotlin library for parsing RSS feed.
 * Fetches feed for you
 * Database cache and custom cache valid time
 * Customizes output data with annotations
+* Customizes fetchers for different types of data source
 
 ### Kotlin
 * Supports RSS 2.0 standard, iTunes, and Google Play tags
