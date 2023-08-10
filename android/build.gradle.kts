@@ -1,8 +1,8 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("kotlin-kapt")
     id("maven-publish")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -51,7 +51,7 @@ dependencies {
     implementation(libs.bundles.coroutines)
     implementation(libs.okhttp)
     implementation(libs.bundles.room)
-    kapt(libs.roomCompiler)
+    ksp(libs.roomCompiler)
     implementation(libs.startup)
 
     // testing
