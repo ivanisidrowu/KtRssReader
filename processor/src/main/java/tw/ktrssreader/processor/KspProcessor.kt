@@ -63,7 +63,7 @@ class KspProcessor(
                 declaration = classDeclaration,
                 isRoot = isRoot,
                 logger = logger
-            ).generate().writeTo(codeGenerator, false)
+            ).generate().writeTo(codeGenerator, false, listOf(classDeclaration.containingFile!!))
         }
     }
 
@@ -81,13 +81,13 @@ class KspProcessor(
                 classDeclaration = classDeclaration,
                 isRoot = isRoot,
                 logger = logger
-            ).generate().writeTo(codeGenerator, false)
+            ).generate().writeTo(codeGenerator, false, listOf(classDeclaration.containingFile!!))
             if (isRoot) {
                 AndroidReaderParserGenerator(
                     rootClassName = classDeclaration.simpleName.asString(),
                     rootClassPackage = classDeclaration.packageName.asString(),
                     logger = logger
-                ).generate().writeTo(codeGenerator, false)
+                ).generate().writeTo(codeGenerator, false, listOf(classDeclaration.containingFile!!))
             }
         }
     }
