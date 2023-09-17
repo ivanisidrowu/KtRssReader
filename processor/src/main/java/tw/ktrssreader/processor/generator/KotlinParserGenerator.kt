@@ -120,12 +120,8 @@ class KotlinParserGenerator(
         propertyToParseData.forEach { generateValueStatementForConstructor(it, funSpec, objectBuilder) }
 
         funSpec.addStatement("\nreturn $outputClassName(")
-        // Generate constructor statements
-        var index = 0
-        val lastIndex = propertyToParseData.size - 1
         propertyToParseData.forEach {
-            generateConstructor(it, funSpec, index == lastIndex)
-            index ++
+            generateConstructor(it, funSpec)
         }
         funSpec.addStatement("$TAB)")
         return funSpec.build()
@@ -230,8 +226,7 @@ class KotlinParserGenerator(
 
     override fun generateConstructor(
         parseData: Map.Entry<String, ParseData>,
-        funSpec: FunSpec.Builder,
-        isLastLine: Boolean
+        funSpec: FunSpec.Builder
     ) {
         if (parseData.value.dataType == DataType.VALUE) {
             val name = parseData.key
@@ -245,7 +240,7 @@ class KotlinParserGenerator(
             return
         }
 
-        super.generateConstructor(parseData, funSpec, isLastLine)
+        super.generateConstructor(parseData, funSpec)
     }
 
     private fun generateListFunction(tag: String, itemType: String, packageName: String): FunSpec {

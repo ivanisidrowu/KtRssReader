@@ -243,8 +243,7 @@ abstract class ParserGenerator(protected val logger: KSPLogger) : Generator {
 
     open fun generateConstructor(
         parseData: Map.Entry<String, ParseData>,
-        funSpec: FunSpec.Builder,
-        isLastLine: Boolean
+        funSpec: FunSpec.Builder
     ) {
         val stringBuilder = StringBuilder()
         val dataType = parseData.value.dataType
@@ -253,7 +252,7 @@ abstract class ParserGenerator(protected val logger: KSPLogger) : Generator {
         if (dataType == DataType.VALUE) {
             val name = parseData.key
             val type = parseData.value.type ?: return
-            val statement = "$TAB$TAB$name = %M(\"$rootTagName\")".appendTypeConversion(type)
+            val statement = "$TAB$TAB$name = %M(\"$rootTagName\"),".appendTypeConversion(type)
             if (type.isBooleanType()) {
                 funSpec.addStatement(statement, readStringMemberName, booleanConversionMemberName)
             } else {
@@ -279,11 +278,7 @@ abstract class ParserGenerator(protected val logger: KSPLogger) : Generator {
             }
         }
 
-        if (isLastLine) {
-            funSpec.addStatement("$TAB$TAB${parseData.key} = $stringBuilder")
-        } else {
-            funSpec.addStatement("$TAB$TAB${parseData.key} = $stringBuilder,")
-        }
+        funSpec.addStatement("$TAB$TAB${parseData.key} = $stringBuilder,")
     }
 
     private fun getTagCandidates(
