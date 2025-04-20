@@ -17,9 +17,8 @@
 package tw.ktrssreader.config
 
 import java.nio.charset.Charset
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
 import kotlin.time.ExperimentalTime
-import kotlin.time.days
 
 class KtRssReaderConfig {
     var charset: Charset? = null
@@ -29,5 +28,5 @@ class KtRssReaderConfig {
     var flushCache: Boolean = false
 
     @ExperimentalTime
-    var expiredTimeMillis: Long = Duration.days(1).inWholeMilliseconds
+    var expiredTimeMillis: Long = 1.days.inWholeMilliseconds
 }
