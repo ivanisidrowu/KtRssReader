@@ -26,7 +26,7 @@ abstract class ExtensionGenerator : Generator {
         .receiver(String::class)
         .addCode(
             """
-            |return when (toLowerCase()) {
+            |return when (lowercase()) {
             |$TAB"true", "yes" -> true
             |$TAB"no", "false" -> false
             |${TAB}else -> null
