@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import java.nio.charset.Charset
+import kotlin.concurrent.thread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
@@ -15,8 +17,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tw.ktrssreader.sample.databinding.ActivityMainBinding
-import java.nio.charset.Charset
-import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 

@@ -16,6 +16,7 @@
 
 package tw.ktrssreader.cache
 
+import java.util.*
 import tw.ktrssreader.KtRssReaderInitializer
 import tw.ktrssreader.constant.Const
 import tw.ktrssreader.persistence.db.entity.ChannelEntity
@@ -23,7 +24,6 @@ import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.convertToByteArray
 import tw.ktrssreader.utils.convertToObject
 import tw.ktrssreader.utils.logD
-import java.util.*
 
 class DatabaseRssCache<T> : RssCache<T> {
 

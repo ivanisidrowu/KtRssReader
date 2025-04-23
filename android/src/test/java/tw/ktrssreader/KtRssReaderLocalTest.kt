@@ -1,8 +1,13 @@
 package tw.ktrssreader
 
 import app.cash.turbine.test
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.mockkConstructor
+import io.mockk.mockkObject
+import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -76,7 +81,7 @@ class KtRssReaderLocalTest {
             block()
         }
 
-        protected fun mockGetCacheChannelSuccessfully(block: (RssStandardChannel) -> Unit,) {
+        protected fun mockGetCacheChannelSuccessfully(block: (RssStandardChannel) -> Unit) {
             val expected = mockkRelaxed<RssStandardChannelData>()
             every { ThreadUtils.isMainThread() } returns false
             every { KtRssProvider.provideRssCache<RssStandardChannel>() } returns mockRssCache
@@ -219,7 +224,7 @@ class KtRssReaderLocalTest {
 
             Reader.flowRead<RssStandardChannel>(fakeUrl)
                 .test {
-                    expectError()
+                    awaitError()
                 }
         }
 
@@ -229,8 +234,8 @@ class KtRssReaderLocalTest {
                 Reader.flowRead<RssStandardChannel>(fakeUrl) {
                     useCache = false
                 }.test {
-                    mockItem shouldBe expectItem()
-                    expectComplete()
+                    mockItem shouldBe awaitItem()
+                    awaitComplete()
                 }
             }
         }
@@ -241,7 +246,7 @@ class KtRssReaderLocalTest {
                 Reader.flowRead<RssStandardChannel>(fakeUrl) {
                     useCache = false
                 }.test {
-                    expectError()
+                    awaitError()
                 }
             }
         }
@@ -251,8 +256,8 @@ class KtRssReaderLocalTest {
             runBlocking {
                 Reader.flowRead<RssStandardChannel>(fakeUrl)
                     .test {
-                        mockItem shouldBe expectItem()
-                        expectComplete()
+                        mockItem shouldBe awaitItem()
+                        awaitComplete()
                     }
             }
         }
@@ -263,8 +268,8 @@ class KtRssReaderLocalTest {
                 Reader.flowRead<RssStandardChannel>(fakeUrl)
                     .test {
                         verify { mockRssCache.saveCache(fakeUrl, mockItem) }
-                        mockItem shouldBe expectItem()
-                        expectComplete()
+                        mockItem shouldBe awaitItem()
+                        awaitComplete()
                     }
             }
         }
@@ -276,8 +281,8 @@ class KtRssReaderLocalTest {
                     flushCache = true
                 }.test {
                     verify { mockRssCache.removeCache(fakeUrl) }
-                    mockItem shouldBe expectItem()
-                    expectComplete()
+                    mockItem shouldBe awaitItem()
+                    awaitComplete()
                 }
             }
         }
@@ -294,8 +299,8 @@ class KtRssReaderLocalTest {
                         mockRssCache.removeCache(fakeUrl)
                         mockException.printStackTrace()
                     }
-                    mockItem shouldBe expectItem()
-                    expectComplete()
+                    mockItem shouldBe awaitItem()
+                    awaitComplete()
                 }
             }
         }
@@ -307,8 +312,8 @@ class KtRssReaderLocalTest {
                     Reader.flowRead<RssStandardChannel>(fakeUrl)
                         .test {
                             verify { mockException.printStackTrace() }
-                            mockItem shouldBe expectItem()
-                            expectComplete()
+                            mockItem shouldBe awaitItem()
+                            awaitComplete()
                         }
                 }
             }

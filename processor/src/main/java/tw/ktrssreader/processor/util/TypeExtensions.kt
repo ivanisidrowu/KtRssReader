@@ -16,9 +16,9 @@
 
 package tw.ktrssreader.processor.util
 
-import tw.ktrssreader.processor.const.*
 import java.util.*
 import kotlin.reflect.KClass
+import tw.ktrssreader.processor.const.*
 
 private val stringName = String::class.simpleName!!
 

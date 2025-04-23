@@ -1,7 +1,13 @@
 package tw.ktrssreader.cache
 
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.mockkObject
+import io.mockk.mockkStatic
+import io.mockk.verify
+import java.util.Calendar
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -16,7 +22,6 @@ import tw.ktrssreader.test.common.mockkRelaxed
 import tw.ktrssreader.test.common.shouldBe
 import tw.ktrssreader.utils.convertToByteArray
 import tw.ktrssreader.utils.convertToObject
-import java.util.*
 
 class DatabaseRssCacheLocalTest {
 
@@ -95,6 +100,8 @@ class DatabaseRssCacheLocalTest {
         val mockChannel = mockkRelaxed<RssStandardChannel>()
         val fakeByteArray: ByteArray = byteArrayOf()
         every { mockChannel.convertToByteArray() } returns fakeByteArray
+        mockkStatic(Calendar::class)
+        every { Calendar.getInstance().timeInMillis } returns 123456
 
         subject.saveCache(fakeUrl, mockChannel)
 

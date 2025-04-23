@@ -6,12 +6,13 @@ plugins {
 }
 
 android {
-    compileSdk = Version.compileSdk
-    buildToolsVersion = Version.buildTool
+    namespace = "tw.ktrssreader.android"
+
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Version.minSdk
-        targetSdk = Version.targetSdk
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

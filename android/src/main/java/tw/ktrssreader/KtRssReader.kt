@@ -16,6 +16,8 @@
 
 package tw.ktrssreader
 
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.flow.flow
 import tw.ktrssreader.config.KtRssReaderConfig
 import tw.ktrssreader.constant.Const
@@ -24,8 +26,6 @@ import tw.ktrssreader.provider.KtRssProvider
 import tw.ktrssreader.utils.ThreadUtils
 import tw.ktrssreader.utils.logD
 import tw.ktrssreader.utils.tryCatch
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 typealias Config = KtRssReaderConfig.() -> Unit
 
@@ -59,7 +59,6 @@ object Reader {
         logD(
             tag = logTag,
             message = """
-                            
             ┌───────────────────────────────────────────────
             │ url: $url
             │ channel: ${T::class.simpleName}

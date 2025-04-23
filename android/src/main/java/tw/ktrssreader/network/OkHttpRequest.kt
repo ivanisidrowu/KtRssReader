@@ -16,10 +16,10 @@
 
 package tw.ktrssreader.network
 
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import java.io.IOException
 import java.nio.charset.Charset
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 class OkHttpRequest(
     private val okHttpClient: OkHttpClient,

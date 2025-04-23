@@ -1,5 +1,7 @@
 package tw.ktrssreader.reader.sample
 
+import java.io.Serializable
+import java.nio.charset.Charset
 import kotlinx.coroutines.flow.Flow
 import tw.ktrssreader.reader.sample.strategy.AutoMixStrategy
 import tw.ktrssreader.reader.sample.strategy.CustomStrategy
@@ -9,8 +11,6 @@ import tw.ktrssreader.reader.sample.strategy.GooglePlayRssStrategy
 import tw.ktrssreader.reader.sample.strategy.ITunesRssStrategy
 import tw.ktrssreader.reader.sample.strategy.RssStrategy
 import tw.ktrssreader.reader.sample.strategy.StandardRssStrategy
-import java.io.Serializable
-import java.nio.charset.Charset
 
 object RssReader {
     private val strategies = hashMapOf<RssType, RssStrategy>().apply {

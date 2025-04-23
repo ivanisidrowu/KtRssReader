@@ -16,8 +16,8 @@
 
 package tw.ktrssreader.kotlin.model.channel
 
-import tw.ktrssreader.kotlin.model.item.*
 import java.io.Serializable
+import tw.ktrssreader.kotlin.model.item.*
 
 interface RssStandardChannel : Serializable {
     val title: String?

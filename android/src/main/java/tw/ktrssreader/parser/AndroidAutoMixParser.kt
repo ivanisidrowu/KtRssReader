@@ -16,6 +16,7 @@
 
 package tw.ktrssreader.parser
 
+import java.io.IOException
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import tw.ktrssreader.kotlin.constant.ParserConst.AUTHOR
@@ -84,10 +85,17 @@ import tw.ktrssreader.kotlin.constant.ParserConst.WEB_MASTER
 import tw.ktrssreader.kotlin.constant.ParserConst.WIDTH
 import tw.ktrssreader.kotlin.extension.hrefToImage
 import tw.ktrssreader.kotlin.extension.replaceInvalidUrlByPriority
-import tw.ktrssreader.kotlin.model.channel.*
-import tw.ktrssreader.kotlin.model.item.*
+import tw.ktrssreader.kotlin.model.channel.AutoMixChannelData
+import tw.ktrssreader.kotlin.model.channel.Cloud
+import tw.ktrssreader.kotlin.model.channel.Image
+import tw.ktrssreader.kotlin.model.channel.Owner
+import tw.ktrssreader.kotlin.model.channel.TextInput
+import tw.ktrssreader.kotlin.model.item.AutoMixItemData
+import tw.ktrssreader.kotlin.model.item.Category
+import tw.ktrssreader.kotlin.model.item.Enclosure
+import tw.ktrssreader.kotlin.model.item.Guid
+import tw.ktrssreader.kotlin.model.item.Source
 import tw.ktrssreader.utils.logD
-import java.io.IOException
 
 class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
 
@@ -323,7 +331,7 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
             width = width
         ).takeIf {
             it.link != null || it.title != null || it.url != null ||
-                it.description != null || it.height != null || it.width != null
+                    it.description != null || it.height != null || it.width != null
         }
     }
 
@@ -364,6 +372,7 @@ class AndroidAutoMixParser : AndroidParserBase<AutoMixChannelData>() {
                         ?.let { categories.add(Category(name = it, domain = null)) }
                     nextTag()
                 }
+
                 else -> skip()
             }
         }

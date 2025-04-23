@@ -24,12 +24,15 @@ import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.squareup.kotlinpoet.ksp.KotlinPoetKspPreview
 import com.squareup.kotlinpoet.ksp.writeTo
 import tw.ktrssreader.annotation.RssTag
 import tw.ktrssreader.processor.const.CHANNEL
 import tw.ktrssreader.processor.const.KSP_OPTION_KEY
-import tw.ktrssreader.processor.generator.*
+import tw.ktrssreader.processor.generator.AndroidExtensionGenerator
+import tw.ktrssreader.processor.generator.AndroidParserGenerator
+import tw.ktrssreader.processor.generator.AndroidReaderParserGenerator
+import tw.ktrssreader.processor.generator.KotlinExtensionGenerator
+import tw.ktrssreader.processor.generator.KotlinParserGenerator
 
 class KspProcessor(
     private val codeGenerator: CodeGenerator,
@@ -49,7 +52,6 @@ class KspProcessor(
         return emptyList()
     }
 
-    @OptIn(KotlinPoetKspPreview::class)
     private fun generateClassesForKotlin(resolver: Resolver) {
         // This 'process' method could be called multiple times, so we use a flag to prevent it generate multiple times.
         if (!isExtensionGenerated) {
@@ -67,7 +69,6 @@ class KspProcessor(
         }
     }
 
-    @OptIn(KotlinPoetKspPreview::class)
     private fun generateClassesForAndroid(resolver: Resolver) {
         // This 'process' method could be called multiple times, so we use a flag to prevent it generate multiple times.
         if (!isExtensionGenerated) {
@@ -87,18 +88,24 @@ class KspProcessor(
                     rootClassName = classDeclaration.simpleName.asString(),
                     rootClassPackage = classDeclaration.packageName.asString(),
                     logger = logger
-                ).generate().writeTo(codeGenerator, false, listOf(classDeclaration.containingFile!!))
+                ).generate()
+                    .writeTo(codeGenerator, false, listOf(classDeclaration.containingFile!!))
             }
         }
     }
 
     @OptIn(KspExperimental::class)
-    private inline fun generateParsers(resolver: Resolver, crossinline action: (Boolean, KSClassDeclaration) -> Unit) {
+    private inline fun generateParsers(
+        resolver: Resolver,
+        crossinline action: (Boolean, KSClassDeclaration) -> Unit
+    ) {
         val rssTagFullName = RssTag::class.qualifiedName ?: return
         resolver.getSymbolsWithAnnotation(rssTagFullName)
             .filterIsInstance<KSClassDeclaration>()
             .forEach { ksClassDeclaration ->
-                val annotation: RssTag = ksClassDeclaration.getAnnotationsByType(RssTag::class).firstOrNull() ?: return@forEach
+                val annotation: RssTag =
+                    ksClassDeclaration.getAnnotationsByType(RssTag::class).firstOrNull()
+                        ?: return@forEach
                 logger.info("[KspProcessor][generateParsers]: class = ${ksClassDeclaration.simpleName.asString()}, annotation = ${annotation.name}")
                 val isRoot = annotation.name == CHANNEL
                 action(isRoot, ksClassDeclaration)

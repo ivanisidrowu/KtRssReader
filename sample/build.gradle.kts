@@ -11,15 +11,16 @@ plugins {
 }
 
 android {
-    compileSdk = Version.compileSdk
-    buildToolsVersion = Version.buildTool
+    namespace = "tw.ktrssreader.sample"
+
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "tw.ktrssreader.sample"
-        minSdk = Version.minSdk
-        targetSdk = Version.targetSdk
-        versionCode = Version.versionCode
-        versionName = Version.versionName
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = 1
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

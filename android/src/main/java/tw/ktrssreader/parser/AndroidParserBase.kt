@@ -17,6 +17,8 @@
 package tw.ktrssreader.parser
 
 import android.util.Xml
+import java.io.ByteArrayInputStream
+import java.io.IOException
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import tw.ktrssreader.kotlin.constant.ParserConst.AUTHOR
@@ -63,8 +65,6 @@ import tw.ktrssreader.kotlin.model.channel.*
 import tw.ktrssreader.kotlin.model.item.*
 import tw.ktrssreader.utils.logD
 import tw.ktrssreader.utils.logW
-import java.io.ByteArrayInputStream
-import java.io.IOException
 
 abstract class AndroidParserBase<out T : RssStandardChannel> : tw.ktrssreader.kotlin.parser.Parser<T> {
 
