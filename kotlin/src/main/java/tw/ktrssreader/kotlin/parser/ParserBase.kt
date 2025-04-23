@@ -17,6 +17,7 @@
 
 package tw.ktrssreader.kotlin.parser
 
+import javax.xml.parsers.DocumentBuilderFactory
 import org.w3c.dom.Element
 import tw.ktrssreader.kotlin.constant.ParserConst.CATEGORY
 import tw.ktrssreader.kotlin.constant.ParserConst.CHANNEL
@@ -55,7 +56,6 @@ import tw.ktrssreader.kotlin.model.item.Category
 import tw.ktrssreader.kotlin.model.item.Enclosure
 import tw.ktrssreader.kotlin.model.item.Guid
 import tw.ktrssreader.kotlin.model.item.Source
-import javax.xml.parsers.DocumentBuilderFactory
 
 abstract class ParserBase<out T : RssStandardChannel> : Parser<T> {
 

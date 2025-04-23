@@ -25,7 +25,6 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.MemberName
-import com.squareup.kotlinpoet.ksp.KotlinPoetKspPreview
 import com.squareup.kotlinpoet.ksp.toTypeName
 import tw.ktrssreader.annotation.*
 import tw.ktrssreader.processor.DataType
@@ -74,7 +73,6 @@ abstract class ParserGenerator(protected val logger: KSPLogger) : Generator {
         return result
     }
 
-    @OptIn(KotlinPoetKspPreview::class)
     protected fun preProcessParseData(
         child: KSPropertyDeclaration,
         parseDataMap: MutableMap<String, ParseData>,
@@ -286,7 +284,6 @@ abstract class ParserGenerator(protected val logger: KSPLogger) : Generator {
         nameFromMethod: String,
         declaration: KSPropertyDeclaration
     ): List<String> {
-
         fun getTags(order: Array<OrderType>, tag: String): List<String> {
             return order.map { orderType ->
                 when (orderType) {

@@ -1,8 +1,8 @@
 package tw.ktrssreader.reader.sample
 
+import java.io.Serializable
 import tw.ktrssreader.annotation.RssRawData
 import tw.ktrssreader.annotation.RssTag
-import java.io.Serializable
 
 @RssTag(name = "channel")
 data class RssRawData(

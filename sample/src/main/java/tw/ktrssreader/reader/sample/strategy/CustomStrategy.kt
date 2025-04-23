@@ -1,9 +1,9 @@
 package tw.ktrssreader.reader.sample.strategy
 
-import kotlinx.coroutines.flow.Flow
-import tw.ktrssreader.generated.RssDataReader
 import java.io.Serializable
 import java.nio.charset.Charset
+import kotlinx.coroutines.flow.Flow
+import tw.ktrssreader.generated.RssDataReader
 
 class CustomStrategy : RssStrategy {
     override fun read(rssText: String, useCache: Boolean, charset: Charset): Serializable =

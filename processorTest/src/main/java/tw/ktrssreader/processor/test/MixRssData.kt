@@ -16,10 +16,10 @@
 
 package tw.ktrssreader.processor.test
 
+import java.io.Serializable
 import tw.ktrssreader.annotation.OrderType
 import tw.ktrssreader.annotation.RssAttribute
 import tw.ktrssreader.annotation.RssTag
-import java.io.Serializable
 
 @RssTag(name = "channel")
 data class MixRssData(

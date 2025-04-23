@@ -1,28 +1,20 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-        maven("https://plugins.gradle.org/m2/")
-    }
-
-    dependencies {
-        classpath(libs.plugin.androidGradle)
-        classpath(libs.plugin.kotlinGradle)
-        classpath(libs.plugin.androidMavenGradle)
-        classpath(libs.plugin.ktlint)
-    }
+plugins {
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.ksp) apply false
+    kotlin("jvm") version libs.versions.kotlin apply false
 }
 
 subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-        disabledRules.set(kotlin.collections.setOf("import-ordering", "no-wildcard-imports"))
-    }
-    tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.BaseKtLintCheckTask> {
-        workerMaxHeapSize.set("2G")
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
+        }
     }
 
     if (name == "annotation" || name == "processor" || name == "kotlin") {
@@ -59,8 +51,4 @@ subprojects {
             }
         }
     }
-}
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
 }

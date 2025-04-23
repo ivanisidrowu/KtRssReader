@@ -4,6 +4,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
+import java.io.IOException
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -13,7 +14,6 @@ import org.junit.Before
 import org.junit.Test
 import tw.ktrssreader.test.common.mockkRelaxed
 import tw.ktrssreader.test.common.shouldBe
-import java.io.IOException
 
 class OkHttpRequestLocalTest {
 
