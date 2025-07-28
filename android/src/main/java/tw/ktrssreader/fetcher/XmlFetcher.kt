@@ -16,8 +16,8 @@
 
 package tw.ktrssreader.fetcher
 
-import tw.ktrssreader.provider.KtRssProvider
 import java.nio.charset.Charset
+import tw.ktrssreader.provider.KtRssProvider
 
 class XmlFetcher : Fetcher {
 

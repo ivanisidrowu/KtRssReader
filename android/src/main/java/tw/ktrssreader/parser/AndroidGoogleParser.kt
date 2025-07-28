@@ -16,6 +16,7 @@
 
 package tw.ktrssreader.parser
 
+import java.io.IOException
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import tw.ktrssreader.kotlin.constant.ParserConst
@@ -37,7 +38,6 @@ import tw.ktrssreader.kotlin.model.item.Category
 import tw.ktrssreader.kotlin.model.item.GoogleItemData
 import tw.ktrssreader.kotlin.model.item.RssStandardItem
 import tw.ktrssreader.utils.logD
-import java.io.IOException
 
 class AndroidGoogleParser : AndroidParserBase<GoogleChannelData>() {
 
